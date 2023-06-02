@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>otps</title>
+    <style>
+      body { font-weight: 100; background-color: #F2F2F2; color: #444; margin: 0; padding: 0;
+      font-family: Arial, sans-serif; } table { background-color: #fff; border-collapse: collapse;
+      margin: auto; } thead { background-color: #333; color: #fff; } tr:nth-child(even) {
+      background-color: #f2f2f2; } th, td { padding: 10px; border: 1px solid #ccc; text-align:
+      center; }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>phone</th>
+          <th>code</th>
+          <th>expired date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each otps}}
+          <tr>
+            <td>{{this.phone}}</td>
+            <td>{{this.code}}</td>
+            <td>{{this.expiredDate}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </body>
+</html>

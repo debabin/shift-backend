@@ -12,7 +12,7 @@ import {
 export class BaseService<Doc extends Document, Entity> {
   constructor(private readonly model: Model<Doc>) {}
 
-  create(body: Omit<Entity, '_id'>) {
+  create(body: Omit<Entity, '_id' | 'created'>) {
     return this.model.create(body);
   }
 

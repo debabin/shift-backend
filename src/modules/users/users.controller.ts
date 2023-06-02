@@ -1,14 +1,11 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { I18nService } from 'nestjs-i18n';
 
-import { BaseResolver } from '@/utils/services';
+import { OtpsService } from '@/modules/otps';
+import { BaseResolver, AuthService } from '@/utils/services';
 
-import { AuthService } from '../auth';
-
-import { SingUpDto } from './dto';
-import { User } from './entities';
+import { SingInDto } from './dto';
 import { UserResponse } from './users.model';
 import { UsersService } from './users.service';
 
@@ -17,46 +14,36 @@ import { UsersService } from './users.service';
 export class UsersController extends BaseResolver {
   constructor(
     private readonly usersService: UsersService,
-    private readonly i18nService: I18nService,
+    private readonly otpsService: OtpsService,
     private readonly authService: AuthService
   ) {
     super();
   }
 
-  @Post('/singup')
-  @ApiHeader({
-    name: 'authorization',
-    description: 'Авторизованный header'
-  })
-  @ApiOperation({ summary: 'Регистрация' })
+  @Post('/singin')
+  @ApiOperation({ summary: 'авторизация' })
   @ApiResponse({
     status: 200,
-    description: 'singup',
+    description: 'singin',
     type: UserResponse
   })
-  async singup(@Body() singUpDto: SingUpDto, @Res() response: Response) {
-    const existingUser = await this.usersService.findOne({ phone: singUpDto.phone });
+  async singin(@Body() singInDto: SingInDto, @Res() response: Response) {
+    const user = await this.usersService.findOne({ phone: singInDto.phone });
 
-    if (existingUser) {
-      return this.wrapFail(this.i18nService.translate('error_not_found'));
+    if (!user) {
+      await this.usersService.create({ phone: singInDto.phone });
     }
 
-    const user = await this.usersService.create(singUpDto);
+    const otp = await this.otpsService.findOne({ phone: singInDto.phone, code: singInDto.code });
 
-    const { token } = await this.authService.register(user);
+    if (!otp) {
+      throw new HttpException('Неправильный отп код', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.otpsService.delete({ _id: otp._id });
+    const { token } = await this.authService.login(user);
     response.cookie('authorization', `Bearer ${token}`, { httpOnly: true, sameSite: true });
 
     return this.wrapSuccess({ user });
-  }
-
-  @Get('/')
-  @ApiOperation({ summary: 'Получить все пиццы' })
-  @ApiResponse({
-    status: 200,
-    description: 'Users',
-    type: [User]
-  })
-  getAllUsers() {
-    return [];
   }
 }

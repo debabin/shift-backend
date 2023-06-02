@@ -3,7 +3,30 @@
 # ------------------------------------------------------
 
 type Mutation {
-  singup(city: String, email: String, firstname: String, lastname: String, middlename: String, phone: String!): UserResponse!
+  createOtp(phone: String!): OtpResponse!
+  signin(code: String!, phone: String!): UserResponse!
+}
+
+type Otp {
+  _id: String!
+  code: Float!
+  created: String!
+  phone: String!
+  retryDelay: Float!
+}
+
+input OtpInput {
+  _id: String!
+  code: Float!
+  created: String!
+  phone: String!
+  retryDelay: Float!
+}
+
+type OtpResponse {
+  reason: String
+  retryDelay: Float!
+  success: Boolean!
 }
 
 type Query {

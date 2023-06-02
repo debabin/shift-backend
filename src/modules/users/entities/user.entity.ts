@@ -23,27 +23,27 @@ export class User {
   @Field(() => String)
   @Prop()
   @ApiProperty({ example: 'firstname', description: 'Имя', required: false })
-  firstname: string;
+  firstname?: string;
 
   @Field(() => String)
   @Prop()
   @ApiProperty({ example: 'middlename', description: 'Отчество', required: false })
-  middlename: string;
+  middlename?: string;
 
   @Field(() => String)
   @Prop()
   @ApiProperty({ example: 'lastname', description: 'Фамилия', required: false })
-  lastname: string;
+  lastname?: string;
 
   @Field(() => String)
   @Prop()
   @ApiProperty({ example: 'email@gmail.com', description: 'Почта', required: false })
-  email: string;
+  email?: string;
 
   @Field(() => String)
   @Prop()
   @ApiProperty({ example: 'city', description: 'Город', required: false })
-  city: string;
+  city?: string;
 }
 
 export type UserDocument = User & Document;

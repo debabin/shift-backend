@@ -2,20 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { generate } from 'generate-password';
 
-import { User } from '@/modules/users';
-
-import { LoginResponse, RegistrationResponse } from './auth.model';
 import { PasswordService } from './common/password';
 
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService, private passwordService: PasswordService) {}
 
-  async register(user: any): Promise<RegistrationResponse> {
+  async register<T extends { phone: string }>(user: T) {
     return this.authenticate(user);
   }
 
-  async login(user: User): Promise<LoginResponse> {
+  async login<T extends { phone: string }>(user: T) {
     return this.authenticate(user);
   }
 
@@ -23,10 +20,9 @@ export class AuthService {
     return this.jwtService.decode(token);
   }
 
-  async authenticate(user: User): Promise<{ user: User; token: string }> {
-    const payload: { phone: User['phone']; email: User['email'] } = {
-      phone: user.phone,
-      email: user.email
+  async authenticate<T extends { phone: string }>(user: T): Promise<{ user: T; token: string }> {
+    const payload: { phone: T['phone'] } = {
+      phone: user.phone
     };
 
     return {

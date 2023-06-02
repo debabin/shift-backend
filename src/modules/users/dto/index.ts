@@ -1,1 +1,1 @@
-export * from './sing-up.dot';
+export * from './sing-in.dot';

@@ -2,10 +2,9 @@ import { Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
-import { AuthService } from '@/modules/auth';
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
-import { BaseResolver } from '@/utils/services';
+import { BaseResolver, AuthService } from '@/utils/services';
 
 import { User } from './entities';
 import { UserResponse } from './users.model';

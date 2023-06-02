@@ -7,8 +7,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
-import { UsersModule } from './modules/users/users.module';
-import { WakeUpModule } from './modules/wakeup/wakeup.module';
+import { OtpsModule } from '@/modules/otps/otps.module';
+import { UsersModule } from '@/modules/users/users.module';
+import { WakeUpModule } from '@/modules/wakeup/wakeup.module';
 
 @Module({
   imports: [
@@ -30,7 +31,9 @@ import { WakeUpModule } from './modules/wakeup/wakeup.module';
       introspection: true,
       context: ({ req, res }) => ({ req, res })
     }),
+    OtpsModule,
     UsersModule,
+
     WakeUpModule
   ],
   providers: []
