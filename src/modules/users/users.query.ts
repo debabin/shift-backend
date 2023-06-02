@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 @Resolver(() => User)
 export class UsersQuery extends BaseResolver {
   constructor(
-    private usersService: UsersService,
+    private readonly usersService: UsersService,
     private readonly i18nService: I18nService,
     private readonly authService: AuthService
   ) {
@@ -24,7 +24,7 @@ export class UsersQuery extends BaseResolver {
   }
 
   @Query(() => UserResponse)
-  async getUser(@Context() context: { req: Request }) {
+  async me(@Context() context: { req: Request }) {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 

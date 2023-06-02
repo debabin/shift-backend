@@ -23,7 +23,7 @@ export class OtpsController extends BaseResolver {
     description: 'create otp',
     type: OtpResponse
   })
-  async otp(@Body() otpDto: OtpDto) {
+  async otp(@Body() otpDto: OtpDto): Promise<OtpResponse> {
     const existingOtp = await this.otpsService.findOne({ phone: otpDto.phone });
 
     if (existingOtp) {

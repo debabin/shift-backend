@@ -13,6 +13,10 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+  app.use('/live', (_req, res) => {
+    res.json({ status: true });
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Shift backend 🔥')
     .setDescription('Данный репозиторий содержит backend для выполнения индивидуальных заданий')

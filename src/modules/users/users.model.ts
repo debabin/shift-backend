@@ -8,6 +8,6 @@ import { User } from './entities';
 @ObjectType()
 export class UserResponse extends BaseResponse {
   @Field(() => User, { nullable: true })
-  @ApiProperty({ description: 'Пользователь' })
+  @ApiProperty({ description: 'Пользователь', type: User })
   user?: User;
 }

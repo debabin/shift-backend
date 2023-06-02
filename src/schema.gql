@@ -29,8 +29,32 @@ type OtpResponse {
   success: Boolean!
 }
 
+type PackageTypesResponse {
+  points: [Point!]!
+  reason: String
+  success: Boolean!
+}
+
+type Point {
+  id: String!
+  name: String!
+}
+
+input PointInput {
+  id: String!
+  name: String!
+}
+
+type PointsResponse {
+  points: [Point!]!
+  reason: String
+  success: Boolean!
+}
+
 type Query {
-  getUser: UserResponse!
+  getDeliveryPackageTypes: PackageTypesResponse!
+  getDeliveryPoints: PointsResponse!
+  me: UserResponse!
 }
 
 type User {

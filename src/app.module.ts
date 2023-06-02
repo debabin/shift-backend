@@ -7,6 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
+import { DeliveryModule } from '@/modules/delivery/delivery.module';
 import { OtpsModule } from '@/modules/otps/otps.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { WakeUpModule } from '@/modules/wakeup/wakeup.module';
@@ -33,7 +34,7 @@ import { WakeUpModule } from '@/modules/wakeup/wakeup.module';
     }),
     OtpsModule,
     UsersModule,
-
+    DeliveryModule,
     WakeUpModule
   ],
   providers: []
