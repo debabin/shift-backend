@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nest start --watch",
-    "build": "nest build",
+    "dev": "npx @nestjs/cli start --watch",
+    "build": "npx @nestjs/cli build",
     "bd": "docker-compose up",
     "dev-debug": "nest start --debug --watch",
     "prod": "node dist/main",
