@@ -1,0 +1,37 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  singup(city: String, email: String, firstname: String, lastname: String, middlename: String, phone: String!): UserResponse!
+}
+
+type Query {
+  getUser: UserResponse!
+}
+
+type User {
+  _id: String!
+  city: String!
+  email: String!
+  firstname: String!
+  lastname: String!
+  middlename: String!
+  phone: String!
+}
+
+input UserInput {
+  _id: String!
+  city: String!
+  email: String!
+  firstname: String!
+  lastname: String!
+  middlename: String!
+  phone: String!
+}
+
+type UserResponse {
+  reason: String
+  success: Boolean!
+  user: User
+}
