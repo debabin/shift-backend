@@ -18,7 +18,7 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Shift backend 🔥')
+    .setTitle('shift backend 🔥')
     .setDescription('Данный репозиторий содержит backend для выполнения индивидуальных заданий')
     .setVersion('1.0')
     .build();

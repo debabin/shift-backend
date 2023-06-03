@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
@@ -38,12 +38,12 @@ export class UsersController extends BaseResolver {
     const otp = await this.otpsService.findOne({ phone: singInDto.phone, code: singInDto.code });
 
     if (!otp) {
-      throw new HttpException('Неправильный отп код', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(this.wrapFail('Неправильный отп код'));
     }
 
     await this.otpsService.delete({ _id: otp._id });
     const { token } = await this.authService.login(user);
-    response.cookie('authorization', `Bearer ${token}`, { httpOnly: true, sameSite: true });
+    response.cookie('authorization', `Bearer ${token}`);
 
     return this.wrapSuccess({ user });
   }
@@ -59,12 +59,16 @@ export class UsersController extends BaseResolver {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
+    if (!decodedJwtAccessToken) {
+      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
+    }
+
     const user = await this.usersService.findOne({
       phone: decodedJwtAccessToken.phone
     });
 
     if (!user) {
-      return this.wrapFail('Пользователь не найден');
+      throw new BadRequestException(this.wrapFail('Пользователь не найден'));
     }
 
     return this.wrapSuccess({ user });

@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
@@ -28,12 +29,16 @@ export class UsersQuery extends BaseResolver {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
+    if (!decodedJwtAccessToken) {
+      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
+    }
+
     const user = await this.usersService.findOne({
       phone: decodedJwtAccessToken.phone
     });
 
     if (!user) {
-      return this.wrapFail(this.i18nService.translate('error_not_found'));
+      throw new BadRequestException(this.wrapFail('Пользователь не найден'));
     }
 
     return this.wrapSuccess({ user });

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Response } from 'express';
 
@@ -24,7 +24,10 @@ export class UsersMutation extends BaseResolver {
   }
 
   @Mutation(() => UserResponse)
-  async signin(@Args() singInDto: SingInDto, @Context() context: { res: Response }) {
+  async signin(
+    @Args() singInDto: SingInDto,
+    @Context() context: { res: Response }
+  ): Promise<UserResponse> {
     const user = await this.usersService.findOne({ phone: singInDto.phone });
 
     if (!user) {
@@ -34,12 +37,12 @@ export class UsersMutation extends BaseResolver {
     const otp = await this.otpsService.findOne({ phone: singInDto.phone, code: singInDto.code });
 
     if (!otp) {
-      throw new HttpException('Неправильный отп код', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(this.wrapFail('Неправильный отп код'));
     }
 
     await this.otpsService.delete({ _id: otp._id });
     const { token } = await this.authService.login(user);
-    context.res.cookie('authorization', `Bearer ${token}`, { httpOnly: true, sameSite: true });
+    context.res.cookie('authorization', `Bearer ${token}`);
 
     return this.wrapSuccess({ user });
   }

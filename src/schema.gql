@@ -2,7 +2,58 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateDeliveryOrderPersonDto {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
+type DeliverResponse {
+  order: Delivery!
+  reason: String
+  success: Boolean!
+}
+
+type DeliveriesResponse {
+  deliveries: [Delivery!]!
+  reason: String
+  success: Boolean!
+}
+
+type Delivery {
+  _id: String!
+  payer: Payer!
+  receiver: Person!
+  receiverAddress: String!
+  sender: Person!
+  senderAddress: String!
+  status: DeliveryStatus!
+}
+
+input DeliveryInput {
+  _id: String!
+  payer: Payer!
+  receiver: PersonInput!
+  receiverAddress: String!
+  sender: PersonInput!
+  senderAddress: String!
+  status: DeliveryStatus!
+}
+
+type DeliveryResponse {
+  delivery: Delivery!
+  reason: String
+  success: Boolean!
+}
+
+enum DeliveryStatus {
+  IN_PROCESSING
+  SUCCESS
+}
+
 type Mutation {
+  createDeliveryOrder(payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: String!, sender: CreateDeliveryOrderPersonDto!, senderAddress: String!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
   signin(code: String!, phone: String!): UserResponse!
 }
@@ -35,6 +86,25 @@ type PackageTypesResponse {
   success: Boolean!
 }
 
+enum Payer {
+  RECEIVER
+  SENDER
+}
+
+type Person {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
+input PersonInput {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
 type Point {
   id: String!
   name: String!
@@ -52,6 +122,8 @@ type PointsResponse {
 }
 
 type Query {
+  getDeliveries: DeliveriesResponse!
+  getDelivery(orderId: String!): DeliveryResponse!
   getDeliveryPackageTypes: PackageTypesResponse!
   getDeliveryPoints: PointsResponse!
   me: UserResponse!
