@@ -5,6 +5,7 @@ import { Schema as MongooseSchema, Document } from 'mongoose';
 
 import { Address } from './address.entity';
 import { Person } from './person.entity';
+import { Point } from './point.entity';
 
 export enum Payer {
   RECEIVER = 'receiver',
@@ -16,9 +17,9 @@ registerEnumType(Payer, {
 
 export enum DeliveryStatus {
   IN_PROCESSING,
-  SUCCESS
+  SUCCESS,
+  CANCELED
 }
-
 registerEnumType(DeliveryStatus, {
   name: 'DeliveryStatus'
 });
@@ -35,7 +36,12 @@ export class Delivery {
   @Field(() => String)
   _id: MongooseSchema.Types.ObjectId;
 
-  @Field(() => String)
+  @Field(() => Point)
+  @Prop({ required: true })
+  @ApiProperty({ description: 'Город отправки', type: Point })
+  senderPoint: Point;
+
+  @Field(() => Address)
   @Prop({ required: true })
   @ApiProperty({ description: 'Адрес отправителя', type: Address })
   senderAddress: Address;
@@ -45,7 +51,12 @@ export class Delivery {
   @ApiProperty({ description: 'Отправитель', type: Person })
   sender: Person;
 
-  @Field(() => String)
+  @Field(() => Point)
+  @Prop({ required: true })
+  @ApiProperty({ description: 'Город получения', type: Point })
+  receiverPoint: Point;
+
+  @Field(() => Address)
   @Prop({ required: true })
   @ApiProperty({ description: 'Адрес получателя', type: Address })
   receiverAddress: Address;

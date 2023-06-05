@@ -11,4 +11,20 @@ export class PackageType {
   @Field(() => String)
   @ApiProperty({ example: 'name', description: 'Название типа посылки' })
   name: string;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 'length', description: 'Длина посылки' })
+  length: number;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 'width', description: 'Ширина посылки' })
+  width: number;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 'weight', description: 'Длина посылки' })
+  weight: number;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 'length', description: 'Высота посылки' })
+  height: number;
 }

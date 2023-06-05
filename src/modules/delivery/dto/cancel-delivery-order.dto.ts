@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @ArgsType()
-export class GetDeliveryDto {
+export class CancelDeliveryOrderDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)

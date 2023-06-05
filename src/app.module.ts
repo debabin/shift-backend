@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
 import { DeliveryModule } from '@/modules/delivery/delivery.module';
@@ -12,7 +13,10 @@ import { OtpsModule } from '@/modules/otps/otps.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { WakeUpModule } from '@/modules/wakeup/wakeup.module';
 
+import { AppController } from './app.controller';
+
 @Module({
+  controllers: [AppController],
   imports: [
     ConfigModule.forRoot(),
     I18nModule.forRoot({
@@ -31,6 +35,9 @@ import { WakeUpModule } from '@/modules/wakeup/wakeup.module';
       playground: true,
       introspection: true,
       context: ({ req, res }) => ({ req, res })
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'static')
     }),
     OtpsModule,
     UsersModule,

@@ -1,8 +1,67 @@
 import { Field, ArgsType, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
 
-import { Payer } from '../entities';
+import { DeliveryOptionType, Payer } from '../entities';
+
+@InputType('CreateDeliveryOrderDeliveryOptionDto')
+export class CreateDeliveryOrderDeliveryOptionDto {
+  @IsString()
+  @IsNotEmpty()
+  @Field(() => String)
+  @ApiProperty({ example: '1', description: 'Индентификатор опции доставки' })
+  id: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Field(() => Number)
+  @ApiProperty({ example: 10000, description: 'Цена доставки в копейках' })
+  price: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Field(() => Number)
+  @ApiProperty({ example: 2, description: 'Количество дней доставки' })
+  days: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @Field(() => String)
+  @ApiProperty({ example: 'name', description: 'Название опции отправки' })
+  name: string;
+
+  @IsNotEmpty()
+  @Field(() => DeliveryOptionType)
+  @ApiProperty({ example: 'type', description: 'Тип доставки', enum: DeliveryOptionType })
+  type: DeliveryOptionType;
+}
+
+@InputType('CreateDeliveryOrderPointDto')
+export class CreateDeliveryOrderPointDto {
+  @IsString()
+  @IsNotEmpty()
+  @Field(() => String)
+  @ApiProperty({ example: '1', description: 'Индентификатор пункта' })
+  id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Field(() => String)
+  @ApiProperty({ example: 'name', description: 'Название пункта' })
+  name: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Field(() => Number)
+  @ApiProperty({ example: 'latitude', description: 'Широта' })
+  latitude: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Field(() => String)
+  @ApiProperty({ example: 'longitude', description: 'Долгота' })
+  longitude: number;
+}
 
 @InputType('CreateDeliveryOrderPersonDto')
 export class CreateDeliveryOrderPersonDto {
@@ -32,12 +91,6 @@ export class CreateDeliveryOrderAddressDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ example: 'city', description: 'Город' })
-  city: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Field(() => String)
   @ApiProperty({ example: 'street', description: 'Улица' })
   street: string;
 
@@ -62,7 +115,12 @@ export class CreateDeliveryOrderAddressDto {
 @ArgsType()
 export class CreateDeliveryOrderDto {
   @ValidateNested()
-  @Field(() => String)
+  @Field(() => CreateDeliveryOrderPointDto)
+  @ApiProperty({ description: 'Город отправки', type: CreateDeliveryOrderPointDto })
+  senderPoint: CreateDeliveryOrderPointDto;
+
+  @ValidateNested()
+  @Field(() => CreateDeliveryOrderAddressDto)
   @ApiProperty({ description: 'Адрес отправителя', type: CreateDeliveryOrderAddressDto })
   senderAddress: CreateDeliveryOrderAddressDto;
 
@@ -72,7 +130,12 @@ export class CreateDeliveryOrderDto {
   sender: CreateDeliveryOrderPersonDto;
 
   @ValidateNested()
-  @Field(() => String)
+  @Field(() => CreateDeliveryOrderPointDto)
+  @ApiProperty({ description: 'Город получения', type: CreateDeliveryOrderPointDto })
+  receiverPoint: CreateDeliveryOrderPointDto;
+
+  @ValidateNested()
+  @Field(() => CreateDeliveryOrderAddressDto)
   @ApiProperty({ description: 'Адрес получателя', type: CreateDeliveryOrderAddressDto })
   receiverAddress: CreateDeliveryOrderAddressDto;
 
@@ -85,4 +148,9 @@ export class CreateDeliveryOrderDto {
   @Field(() => Payer)
   @ApiProperty({ description: 'Кто будет оплачивать', enum: Payer })
   payer: Payer;
+
+  @IsNotEmpty()
+  @Field(() => CreateDeliveryOrderDeliveryOptionDto)
+  @ApiProperty({ description: 'Опция доставки', type: CreateDeliveryOrderDeliveryOptionDto })
+  option: CreateDeliveryOrderDeliveryOptionDto;
 }

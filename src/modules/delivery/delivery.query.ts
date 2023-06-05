@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 
+import { points, packages } from '@/utils/constants';
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { AuthService, BaseResolver } from '@/utils/services';
@@ -30,13 +31,13 @@ export class DeliveryQuery extends BaseResolver {
   }
 
   @Query(() => PointsResponse)
-  async getDeliveryPoints() {
-    return this.wrapSuccess({ points: [] });
+  getDeliveryPoints(): PointsResponse {
+    return this.wrapSuccess({ points });
   }
 
   @Query(() => PackageTypesResponse)
-  async getDeliveryPackageTypes() {
-    return this.wrapSuccess({ packages: [] });
+  getDeliveryPackageTypes(): PackageTypesResponse {
+    return this.wrapSuccess({ packages });
   }
 
   @GqlAuthorizedOnly()

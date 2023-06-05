@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { BaseService } from '@/utils';
+import { BaseService } from '@/utils/services';
 
 import { UserDocument, User } from './entities';
 

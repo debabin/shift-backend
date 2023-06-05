@@ -32,7 +32,7 @@ export class OtpsMutation extends BaseResolver {
 
     const code = Math.floor(100000 + Math.random() * 900000);
     await this.otpsService.create({
-      phone: otpDto.phone,
+      phone: `${otpDto.phone}`,
       code,
       retryDelay: RETRY_DELAY
     });

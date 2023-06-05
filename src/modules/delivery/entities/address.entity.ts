@@ -5,10 +5,6 @@ import { ApiProperty } from '@nestjs/swagger';
 @ObjectType()
 export class Address {
   @Field(() => String)
-  @ApiProperty({ example: 'city', description: 'Город' })
-  city: string;
-
-  @Field(() => String)
   @ApiProperty({ example: 'street', description: 'Улица' })
   street: string;
 

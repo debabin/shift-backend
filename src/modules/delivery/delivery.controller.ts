@@ -1,9 +1,13 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { randomUUID } from 'crypto';
+
+import { BadRequestException, Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
-import { ApiAuthorizedOnly } from '@/utils';
-import { AuthService, BaseResolver } from '@/utils/services';
+import { packages, points } from '@/utils/constants';
+import { ApiAuthorizedOnly } from '@/utils/guards';
+import { getDistance } from '@/utils/helpers';
+import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
 
@@ -12,11 +16,17 @@ import {
   PackageTypesResponse,
   DeliverResponse,
   DeliveriesResponse,
-  DeliveryResponse
+  DeliveryResponse,
+  CalculateDeliveryResponse
 } from './delivery.model';
 import { DeliveryService } from './delivery.service';
-import { CreateDeliveryOrderDto, GetDeliveryDto } from './dto';
-import { DeliveryStatus } from './entities';
+import {
+  CalculateDeliveryDto,
+  CancelDeliveryOrderDto,
+  CreateDeliveryOrderDto,
+  GetDeliveryDto
+} from './dto';
+import { DeliveryOption, DeliveryOptionType, DeliveryStatus } from './entities';
 
 @ApiTags('📦 delivery')
 @Controller('/delivery')
@@ -35,8 +45,8 @@ export class DeliveryController extends BaseResolver {
     description: 'points',
     type: PointsResponse
   })
-  async getPoints(): Promise<PointsResponse> {
-    return this.wrapSuccess({ points: [] });
+  getPoints(): PointsResponse {
+    return this.wrapSuccess({ points });
   }
 
   @Get('/package/types')
@@ -46,8 +56,54 @@ export class DeliveryController extends BaseResolver {
     description: 'package types',
     type: PackageTypesResponse
   })
-  async getPackageTypes(): Promise<PointsResponse> {
-    return this.wrapSuccess({ points: [] });
+  getPackageTypes(): PackageTypesResponse {
+    return this.wrapSuccess({ packages });
+  }
+
+  @Post('/calc')
+  @ApiOperation({ summary: 'расчет доставки' })
+  @ApiResponse({
+    status: 200,
+    description: 'calc',
+    type: CalculateDeliveryResponse
+  })
+  async calculateDelivery(
+    @Body() calculateDeliveryDto: CalculateDeliveryDto
+  ): Promise<CalculateDeliveryResponse> {
+    const distancePrice = getDistance(
+      calculateDeliveryDto.receiverPoint.latitude,
+      calculateDeliveryDto.receiverPoint.longitude,
+      calculateDeliveryDto.senderPoint.latitude,
+      calculateDeliveryDto.senderPoint.longitude
+    );
+
+    const sizeWeightPrice =
+      (calculateDeliveryDto.package.length *
+        calculateDeliveryDto.package.weight *
+        calculateDeliveryDto.package.height *
+        calculateDeliveryDto.package.width) /
+      10000;
+
+    const price = Math.round((distancePrice + sizeWeightPrice) * 100);
+    const days = Math.floor(Math.random() * 7) + 2;
+    const options: DeliveryOption[] = [
+      {
+        id: randomUUID(),
+        days,
+        price,
+        name: 'стандартная доставка',
+        type: DeliveryOptionType.DEFAULT
+      },
+      {
+        id: randomUUID(),
+        price: price * 2,
+        days: Math.floor(days / 2),
+        name: 'эксперсс доставка',
+        type: DeliveryOptionType.EXPRESS
+      }
+    ];
+
+    return this.wrapSuccess({ options });
   }
 
   @Post('/order')
@@ -76,6 +132,9 @@ export class DeliveryController extends BaseResolver {
     description: 'orders',
     type: DeliveriesResponse
   })
+  @ApiHeader({
+    name: 'authorization'
+  })
   async getDeliveries(@Res() request: Request): Promise<DeliveriesResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
@@ -102,6 +161,9 @@ export class DeliveryController extends BaseResolver {
     description: 'order',
     type: DeliveriesResponse
   })
+  @ApiHeader({
+    name: 'authorization'
+  })
   async getDelivery(
     @Param() params: GetDeliveryDto,
     @Res() request: Request
@@ -126,5 +188,37 @@ export class DeliveryController extends BaseResolver {
     }
 
     return this.wrapSuccess({ delivery });
+  }
+
+  @ApiAuthorizedOnly()
+  @Put('/orders/cancel')
+  @ApiOperation({ summary: 'отменить доставку' })
+  @ApiResponse({
+    status: 200,
+    description: 'order',
+    type: BaseResponse
+  })
+  @ApiHeader({
+    name: 'authorization'
+  })
+  async cancelDeliveryOrder(
+    @Body() cancelDeliveryOrderDto: CancelDeliveryOrderDto
+  ): Promise<BaseResponse> {
+    const order = await this.deliveryService.findOne({ _id: cancelDeliveryOrderDto.orderId });
+
+    if (!order) {
+      throw new BadRequestException(this.wrapFail('Доставка не найдена'));
+    }
+
+    if (order.status > DeliveryStatus.IN_PROCESSING) {
+      throw new BadRequestException(this.wrapFail('Доставка нельзя отменить'));
+    }
+
+    await this.deliveryService.updateOne(
+      { _id: cancelDeliveryOrderDto.orderId },
+      { $set: { status: DeliveryStatus.CANCELED } }
+    );
+
+    return this.wrapSuccess();
   }
 }

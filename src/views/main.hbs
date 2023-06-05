@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>My Website</title>
+    <style>
+      body { font-weight: 100; background-color: #fff; color: #444; margin: 0; padding: 0;
+      font-family: Arial, sans-serif; } .wrapper { display: flex; flex-direction: column; gap: 15px;
+      justify-content: center; align-items: center; height: 100vh; } img { width: 400px; }
+      .card-container { justify-content: center; flex-wrap: wrap; display: flex; gap: 30px; } .card
+      { position: relative; width: 150px; padding: 10px; transition: all .2s ease-in-out;
+      border-radius: 6px; background: #fff; text-align: center; } .rest::before { content: "";
+      position: absolute; top: -2px; bottom: -2px; left: -2px; right: -2px; background:
+      linear-gradient(to bottom, #4776e6, #8e54e9); border-radius: 6px; z-index: -1; }
+      .graphql::before { content: ""; position: absolute; top: -2px; bottom: -2px; left: -2px;
+      right: -2px; background: linear-gradient(to bottom, #e647e3, #cb54e9); border-radius: 6px;
+      z-index: -1; } .otps::before { content: ""; position: absolute; top: -2px; bottom: -2px; left:
+      -2px; right: -2px; background: linear-gradient(to bottom, #4784e6, #54ade9); border-radius:
+      6px; z-index: -1; } a { text-decoration: none; color: black;} .card p { font-size: 20px; }
+    </style>
+  </head>
+  <body>
+    <div class='wrapper'>
+      <div class='container'>
+        <img src='../../images/shift.png' />
+      </div>
+      <div class='card-container'>
+        <a href={{rest}}>
+          <div class='card rest'>
+            <p>rest</p>
+          </div>
+        </a>
+
+        <a href={{graphql}}>
+          <div class='card graphql'>
+            <p>graphql</p>
+          </div>
+        </a>
+
+        <a href={{otps}}>
+          <div class='card otps'>
+            <p>otps</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </body>
+</html>

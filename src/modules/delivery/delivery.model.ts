@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponse } from '@/utils/services';
 
 import { Point, PackageType, Delivery } from './entities';
+import { DeliveryOption } from './entities/delivery-option.entity';
 
 @ObjectType()
 export class PointsResponse extends BaseResponse {
@@ -14,9 +15,9 @@ export class PointsResponse extends BaseResponse {
 
 @ObjectType()
 export class PackageTypesResponse extends BaseResponse {
-  @Field(() => [Point])
+  @Field(() => [PackageType])
   @ApiProperty({ description: 'Типы ', type: [PackageType] })
-  points: PackageType[];
+  packages: PackageType[];
 }
 
 @ObjectType()
@@ -38,4 +39,11 @@ export class DeliveryResponse extends BaseResponse {
   @Field(() => Delivery)
   @ApiProperty({ description: 'Доставка', type: Delivery })
   delivery: Delivery;
+}
+
+@ObjectType()
+export class CalculateDeliveryResponse extends BaseResponse {
+  @Field(() => [DeliveryOption])
+  @ApiProperty({ description: 'Опции доставки', type: [DeliveryOption] })
+  options: DeliveryOption[];
 }

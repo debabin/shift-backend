@@ -2,11 +2,70 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  appartament: String!
+  comment: String
+  house: String!
+  street: String!
+}
+
+input AddressInput {
+  appartament: String!
+  comment: String
+  house: String!
+  street: String!
+}
+
+type BaseResponse {
+  reason: String
+  success: Boolean!
+}
+
+input CalculateDeliveryPackageDto {
+  height: Float!
+  length: Float!
+  weight: Float!
+  width: Float!
+}
+
+input CalculateDeliveryPointDto {
+  latitude: Float!
+  longitude: Float!
+}
+
+type CalculateDeliveryResponse {
+  options: [DeliveryOption!]!
+  reason: String
+  success: Boolean!
+}
+
+input CreateDeliveryOrderAddressDto {
+  appartament: String!
+  comment: String
+  house: String!
+  street: String!
+}
+
+input CreateDeliveryOrderDeliveryOptionDto {
+  days: Float!
+  id: String!
+  name: String!
+  price: Float!
+  type: DeliveryOptionType!
+}
+
 input CreateDeliveryOrderPersonDto {
   firstname: String!
   lastname: String!
   middlename: String
   phone: String!
+}
+
+input CreateDeliveryOrderPointDto {
+  id: String!
+  latitude: Float!
+  longitude: String!
+  name: String!
 }
 
 type DeliverResponse {
@@ -25,9 +84,11 @@ type Delivery {
   _id: String!
   payer: Payer!
   receiver: Person!
-  receiverAddress: String!
+  receiverAddress: Address!
+  receiverPoint: Point!
   sender: Person!
-  senderAddress: String!
+  senderAddress: Address!
+  senderPoint: Point!
   status: DeliveryStatus!
 }
 
@@ -35,10 +96,33 @@ input DeliveryInput {
   _id: String!
   payer: Payer!
   receiver: PersonInput!
-  receiverAddress: String!
+  receiverAddress: AddressInput!
+  receiverPoint: PointInput!
   sender: PersonInput!
-  senderAddress: String!
+  senderAddress: AddressInput!
+  senderPoint: PointInput!
   status: DeliveryStatus!
+}
+
+type DeliveryOption {
+  days: Float!
+  id: String!
+  name: String!
+  price: Float!
+  type: DeliveryOptionType!
+}
+
+enum DeliveryOptionType {
+  DEFAULT
+  EXPRESS
+}
+
+input DeliveryOpttionInput {
+  days: Float!
+  id: String!
+  name: String!
+  price: Float!
+  type: DeliveryOptionType!
 }
 
 type DeliveryResponse {
@@ -48,12 +132,15 @@ type DeliveryResponse {
 }
 
 enum DeliveryStatus {
+  CANCELED
   IN_PROCESSING
   SUCCESS
 }
 
 type Mutation {
-  createDeliveryOrder(payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: String!, sender: CreateDeliveryOrderPersonDto!, senderAddress: String!): DeliverResponse!
+  calculateDelivery(package: CalculateDeliveryPackageDto!, receiverPoint: CalculateDeliveryPointDto!, senderPoint: CalculateDeliveryPointDto!): CalculateDeliveryResponse!
+  cancelDeliveryOrder(orderId: String!): BaseResponse!
+  createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
   signin(code: String!, phone: String!): UserResponse!
 }
@@ -80,8 +167,26 @@ type OtpResponse {
   success: Boolean!
 }
 
+type PackageType {
+  height: Float!
+  id: String!
+  length: Float!
+  name: String!
+  weight: Float!
+  width: Float!
+}
+
+input PackageTypeInput {
+  height: Float!
+  id: String!
+  length: Float!
+  name: String!
+  weight: Float!
+  width: Float!
+}
+
 type PackageTypesResponse {
-  points: [Point!]!
+  packages: [PackageType!]!
   reason: String
   success: Boolean!
 }
@@ -107,11 +212,15 @@ input PersonInput {
 
 type Point {
   id: String!
+  latitude: Float!
+  longitude: String!
   name: String!
 }
 
 input PointInput {
   id: String!
+  latitude: Float!
+  longitude: String!
   name: String!
 }
 
