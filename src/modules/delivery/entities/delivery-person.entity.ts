@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
-@InputType('PersonInput')
+@InputType('DeliveryPersonInput')
 @ObjectType()
-export class Person {
+export class DeliveryPerson {
   @Field(() => String)
   @ApiProperty({ example: 'firstname', description: 'Имя' })
   firstname: string;

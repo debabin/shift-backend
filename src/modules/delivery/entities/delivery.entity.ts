@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Document } from 'mongoose';
 
 import { Address } from './address.entity';
-import { Person } from './person.entity';
+import { DeliveryPerson } from './delivery-person.entity';
 import { Point } from './point.entity';
 
 export enum Payer {
@@ -46,10 +46,10 @@ export class Delivery {
   @ApiProperty({ description: 'Адрес отправителя', type: Address })
   senderAddress: Address;
 
-  @Field(() => Person)
+  @Field(() => DeliveryPerson)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Отправитель', type: Person })
-  sender: Person;
+  @ApiProperty({ description: 'Отправитель', type: DeliveryPerson })
+  sender: DeliveryPerson;
 
   @Field(() => Point)
   @Prop({ required: true })
@@ -61,10 +61,10 @@ export class Delivery {
   @ApiProperty({ description: 'Адрес получателя', type: Address })
   receiverAddress: Address;
 
-  @Field(() => Person)
+  @Field(() => DeliveryPerson)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Получатель', type: Person })
-  receiver: Person;
+  @ApiProperty({ description: 'Получатель', type: DeliveryPerson })
+  receiver: DeliveryPerson;
 
   @Field(() => Payer)
   @Prop({ required: true })

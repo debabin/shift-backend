@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
+import { CinemaModule } from '@/modules/cinema/cinema.module';
 import { DeliveryModule } from '@/modules/delivery/delivery.module';
 import { OtpsModule } from '@/modules/otps/otps.module';
 import { UsersModule } from '@/modules/users/users.module';
@@ -41,6 +42,7 @@ import { AppController } from './app.controller';
     }),
     OtpsModule,
     UsersModule,
+    CinemaModule,
     DeliveryModule,
     WakeUpModule
   ],

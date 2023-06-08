@@ -19,7 +19,6 @@ import { DeliveryService } from './delivery.service';
 import { GetDeliveryDto } from './dto';
 
 @Resolver('📦 delivery query')
-@GqlAuthorizedOnly()
 @DescribeContext('DeliveryQuery')
 @Resolver()
 export class DeliveryQuery extends BaseResolver {

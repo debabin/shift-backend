@@ -39,6 +39,12 @@ type CalculateDeliveryResponse {
   success: Boolean!
 }
 
+input CinemaPersonInput {
+  fullName: String!
+  id: String!
+  professions: [Profession!]!
+}
+
 input CreateDeliveryOrderAddressDto {
   appartament: String!
   comment: String
@@ -68,6 +74,11 @@ input CreateDeliveryOrderPointDto {
   name: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type DeliverResponse {
   order: Delivery!
   reason: String
@@ -83,10 +94,10 @@ type DeliveriesResponse {
 type Delivery {
   _id: String!
   payer: Payer!
-  receiver: Person!
+  receiver: DeliveryPerson!
   receiverAddress: Address!
   receiverPoint: Point!
-  sender: Person!
+  sender: DeliveryPerson!
   senderAddress: Address!
   senderPoint: Point!
   status: DeliveryStatus!
@@ -95,10 +106,10 @@ type Delivery {
 input DeliveryInput {
   _id: String!
   payer: Payer!
-  receiver: PersonInput!
+  receiver: DeliveryPersonInput!
   receiverAddress: AddressInput!
   receiverPoint: PointInput!
-  sender: PersonInput!
+  sender: DeliveryPersonInput!
   senderAddress: AddressInput!
   senderPoint: PointInput!
   status: DeliveryStatus!
@@ -125,6 +136,20 @@ input DeliveryOpttionInput {
   type: DeliveryOptionType!
 }
 
+type DeliveryPerson {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
+input DeliveryPersonInput {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
 type DeliveryResponse {
   delivery: Delivery!
   reason: String
@@ -135,6 +160,36 @@ enum DeliveryStatus {
   CANCELED
   IN_PROCESSING
   SUCCESS
+}
+
+type Film {
+  actors: [FilmPerson!]
+  description: String!
+  id: String!
+  name: String!
+  originalName: String!
+  releaseDate: DateTime!
+}
+
+input FilmInput {
+  actors: [CinemaPersonInput!]
+  description: String!
+  id: String!
+  name: String!
+  originalName: String!
+  releaseDate: DateTime!
+}
+
+type FilmPerson {
+  fullName: String!
+  id: String!
+  professions: [Profession!]!
+}
+
+type FilmsResponse {
+  films: [Film!]!
+  reason: String
+  success: Boolean!
 }
 
 type Mutation {
@@ -196,20 +251,6 @@ enum Payer {
   SENDER
 }
 
-type Person {
-  firstname: String!
-  lastname: String!
-  middlename: String
-  phone: String!
-}
-
-input PersonInput {
-  firstname: String!
-  lastname: String!
-  middlename: String
-  phone: String!
-}
-
 type Point {
   id: String!
   latitude: Float!
@@ -230,11 +271,17 @@ type PointsResponse {
   success: Boolean!
 }
 
+enum Profession {
+  actor
+  director
+}
+
 type Query {
   getDeliveries: DeliveriesResponse!
   getDelivery(orderId: String!): DeliveryResponse!
   getDeliveryPackageTypes: PackageTypesResponse!
   getDeliveryPoints: PointsResponse!
+  getFilms: FilmsResponse!
   me: UserResponse!
 }
 
