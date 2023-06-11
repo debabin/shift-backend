@@ -45,6 +45,20 @@ input CinemaPersonInput {
   professions: [Profession!]!
 }
 
+type Country {
+  code: String!
+  code2: String!
+  id: Float!
+  name: String!
+}
+
+input CountryInput {
+  code: String!
+  code2: String!
+  id: Float!
+  name: String!
+}
+
 input CreateDeliveryOrderAddressDto {
   appartament: String!
   comment: String
@@ -163,27 +177,57 @@ enum DeliveryStatus {
 }
 
 type Film {
-  actors: [FilmPerson!]
+  actors: [FilmPerson!]!
+  ageRating: Rating!
+  country: Country
   description: String!
+  directors: [FilmPerson!]!
+  genres: [String!]!
   id: String!
+  img: String!
   name: String!
   originalName: String!
   releaseDate: DateTime!
+  runtime: Float!
+  userRatings: [FilmUserRaiting!]!
 }
 
 input FilmInput {
-  actors: [CinemaPersonInput!]
+  actors: [CinemaPersonInput!]! = []
+  ageRating: Rating!
+  country: CountryInput
   description: String!
+  directors: [CinemaPersonInput!]! = []
+  genres: [String!]! = []
   id: String!
+  img: String!
   name: String!
   originalName: String!
   releaseDate: DateTime!
+  runtime: Float!
+  userRatings: [FilmUserRaitingInput!]!
 }
 
 type FilmPerson {
   fullName: String!
   id: String!
   professions: [Profession!]!
+}
+
+type FilmResponse {
+  film: [Film!]!
+  reason: String
+  success: Boolean!
+}
+
+type FilmUserRaiting {
+  imdb: String!
+  kinopoisk: String!
+}
+
+input FilmUserRaitingInput {
+  imdb: String!
+  kinopoisk: String!
 }
 
 type FilmsResponse {
@@ -281,8 +325,41 @@ type Query {
   getDelivery(orderId: String!): DeliveryResponse!
   getDeliveryPackageTypes: PackageTypesResponse!
   getDeliveryPoints: PointsResponse!
+  getFilm(filmId: String!): FilmResponse!
   getFilms: FilmsResponse!
+  getTickets: TicketsResponse!
   me: UserResponse!
+}
+
+enum Rating {
+  G
+  N17
+  PG
+  PG13
+  R
+}
+
+type Ticket {
+  _id: String!
+  film: Film!
+  status: TicketStatus!
+}
+
+input TicketInput {
+  _id: String!
+  film: FilmInput!
+  status: TicketStatus!
+}
+
+enum TicketStatus {
+  CANCELED
+  PAYED
+}
+
+type TicketsResponse {
+  reason: String
+  success: Boolean!
+  tickets: [Ticket!]!
 }
 
 type User {

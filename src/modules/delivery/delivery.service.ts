@@ -11,8 +11,8 @@ export const OTP_EXPIRED_TIME = 10 * 60000;
 
 @Injectable()
 export class DeliveryService extends BaseService<DeliveryDocument, Delivery> {
-  constructor(@InjectModel(Delivery.name) private OtpModel: Model<DeliveryDocument>) {
-    super(OtpModel);
+  constructor(@InjectModel(Delivery.name) private DeliveryModel: Model<DeliveryDocument>) {
+    super(DeliveryModel);
   }
 
   @Cron('0 0 */5 * * *')

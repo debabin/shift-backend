@@ -1,7 +1,22 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
+import { Country } from '@/utils/common';
+
 import { FilmPerson } from './film-person.entity';
+import { FilmUserRaiting } from './film-user-raiting.entity';
+
+export enum Rating {
+  G,
+  PG,
+  PG13,
+  N17,
+  R
+}
+
+registerEnumType(Rating, {
+  name: 'Rating'
+});
 
 @InputType('FilmInput')
 @ObjectType()
@@ -9,10 +24,6 @@ export class Film {
   @Field(() => String)
   @ApiProperty({ example: '1', description: 'Индентификатор персоны' })
   id: string;
-
-  //   @ApiProperty()
-  //   @Field(() => ContentType)
-  //   type: ContentType;
 
   @ApiProperty()
   @ApiProperty({ description: 'Название фильма' })
@@ -35,52 +46,41 @@ export class Film {
   releaseDate: Date;
 
   @ApiProperty()
-  @Field(() => [FilmPerson], { nullable: true })
+  @Field(() => [FilmPerson], { defaultValue: [] })
   @ApiProperty({ description: 'Актеры', type: [FilmPerson] })
   actors: FilmPerson[];
 
-  //   @ApiProperty()
-  //   @Field(() => Number)
-  //   @Prop()
-  //   runtime: number;
+  @ApiProperty()
+  @Field(() => [FilmPerson], { defaultValue: [] })
+  @ApiProperty({ description: 'Режиссер', type: [FilmPerson] })
+  directors: FilmPerson[];
 
-  //   @ApiProperty()
-  //   @Field(() => String, { nullable: true })
-  //   @Prop()
-  //   chat: string;
+  @ApiProperty()
+  @Field(() => Number)
+  @ApiProperty({ description: 'Продолжительность', type: Number })
+  runtime: number;
 
-  //   @ApiProperty()
-  //   @Field(() => String, { nullable: true })
-  //   @Prop()
-  //   telegramUrl: string;
+  @ApiProperty()
+  @Field(() => Rating)
+  @ApiProperty({ description: 'Возрастное ограничение', enum: Number })
+  ageRating: Rating;
 
-  //   @ApiProperty()
-  //   @Field(() => [String], { nullable: true })
-  //   @Prop()
-  //   directors: string[];
+  @ApiProperty()
+  @Field(() => [String], { defaultValue: [] })
+  genres: string[];
 
-  //   @ApiProperty()
-  //   @Field(() => Rating)
-  //   @Prop({ type: typeof Rating })
-  //   ageRating: Rating;
+  @ApiProperty()
+  @Field(() => [FilmUserRaiting])
+  @ApiProperty({ description: 'Рейтинг пользователей', type: FilmUserRaiting })
+  userRatings: FilmUserRaiting[];
 
-  //   @ApiProperty()
-  //   @Field(() => [String], { nullable: true })
-  //   @Prop()
-  //   genres: string[];
+  @ApiProperty()
+  @Field(() => String)
+  @ApiProperty({ description: 'Изображение фильма' })
+  img: string;
 
-  //   @ApiProperty()
-  //   @Field(() => [UserRating])
-  //   @Prop({ default: [] })
-  //   userRatings: UserRating[];
-
-  //   @ApiProperty()
-  //   @Field(() => Img, { nullable: true })
-  //   @Prop()
-  //   img?: Img;
-
-  //   @ApiProperty()
-  //   @Field(() => Country, { nullable: true })
-  //   @Prop()
-  //   country?: Country;
+  @ApiProperty()
+  @Field(() => Country, { nullable: true })
+  @ApiProperty({ description: 'Страна' })
+  country?: Country;
 }

@@ -4,13 +4,13 @@ import { BadRequestException, Body, Controller, Get, Param, Post, Put, Res } fro
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
-import { packages, points } from '@/utils/constants';
 import { ApiAuthorizedOnly } from '@/utils/guards';
 import { getDistance } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
 
+import { packages, points } from './constants';
 import {
   PointsResponse,
   PackageTypesResponse,
@@ -195,7 +195,7 @@ export class DeliveryController extends BaseResolver {
   @ApiOperation({ summary: 'отменить доставку' })
   @ApiResponse({
     status: 200,
-    description: 'order',
+    description: 'order cancel',
     type: BaseResponse
   })
   @ApiHeader({

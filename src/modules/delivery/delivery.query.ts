@@ -2,13 +2,13 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 
-import { points, packages } from '@/utils/constants';
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { AuthService, BaseResolver } from '@/utils/services';
 
 import { User } from '../users';
 
+import { points, packages } from './constants';
 import {
   PointsResponse,
   PackageTypesResponse,

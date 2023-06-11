@@ -4,6 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { DescribeContext } from '@/utils/decorators';
+import { GqlAuthorizedOnly } from '@/utils/guards';
 import { getDistance } from '@/utils/helpers';
 import { BaseResolver, BaseResponse } from '@/utils/services';
 
@@ -20,6 +21,7 @@ export class DeliveryMutation extends BaseResolver {
     super();
   }
 
+  @GqlAuthorizedOnly()
   @Mutation(() => BaseResponse)
   async cancelDeliveryOrder(
     @Args() cancelDeliveryOrderDto: CancelDeliveryOrderDto

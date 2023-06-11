@@ -1,20 +1,17 @@
 import { Module } from '@nestjs/common';
-// import { MongooseModule } from '@nestjs/mongoose';
-// import { ScheduleModule } from '@nestjs/schedule';
+import { MongooseModule } from '@nestjs/mongoose';
 
-// import { AuthModule } from '@/utils/services';
+import { AuthModule } from '@/utils/services';
 
-import { DeliveryController } from './cinema.controller';
+import { CinemaController } from './cinema.controller';
 import { CinemaQuery } from './cinema.query';
-// import { DeliveryService } from './delivery.service';
+import { CinemaService } from './cinema.service';
+import { Ticket, TicketSchema } from './entities/ticket.entity';
 
 @Module({
-  controllers: [DeliveryController],
-  imports: [
-    // AuthModule,
-    // MongooseModule.forFeature([{ name: Delivery.name, schema: DeliverySchema }])
-  ],
-  providers: [CinemaQuery],
-  exports: []
+  controllers: [CinemaController],
+  imports: [AuthModule, MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }])],
+  providers: [CinemaService, CinemaQuery],
+  exports: [CinemaService]
 })
 export class CinemaModule {}
