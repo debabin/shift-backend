@@ -34,7 +34,7 @@ export class DeliveryMutation extends BaseResolver {
 
     await this.cinemaService.updateOne(
       { _id: cancelTicketOrderDto.ticketId },
-      { $set: { status: TicketStatus.PAYED } }
+      { $set: { status: TicketStatus.CANCELED } }
     );
 
     return this.wrapSuccess();

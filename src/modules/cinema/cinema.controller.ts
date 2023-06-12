@@ -29,7 +29,7 @@ export class CinemaController extends BaseResolver {
     description: 'cinema today',
     type: FilmsResponse
   })
-  getFilms(): FilmsResponse {
+  getCinemaToday(): FilmsResponse {
     const films = this.cinemaService.getFilms();
     return this.wrapSuccess({ films });
   }
@@ -57,7 +57,7 @@ export class CinemaController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
-  async getDeliveries(@Res() request: Request): Promise<TicketsResponse> {
+  async getTickets(@Res() request: Request): Promise<TicketsResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -81,9 +81,7 @@ export class CinemaController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
-  async cancelDeliveryOrder(
-    @Body() cancelTicketOrderDto: CancelTicketOrderDto
-  ): Promise<BaseResponse> {
+  async cancelTicket(@Body() cancelTicketOrderDto: CancelTicketOrderDto): Promise<BaseResponse> {
     const ticket = await this.cinemaService.findOne({ _id: cancelTicketOrderDto.ticketId });
 
     if (!ticket) {
@@ -96,7 +94,7 @@ export class CinemaController extends BaseResolver {
 
     await this.cinemaService.updateOne(
       { _id: cancelTicketOrderDto.ticketId },
-      { $set: { status: TicketStatus.PAYED } }
+      { $set: { status: TicketStatus.CANCELED } }
     );
 
     return this.wrapSuccess();

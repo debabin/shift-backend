@@ -24,7 +24,7 @@ export class CinemaQuery extends BaseResolver {
   }
 
   @Query(() => FilmsResponse)
-  async getFilms(): Promise<FilmsResponse> {
+  async getCinemaToday(): Promise<FilmsResponse> {
     const films = this.cinemaService.getFilms();
     return this.wrapSuccess({ films });
   }

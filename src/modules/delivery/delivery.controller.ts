@@ -165,7 +165,7 @@ export class DeliveryController extends BaseResolver {
     name: 'authorization'
   })
   async getDelivery(
-    @Param() params: GetDeliveryDto,
+    @Param() getDeliveryDto: GetDeliveryDto,
     @Res() request: Request
   ): Promise<DeliveryResponse> {
     const token = request.headers.authorization.split(' ')[1];
@@ -176,7 +176,7 @@ export class DeliveryController extends BaseResolver {
     }
 
     const delivery = await this.deliveryService.findOne({
-      _id: params.orderId,
+      _id: getDeliveryDto.orderId,
       $or: [
         { 'sender.phone': decodedJwtAccessToken.phone },
         { 'receiver.phone': decodedJwtAccessToken.phone }
