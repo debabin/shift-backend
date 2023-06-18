@@ -27,6 +27,11 @@ async function bootstrap() {
     .setTitle('shift backend 🔥')
     .setDescription('Данный репозиторий содержит backend для выполнения индивидуальных заданий')
     .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT'
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

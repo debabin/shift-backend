@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import { BadRequestException, Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { ApiAuthorizedOnly } from '@/utils/guards';
@@ -135,6 +135,7 @@ export class DeliveryController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
+  @ApiBearerAuth()
   async getDeliveries(@Res() request: Request): Promise<DeliveriesResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
@@ -164,6 +165,7 @@ export class DeliveryController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
+  @ApiBearerAuth()
   async getDelivery(
     @Param() getDeliveryDto: GetDeliveryDto,
     @Res() request: Request
@@ -201,6 +203,7 @@ export class DeliveryController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
+  @ApiBearerAuth()
   async cancelDeliveryOrder(
     @Body() cancelDeliveryOrderDto: CancelDeliveryOrderDto
   ): Promise<BaseResponse> {

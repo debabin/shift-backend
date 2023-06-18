@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Param, Put, Res } from '@nestjs/common';
-import { ApiOperation, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiHeader, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { ApiAuthorizedOnly } from '@/utils/guards';
@@ -57,6 +57,7 @@ export class CinemaController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
+  @ApiBearerAuth()
   async getTickets(@Res() request: Request): Promise<TicketsResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
@@ -81,6 +82,7 @@ export class CinemaController extends BaseResolver {
   @ApiHeader({
     name: 'authorization'
   })
+  @ApiBearerAuth()
   async cancelTicket(@Body() cancelTicketOrderDto: CancelTicketOrderDto): Promise<BaseResponse> {
     const ticket = await this.cinemaService.findOne({ _id: cancelTicketOrderDto.ticketId });
 

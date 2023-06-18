@@ -321,12 +321,12 @@ enum Profession {
 }
 
 type Query {
+  getCinemaToday: FilmsResponse!
   getDeliveries: DeliveriesResponse!
   getDelivery(orderId: String!): DeliveryResponse!
   getDeliveryPackageTypes: PackageTypesResponse!
   getDeliveryPoints: PointsResponse!
   getFilm(filmId: String!): FilmResponse!
-  getFilms: FilmsResponse!
   getTickets: TicketsResponse!
   me: UserResponse!
 }
