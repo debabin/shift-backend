@@ -7,9 +7,9 @@ import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
 
-import { FilmResponse, FilmsResponse, TicketsResponse } from './cinema.model';
+import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
-import { CancelTicketOrderDto, GetFilmDto } from './dto';
+import { CancelTicketOrderDto, GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
 
 @ApiTags('🍿 cinema')
@@ -34,7 +34,7 @@ export class CinemaController extends BaseResolver {
     return this.wrapSuccess({ films });
   }
 
-  @Get('/film/:id')
+  @Get('/film/:filmId')
   @ApiOperation({ summary: 'получить фильм' })
   @ApiResponse({
     status: 200,
@@ -100,5 +100,17 @@ export class CinemaController extends BaseResolver {
     );
 
     return this.wrapSuccess();
+  }
+
+  @Get('/film/:filmId/schedule')
+  @ApiOperation({ summary: 'Получить расписание фильма' })
+  @ApiResponse({
+    status: 200,
+    description: 'schedule',
+    type: ScheduleResponse
+  })
+  getSchedule(@Param() params: GetScheduleDto): ScheduleResponse {
+    const scheduleByFilm = this.cinemaService.getScheduleByFilm(params.filmId);
+    return this.wrapSuccess({ schedule: scheduleByFilm });
   }
 }

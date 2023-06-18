@@ -41,9 +41,9 @@ export class Film {
   description: string;
 
   @ApiProperty()
-  @Field(() => Date)
+  @Field(() => String)
   @ApiProperty({ description: 'Дата выхода' })
-  releaseDate: Date;
+  releaseDate: string;
 
   @ApiProperty()
   @Field(() => [FilmPerson], { defaultValue: [] })
@@ -70,9 +70,9 @@ export class Film {
   genres: string[];
 
   @ApiProperty()
-  @Field(() => [FilmUserRaiting])
+  @Field(() => FilmUserRaiting)
   @ApiProperty({ description: 'Рейтинг пользователей', type: FilmUserRaiting })
-  userRatings: FilmUserRaiting[];
+  userRatings: FilmUserRaiting;
 
   @ApiProperty()
   @Field(() => String)

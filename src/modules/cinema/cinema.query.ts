@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Param } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 
@@ -8,9 +8,9 @@ import { AuthService, BaseResolver } from '@/utils/services';
 
 import { User } from '../users';
 
-import { FilmResponse, FilmsResponse, TicketsResponse } from './cinema.model';
+import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
-import { GetFilmDto } from './dto';
+import { GetFilmDto, GetScheduleDto } from './dto';
 
 @Resolver('🍿 cinema query')
 @DescribeContext('CinemaQuery')
@@ -24,15 +24,21 @@ export class CinemaQuery extends BaseResolver {
   }
 
   @Query(() => FilmsResponse)
-  async getCinemaToday(): Promise<FilmsResponse> {
+  getCinemaToday(): FilmsResponse {
     const films = this.cinemaService.getFilms();
     return this.wrapSuccess({ films });
   }
 
   @Query(() => FilmResponse)
-  async getFilm(@Args() getFilmDto: GetFilmDto): Promise<FilmResponse> {
+  getFilm(@Args() getFilmDto: GetFilmDto): FilmResponse {
     const film = this.cinemaService.getFilm(getFilmDto.filmId);
     return this.wrapSuccess({ film });
+  }
+
+  @Query(() => ScheduleResponse)
+  getSchedule(@Args() getScheduleDto: GetScheduleDto): ScheduleResponse {
+    const scheduleByFilm = this.cinemaService.getScheduleByFilm(getScheduleDto.filmId);
+    return this.wrapSuccess({ schedule: scheduleByFilm });
   }
 
   @GqlAuthorizedOnly()
