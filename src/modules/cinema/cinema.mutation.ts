@@ -6,13 +6,13 @@ import { GqlAuthorizedOnly } from '@/utils/guards';
 import { BaseResolver, BaseResponse } from '@/utils/services';
 
 import { CinemaService } from './cinema.service';
-import { CancelTicketOrderDto } from './dto';
+import { CancelTicketOrderDto, CreateCinemaPaymentDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
 
 @Resolver('📦 cinema mutation')
 @DescribeContext('CinemaMutation')
 @Resolver(() => Ticket)
-export class DeliveryMutation extends BaseResolver {
+export class CinemaMutation extends BaseResolver {
   constructor(private readonly cinemaService: CinemaService) {
     super();
   }
@@ -38,5 +38,21 @@ export class DeliveryMutation extends BaseResolver {
     );
 
     return this.wrapSuccess();
+  }
+
+  @Mutation(() => BaseResponse)
+  async createCinemaPayment(
+    @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
+  ): Promise<BaseResponse> {
+    const tickets: Omit<Ticket, '_id'>[] = createCinemaPaymentDto.tickets.map((ticket) => ({
+      filmId: createCinemaPaymentDto.filmId,
+      seance: createCinemaPaymentDto.seance,
+      status: TicketStatus.PAYED,
+      ...ticket
+    }));
+
+    await this.cinemaService.insertMany(tickets);
+
+    return this.wrapSuccess({});
   }
 }

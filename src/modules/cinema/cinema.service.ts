@@ -4,8 +4,8 @@ import { Model } from 'mongoose';
 
 import { BaseService } from '@/utils/services';
 
+import { films, schedules } from './constants';
 import { Ticket, TicketDocument } from './entities/ticket.entity';
-import { films, scheduleData } from './constants';
 
 @Injectable()
 export class CinemaService extends BaseService<TicketDocument, Ticket> {
@@ -22,23 +22,18 @@ export class CinemaService extends BaseService<TicketDocument, Ticket> {
     return films.find((film) => film.id === id);
   }
 
-  getScheduleData() {
-    return scheduleData;
+  getSchedules() {
+    return schedules;
   }
 
-  getScheduleByFilm(id: string) {
-    const date = new Date();
-    const currentDay = date.getDay();
+  getSchedule(filmId: string) {
+    const currentDay = new Date().getDay();
 
-    const scheduleData = this.getScheduleData();
-    const scheduleByFilm = scheduleData.find(
-      (scheduleDataItem) => scheduleDataItem.filmId === id
-    ).schedule;
+    const schedules = this.getSchedules();
+    const { schedule } = schedules.find((scheduleDataItem) => scheduleDataItem.filmId === filmId);
 
-    if (currentDay === 0) return scheduleByFilm;
+    if (currentDay === 0) return schedule;
 
-    return scheduleByFilm
-      .slice(currentDay, scheduleByFilm.length)
-      .concat(scheduleByFilm.slice(0, currentDay));
+    return schedule.slice(currentDay, schedule.length).concat(schedule.slice(0, currentDay));
   }
 }

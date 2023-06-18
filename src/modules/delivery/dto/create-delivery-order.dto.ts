@@ -81,6 +81,8 @@ export class CreateDeliveryOrderPersonDto {
   @ApiProperty({ example: 'middlename', description: 'Отчество' })
   middlename?: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Field(() => String)
   @ApiProperty({ example: '89990009999', description: 'Телефон' })
   phone: string;

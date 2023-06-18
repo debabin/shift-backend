@@ -1,4 +1,4 @@
-import { BadRequestException, Param } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 
@@ -11,6 +11,7 @@ import { User } from '../users';
 import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
+import { TicketStatus } from './entities';
 
 @Resolver('🍿 cinema query')
 @DescribeContext('CinemaQuery')
@@ -36,9 +37,15 @@ export class CinemaQuery extends BaseResolver {
   }
 
   @Query(() => ScheduleResponse)
-  getSchedule(@Args() getScheduleDto: GetScheduleDto): ScheduleResponse {
-    const scheduleByFilm = this.cinemaService.getScheduleByFilm(getScheduleDto.filmId);
-    return this.wrapSuccess({ schedule: scheduleByFilm });
+  getFilmSchedule(@Args() getScheduleDto: GetScheduleDto): ScheduleResponse {
+    const schedule = this.cinemaService.getSchedule(getScheduleDto.filmId);
+    const tickets = this.cinemaService.find({
+      status: TicketStatus.PAYED,
+      'seance.date': { $gt: new Date().getTime() }
+    });
+
+    // тут нужно еще дополнить расписание купленными билетами
+    return this.wrapSuccess({ schedule });
   }
 
   @GqlAuthorizedOnly()

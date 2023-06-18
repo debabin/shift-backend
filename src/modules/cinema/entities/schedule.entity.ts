@@ -1,5 +1,6 @@
 import { InputType, ObjectType, Field } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+
 import { Seance } from './seance.entity';
 
 @InputType('ScheduleInput')
@@ -11,6 +12,6 @@ export class Schedule {
 
   @ApiProperty()
   @Field(() => [[Seance]])
-  @ApiProperty({ description: 'Недельное расписание' })
+  @ApiProperty({ description: 'Недельное расписание', type: [[Seance]] })
   schedule: Seance[][];
 }

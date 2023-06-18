@@ -88,6 +88,29 @@ input CreateDeliveryOrderPointDto {
   name: String!
 }
 
+input CreatePaymentDebitCardDto {
+  cvv: String!
+  expireDate: String!
+  pan: String!
+}
+
+input CreatePaymentPersonDto {
+  firstname: String!
+  lastname: String!
+  middlename: String
+  phone: String!
+}
+
+input CreatePaymentSeanceDto {
+  date: DateTime!
+  time: String!
+}
+
+input CreatePaymentTicketsDto {
+  column: Float!
+  row: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -187,9 +210,41 @@ type Film {
   img: String!
   name: String!
   originalName: String!
-  releaseDate: DateTime!
+  releaseDate: String!
   runtime: Float!
-  userRatings: [FilmUserRaiting!]!
+  userRatings: FilmUserRaiting!
+}
+
+type FilmHall {
+  name: String!
+  places: [[FilmHallCell!]!]!
+}
+
+type FilmHallCell {
+  price: Float!
+  status: FilmHallCellStatus!
+  type: FilmHallCellType!
+}
+
+input FilmHallCellInput {
+  price: Float!
+  status: FilmHallCellStatus!
+  type: FilmHallCellType!
+}
+
+enum FilmHallCellStatus {
+  DEFAULT
+  PAYED
+}
+
+enum FilmHallCellType {
+  COMFORT
+  ECONOM
+}
+
+input FilmHallInput {
+  name: String!
+  places: [[FilmHallCellInput!]!]!
 }
 
 input FilmInput {
@@ -203,9 +258,9 @@ input FilmInput {
   img: String!
   name: String!
   originalName: String!
-  releaseDate: DateTime!
+  releaseDate: String!
   runtime: Float!
-  userRatings: [FilmUserRaitingInput!]!
+  userRatings: FilmUserRaitingInput!
 }
 
 type FilmPerson {
@@ -215,7 +270,7 @@ type FilmPerson {
 }
 
 type FilmResponse {
-  film: [Film!]!
+  film: Film!
   reason: String
   success: Boolean!
 }
@@ -239,6 +294,7 @@ type FilmsResponse {
 type Mutation {
   calculateDelivery(package: CalculateDeliveryPackageDto!, receiverPoint: CalculateDeliveryPointDto!, senderPoint: CalculateDeliveryPointDto!): CalculateDeliveryResponse!
   cancelDeliveryOrder(orderId: String!): BaseResponse!
+  createCinemaPayment(debitCard: CreatePaymentDebitCardDto!, filmId: String!, person: CreatePaymentPersonDto!, seance: CreatePaymentSeanceDto!, tickets: CreatePaymentTicketsDto!): BaseResponse!
   createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
   signin(code: String!, phone: String!): UserResponse!
@@ -327,6 +383,7 @@ type Query {
   getDeliveryPackageTypes: PackageTypesResponse!
   getDeliveryPoints: PointsResponse!
   getFilm(filmId: String!): FilmResponse!
+  getFilmSchedule(filmId: String!): ScheduleResponse!
   getTickets: TicketsResponse!
   me: UserResponse!
 }
@@ -339,16 +396,50 @@ enum Rating {
   R
 }
 
+type ScheduleResponse {
+  reason: String
+  schedule: [[Seance!]!]!
+  success: Boolean!
+}
+
+type Seance {
+  date: DateTime!
+  hall: FilmHall!
+  time: String!
+}
+
+input SeanceInput {
+  date: DateTime!
+  hall: FilmHallInput!
+  time: String!
+}
+
 type Ticket {
   _id: String!
-  film: Film!
+  column: Float!
+  filmId: String!
+  row: Float!
+  seance: TicketSeance!
   status: TicketStatus!
 }
 
 input TicketInput {
   _id: String!
-  film: FilmInput!
+  column: Float!
+  filmId: String!
+  row: Float!
+  seance: TicketSeanceInput!
   status: TicketStatus!
+}
+
+type TicketSeance {
+  date: DateTime!
+  time: String!
+}
+
+input TicketSeanceInput {
+  date: DateTime!
+  time: String!
 }
 
 enum TicketStatus {

@@ -109,8 +109,14 @@ export class CinemaController extends BaseResolver {
     description: 'schedule',
     type: ScheduleResponse
   })
-  getSchedule(@Param() params: GetScheduleDto): ScheduleResponse {
-    const scheduleByFilm = this.cinemaService.getScheduleByFilm(params.filmId);
-    return this.wrapSuccess({ schedule: scheduleByFilm });
+  getFilmSchedule(@Param() params: GetScheduleDto): ScheduleResponse {
+    const schedule = this.cinemaService.getSchedule(params.filmId);
+    const tickets = this.cinemaService.find({
+      status: TicketStatus.PAYED,
+      'seance.date': { $gt: new Date().getTime() }
+    });
+
+    // тут нужно еще дополнить расписание купленными билетами
+    return this.wrapSuccess({ schedule });
   }
 }

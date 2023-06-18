@@ -3,8 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Document } from 'mongoose';
 
-import { Film } from './film.entity';
-
 export enum TicketStatus {
   PAYED,
   CANCELED
@@ -13,6 +11,18 @@ export enum TicketStatus {
 registerEnumType(TicketStatus, {
   name: 'TicketStatus'
 });
+
+@InputType('TicketSeanceInput')
+@ObjectType()
+export class TicketSeance {
+  @Field(() => Number)
+  @ApiProperty({ description: 'Дата сеанса' })
+  date: number;
+
+  @Field(() => String)
+  @ApiProperty({ description: 'Время сеанса' })
+  time: string;
+}
 
 @InputType('TicketInput')
 @ObjectType()
@@ -26,14 +36,26 @@ export class Ticket {
   @Field(() => String)
   _id: MongooseSchema.Types.ObjectId;
 
-  @Field(() => Film)
+  @Field(() => String)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Фильм', type: Film })
-  film: Film;
+  @ApiProperty({ description: 'Индефикатор фильма' })
+  filmId: string;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 1, description: 'Ряд' })
+  row: number;
+
+  @Field(() => Number)
+  @ApiProperty({ example: 1, description: 'Место' })
+  column: number;
+
+  @Field(() => TicketSeance)
+  @ApiProperty({ description: 'Сеанс фильма', type: TicketSeance })
+  seance: TicketSeance;
 
   @Field(() => TicketStatus)
   @Prop({ required: true, default: TicketStatus.PAYED })
-  @ApiProperty({ description: 'Статус доставки', enum: TicketStatus })
+  @ApiProperty({ description: 'Статус билета', enum: TicketStatus })
   status: TicketStatus;
 }
 

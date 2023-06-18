@@ -1,6 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import { Place } from './place.entity';
+
+import { FilmHall } from './film-hall.entity';
 
 @InputType('SeanceInput')
 @ObjectType()
@@ -9,11 +10,7 @@ export class Seance {
   @ApiProperty({ description: 'Время сеанса' })
   time: string;
 
-  @Field(() => String)
-  @ApiProperty({ description: 'Название зала' })
-  hallName: string;
-
-  @Field(() => [[Place]])
-  @ApiProperty({ description: 'Матрица мест' })
-  places: Place[][];
+  @Field(() => FilmHall)
+  @ApiProperty({ description: 'Зал сеанса', type: FilmHall })
+  hall: FilmHall;
 }
