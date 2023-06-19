@@ -37,15 +37,40 @@ export class CinemaQuery extends BaseResolver {
   }
 
   @Query(() => ScheduleResponse)
-  getFilmSchedule(@Args() getScheduleDto: GetScheduleDto): ScheduleResponse {
-    const schedule = this.cinemaService.getSchedule(getScheduleDto.filmId);
-    const tickets = this.cinemaService.find({
+  async getFilmSchedule(@Args() getScheduleDto: GetScheduleDto): Promise<ScheduleResponse> {
+    const filmSchedule = this.cinemaService.getFilmSchedule(getScheduleDto.filmId);
+    const tickets = await this.cinemaService.find({
       status: TicketStatus.PAYED,
       'seance.date': { $gt: new Date().getTime() }
     });
 
-    // тут нужно еще дополнить расписание купленными билетами
-    return this.wrapSuccess({ schedule });
+    const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
+      const date = new Date(new Date().setDate(new Date().getDate() + index));
+      const year = date.getFullYear().toString().slice(2);
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formatedDate = `${day}.${month}.${year}`;
+
+      const seances = schedule.map((element) => {
+        const payedTickets = tickets.filter(
+          (ticket) =>
+            ticket.seance.date === formatedDate &&
+            ticket.seance.time === element.time &&
+            ticket.filmId === getScheduleDto.filmId
+        );
+
+        return {
+          ...element,
+          payedTickets
+        };
+      });
+
+      acc.push({ date: formatedDate, seances });
+
+      return acc;
+    }, [] as ScheduleResponse['schedules']);
+
+    return this.wrapSuccess({ schedules: updatedFilmSchedule });
   }
 
   @GqlAuthorizedOnly()

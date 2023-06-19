@@ -27,8 +27,26 @@ export class FilmResponse extends BaseResponse {
 }
 
 @ObjectType()
+export class ScheduleSeance extends Seance {
+  @Field(() => [Ticket])
+  @ApiProperty({ description: 'Купленные билеты', type: [Ticket] })
+  payedTickets: Ticket[];
+}
+
+@ObjectType()
+export class Schedule {
+  @Field(() => String)
+  @ApiProperty({ description: 'Дата сеансов', type: Schedule })
+  date: string;
+
+  @Field(() => [ScheduleSeance])
+  @ApiProperty({ description: 'Сеансы', type: ScheduleSeance })
+  seances: ScheduleSeance[];
+}
+
+@ObjectType()
 export class ScheduleResponse extends BaseResponse {
-  @Field(() => [[Seance]])
-  @ApiProperty({ description: 'Расписание', type: [[Seance]] })
-  schedule: Record<number, Seance[]>;
+  @Field(() => [Schedule])
+  @ApiProperty({ description: 'Расписание', type: [Schedule] })
+  schedules: Schedule[];
 }

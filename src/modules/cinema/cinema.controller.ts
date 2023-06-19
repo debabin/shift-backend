@@ -10,7 +10,7 @@ import { User } from '../users';
 import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, GetFilmDto, GetScheduleDto } from './dto';
-import {Ticket, TicketStatus} from './entities';
+import { TicketStatus } from './entities';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')
@@ -109,16 +109,39 @@ export class CinemaController extends BaseResolver {
     description: 'schedule',
     type: ScheduleResponse
   })
-  getFilmSchedule(@Param() params: GetScheduleDto): ScheduleResponse {
-    const schedule = this.cinemaService.getSchedule(params.filmId);
-    const tickets: Ticket[] = this.cinemaService.find({
+  async getFilmSchedule(@Param() getScheduleDto: GetScheduleDto): Promise<ScheduleResponse> {
+    const filmSchedule = this.cinemaService.getFilmSchedule(getScheduleDto.filmId);
+    const tickets = await this.cinemaService.find({
       status: TicketStatus.PAYED,
       'seance.date': { $gt: new Date().getTime() }
     });
 
-    // тут нужно еще дополнить расписание купленными билетами
+    const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
+      const date = new Date(new Date().setDate(new Date().getDate() + index));
+      const year = date.getFullYear().toString().slice(2);
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formatedDate = `${day}.${month}.${year}`;
 
+      const seances = schedule.map((element) => {
+        const payedTickets = tickets.filter(
+          (ticket) =>
+            ticket.seance.date === formatedDate &&
+            ticket.seance.time === element.time &&
+            ticket.filmId === getScheduleDto.filmId
+        );
 
-    return this.wrapSuccess({ schedule });
+        return {
+          ...element,
+          payedTickets
+        };
+      });
+
+      acc.push({ date: formatedDate, seances });
+
+      return acc;
+    }, [] as ScheduleResponse['schedules']);
+
+    return this.wrapSuccess({ schedules: updatedFilmSchedule });
   }
 }

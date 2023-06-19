@@ -1,28 +1,28 @@
-import { FilmHallCellStatus, FilmHallCellType } from '../../entities';
+import { FilmHallCellType } from '../../entities';
 
 export const red = [
   [
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM }
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM }
   ],
   [
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 200, type: FilmHallCellType.COMFORT },
-    { status: FilmHallCellStatus.DEFAULT, price: 200, type: FilmHallCellType.COMFORT },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM }
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 200, type: FilmHallCellType.COMFORT },
+    { price: 200, type: FilmHallCellType.COMFORT },
+    { price: 100, type: FilmHallCellType.ECONOM }
   ],
   [
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 200, type: FilmHallCellType.COMFORT },
-    { status: FilmHallCellStatus.DEFAULT, price: 200, type: FilmHallCellType.COMFORT },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM }
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 200, type: FilmHallCellType.COMFORT },
+    { price: 200, type: FilmHallCellType.COMFORT },
+    { price: 100, type: FilmHallCellType.ECONOM }
   ],
   [
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM },
-    { status: FilmHallCellStatus.DEFAULT, price: 100, type: FilmHallCellType.ECONOM }
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM },
+    { price: 100, type: FilmHallCellType.ECONOM }
   ]
 ];

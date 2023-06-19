@@ -30,9 +30,4 @@ export class FilmHallCell {
   @Field(() => Number)
   @ApiProperty({ example: 100, description: 'Цена места в зале' })
   price: number;
-
-  @ApiProperty()
-  @Field(() => FilmHallCellStatus)
-  @ApiProperty({ description: 'Статус места в зале', enum: FilmHallCellStatus })
-  status: FilmHallCellStatus;
 }

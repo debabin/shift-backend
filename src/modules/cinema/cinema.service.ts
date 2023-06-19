@@ -26,16 +26,14 @@ export class CinemaService extends BaseService<TicketDocument, Ticket> {
     return schedules;
   }
 
-  getSchedule(filmId: string) {
-    // const currentDay = new Date().getDay();
+  getFilmSchedule(filmId: string) {
+    const currentDay = new Date().getDay();
 
     const schedules = this.getSchedules();
     const { schedule } = schedules.find((scheduleDataItem) => scheduleDataItem.filmId === filmId);
 
-    return schedule;
+    if (currentDay === 0) return schedule;
 
-    // if (currentDay === 0) return schedule;
-    //
-    // return schedule.slice(currentDay, schedule.length).concat(schedule.slice(0, currentDay));
+    return schedule.slice(currentDay, schedule.length).concat(schedule.slice(0, currentDay));
   }
 }

@@ -102,7 +102,7 @@ input CreatePaymentPersonDto {
 }
 
 input CreatePaymentSeanceDto {
-  date: DateTime!
+  date: String!
   time: String!
 }
 
@@ -110,11 +110,6 @@ input CreatePaymentTicketsDto {
   column: Float!
   row: Float!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type DeliverResponse {
   order: Delivery!
@@ -222,19 +217,12 @@ type FilmHall {
 
 type FilmHallCell {
   price: Float!
-  status: FilmHallCellStatus!
   type: FilmHallCellType!
 }
 
 input FilmHallCellInput {
   price: Float!
-  status: FilmHallCellStatus!
   type: FilmHallCellType!
-}
-
-enum FilmHallCellStatus {
-  DEFAULT
-  PAYED
 }
 
 enum FilmHallCellType {
@@ -396,21 +384,20 @@ enum Rating {
   R
 }
 
+type Schedule {
+  date: String!
+  seances: [ScheduleSeance!]!
+}
+
 type ScheduleResponse {
   reason: String
-  schedule: [[Seance!]!]!
+  schedules: [Schedule!]!
   success: Boolean!
 }
 
-type Seance {
-  date: DateTime!
+type ScheduleSeance {
   hall: FilmHall!
-  time: String!
-}
-
-input SeanceInput {
-  date: DateTime!
-  hall: FilmHallInput!
+  payedTickets: [Ticket!]!
   time: String!
 }
 
@@ -433,12 +420,12 @@ input TicketInput {
 }
 
 type TicketSeance {
-  date: DateTime!
+  date: String!
   time: String!
 }
 
 input TicketSeanceInput {
-  date: DateTime!
+  date: String!
   time: String!
 }
 

@@ -66,9 +66,9 @@ export class CreatePaymentPersonDto {
 @InputType('CreatePaymentSeanceDto')
 export class CreatePaymentSeanceDto {
   @IsNotEmpty()
-  @Field(() => Number)
+  @Field(() => String)
   @ApiProperty({ example: new Date().getTime(), description: 'Дата сеанса' })
-  date: number;
+  date: string;
 
   @IsString()
   @IsNotEmpty()

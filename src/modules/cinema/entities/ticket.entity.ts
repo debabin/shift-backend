@@ -15,12 +15,12 @@ registerEnumType(TicketStatus, {
 @InputType('TicketSeanceInput')
 @ObjectType()
 export class TicketSeance {
-  @Field(() => Number)
-  @ApiProperty({ description: 'Дата сеанса' })
-  date: number;
+  @Field(() => String)
+  @ApiProperty({ example: '19.06.23', description: 'Дата сеанса' })
+  date: string;
 
   @Field(() => String)
-  @ApiProperty({ description: 'Время сеанса' })
+  @ApiProperty({ example: '21:57', description: 'Время сеанса' })
   time: string;
 }
 
