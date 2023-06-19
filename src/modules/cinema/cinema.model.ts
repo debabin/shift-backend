@@ -30,5 +30,5 @@ export class FilmResponse extends BaseResponse {
 export class ScheduleResponse extends BaseResponse {
   @Field(() => [[Seance]])
   @ApiProperty({ description: 'Расписание', type: [[Seance]] })
-  schedule: Seance[][];
+  schedule: Record<number, Seance[]>;
 }

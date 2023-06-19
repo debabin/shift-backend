@@ -10,7 +10,7 @@ import { User } from '../users';
 import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, GetFilmDto, GetScheduleDto } from './dto';
-import { TicketStatus } from './entities';
+import {Ticket, TicketStatus} from './entities';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')
@@ -111,12 +111,14 @@ export class CinemaController extends BaseResolver {
   })
   getFilmSchedule(@Param() params: GetScheduleDto): ScheduleResponse {
     const schedule = this.cinemaService.getSchedule(params.filmId);
-    const tickets = this.cinemaService.find({
+    const tickets: Ticket[] = this.cinemaService.find({
       status: TicketStatus.PAYED,
       'seance.date': { $gt: new Date().getTime() }
     });
 
     // тут нужно еще дополнить расписание купленными билетами
+
+
     return this.wrapSuccess({ schedule });
   }
 }

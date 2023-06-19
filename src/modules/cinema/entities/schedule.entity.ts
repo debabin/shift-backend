@@ -10,8 +10,10 @@ export class Schedule {
   @ApiProperty({ description: 'Индентификатор фильма' })
   filmId: string;
 
-  @ApiProperty()
-  @Field(() => [[Seance]])
-  @ApiProperty({ description: 'Недельное расписание', type: [[Seance]] })
-  schedule: Seance[][];
+  @Field(() => Seance)
+  @ApiProperty({ description: 'Недельное расписание', type: Seance })
+  // schedule: {
+  //   [p: number]: Seance;
+  // };
+  schedule: Record<number, Seance[]>
 }
