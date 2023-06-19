@@ -10,7 +10,18 @@ export class FilmHall {
   @ApiProperty({ example: 'name', description: 'Название зала' })
   name: string;
 
-  @Field(() => [[FilmHallCell]])
+  @Field(() => [[FilmHallCell]], {
+    defaultValue: [
+      [
+        { type: '', price: 10 },
+        { type: '', price: 10 }
+      ],
+      [
+        { type: '', price: 10 },
+        { type: '', price: 10 }
+      ]
+    ]
+  })
   @ApiProperty({ description: 'Места в зале', type: [[FilmHallCell]] })
   places: FilmHallCell[][];
 }

@@ -12,9 +12,9 @@ registerEnumType(TicketStatus, {
   name: 'TicketStatus'
 });
 
-@InputType('TicketSeanceInput')
+@InputType('FilmTicketSeanceInput')
 @ObjectType()
-export class TicketSeance {
+export class FilmTicketSeance {
   @Field(() => String)
   @ApiProperty({ example: '19.06.23', description: 'Дата сеанса' })
   date: string;
@@ -49,9 +49,9 @@ export class Ticket {
   @ApiProperty({ example: 1, description: 'Место' })
   column: number;
 
-  @Field(() => TicketSeance)
-  @ApiProperty({ description: 'Сеанс фильма', type: TicketSeance })
-  seance: TicketSeance;
+  @Field(() => FilmTicketSeance)
+  @ApiProperty({ description: 'Сеанс фильма', type: FilmTicketSeance })
+  seance: FilmTicketSeance;
 
   @Field(() => TicketStatus)
   @Prop({ required: true, default: TicketStatus.PAYED })

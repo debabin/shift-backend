@@ -14,7 +14,7 @@ registerEnumType(Profession, {
 @ObjectType()
 export class FilmPerson {
   @Field(() => String)
-  @ApiProperty({ example: '1', description: 'Индентификатор персоны' })
+  @ApiProperty({ example: '1', description: 'Идентификатор персоны' })
   id: string;
 
   @Field(() => [Profession])

@@ -7,6 +7,6 @@ export class GetFilmDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ description: 'Индефикатор фильма' })
+  @ApiProperty({ description: 'Идентификатор фильма' })
   filmId: string;
 }

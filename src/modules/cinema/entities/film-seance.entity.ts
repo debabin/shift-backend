@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { FilmHall } from './film-hall.entity';
 
-@InputType('SeanceInput')
+@InputType('FilmSeanceInput')
 @ObjectType()
-export class Seance {
+export class FilmSeance {
   @Field(() => String)
   @ApiProperty({ description: 'Время сеанса' })
   time: string;

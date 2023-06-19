@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { BaseService } from '@/utils/services';
 
 import { films, schedules } from './constants';
-import { Ticket, TicketDocument } from './entities/ticket.entity';
+import { Ticket, TicketDocument } from './entities';
 
 @Injectable()
 export class CinemaService extends BaseService<TicketDocument, Ticket> {

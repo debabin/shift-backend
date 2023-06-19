@@ -9,8 +9,10 @@ import { User } from '../users';
 
 import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
-import { CancelTicketOrderDto, GetFilmDto, GetScheduleDto } from './dto';
-import { TicketStatus } from './entities';
+import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
+import { Ticket, TicketStatus } from './entities';
+import { getDDMMYYFormatDate } from '@/utils/helpers';
+import { Args } from '@nestjs/graphql';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')
@@ -117,16 +119,12 @@ export class CinemaController extends BaseResolver {
     });
 
     const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
-      const date = new Date(new Date().setDate(new Date().getDate() + index));
-      const year = date.getFullYear().toString().slice(2);
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const formatedDate = `${day}.${month}.${year}`;
+      const formattedDate = getDDMMYYFormatDate(index);
 
       const seances = schedule.map((element) => {
         const payedTickets = tickets.filter(
           (ticket) =>
-            ticket.seance.date === formatedDate &&
+            ticket.seance.date === formattedDate &&
             ticket.seance.time === element.time &&
             ticket.filmId === getScheduleDto.filmId
         );
@@ -137,11 +135,33 @@ export class CinemaController extends BaseResolver {
         };
       });
 
-      acc.push({ date: formatedDate, seances });
+      acc.push({ date: formattedDate, seances });
 
       return acc;
     }, [] as ScheduleResponse['schedules']);
 
     return this.wrapSuccess({ schedules: updatedFilmSchedule });
+  }
+
+  @Get('/payment')
+  @ApiOperation({ summary: 'Оплатить билеты' })
+  @ApiResponse({
+    status: 200,
+    description: 'payment',
+    type: BaseResponse
+  })
+  async createCinemaPayment(
+    @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
+  ): Promise<BaseResponse> {
+    const tickets: Omit<Ticket, '_id'>[] = createCinemaPaymentDto.tickets.map((ticket) => ({
+      filmId: createCinemaPaymentDto.filmId,
+      seance: createCinemaPaymentDto.seance,
+      status: TicketStatus.PAYED,
+      ...ticket
+    }));
+
+    await this.cinemaService.insertMany(tickets);
+
+    return this.wrapSuccess({});
   }
 }

@@ -7,7 +7,7 @@ import { CinemaController } from './cinema.controller';
 import { CinemaMutation } from './cinema.mutation';
 import { CinemaQuery } from './cinema.query';
 import { CinemaService } from './cinema.service';
-import { Ticket, TicketSchema } from './entities/ticket.entity';
+import { Ticket, TicketSchema } from './entities';
 
 @Module({
   controllers: [CinemaController],

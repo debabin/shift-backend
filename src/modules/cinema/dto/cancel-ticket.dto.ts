@@ -7,6 +7,6 @@ export class CancelTicketOrderDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ description: 'Индефикатор билета' })
+  @ApiProperty({ description: 'Идентификатор билета' })
   ticketId: string;
 }

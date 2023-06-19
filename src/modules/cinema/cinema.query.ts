@@ -12,6 +12,7 @@ import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from '
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
+import { getDDMMYYFormatDate } from '@/utils/helpers';
 
 @Resolver('🍿 cinema query')
 @DescribeContext('CinemaQuery')
@@ -45,16 +46,12 @@ export class CinemaQuery extends BaseResolver {
     });
 
     const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
-      const date = new Date(new Date().setDate(new Date().getDate() + index));
-      const year = date.getFullYear().toString().slice(2);
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const formatedDate = `${day}.${month}.${year}`;
+      const formattedDate = getDDMMYYFormatDate(index);
 
       const seances = schedule.map((element) => {
         const payedTickets = tickets.filter(
           (ticket) =>
-            ticket.seance.date === formatedDate &&
+            ticket.seance.date === formattedDate &&
             ticket.seance.time === element.time &&
             ticket.filmId === getScheduleDto.filmId
         );
@@ -65,7 +62,7 @@ export class CinemaQuery extends BaseResolver {
         };
       });
 
-      acc.push({ date: formatedDate, seances });
+      acc.push({ date: formattedDate, seances });
 
       return acc;
     }, [] as ScheduleResponse['schedules']);
