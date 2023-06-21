@@ -7,11 +7,11 @@ import { FilmPerson } from './film-person.entity';
 import { FilmUserRaiting } from './film-user-raiting.entity';
 
 export enum Rating {
-  G,
-  PG,
-  PG13,
-  N17,
-  R
+  G = 'G',
+  PG = 'PG',
+  PG13 = 'PG13',
+  N17 = 'N17',
+  R = 'R'
 }
 
 registerEnumType(Rating, {
@@ -62,7 +62,7 @@ export class Film {
 
   @ApiProperty()
   @Field(() => Rating)
-  @ApiProperty({ description: 'Возрастное ограничение', enum: Number })
+  @ApiProperty({ description: 'Возрастное ограничение', enum: Rating })
   ageRating: Rating;
 
   @ApiProperty()

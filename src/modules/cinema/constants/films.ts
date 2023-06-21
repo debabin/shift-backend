@@ -1,4 +1,4 @@
-import { Film } from '@/modules/cinema/entities';
+import { Film, Profession, Rating } from '../entities';
 
 export const films: Film[] = [
   {
@@ -11,64 +11,64 @@ export const films: Film[] = [
     actors: [
       {
         id: '1',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Том Хэнкс'
       },
       {
         id: '2',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Дэвид Морс'
       },
       {
         id: '3',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Бонни Хант'
       },
       {
         id: '4',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Майкл Кларк Дункан'
       },
       {
         id: '5',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Джеймс Кромуэлл'
       },
       {
         id: '6',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Майкл Джитер'
       },
       {
         id: '7',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Грэм Грин'
       },
       {
         id: '8',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Даг Хатчисон'
       },
       {
         id: '9',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Сэм Рокуэлл'
       },
       {
         id: '10',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Барри Пеппер'
       }
     ],
     directors: [
       {
         id: '1',
-        professions: [0, 1],
+        professions: [Profession.ACTOR, Profession.DIRECTOR],
         fullName: 'Фрэнк Дарабонт'
       }
     ],
     runtime: 189,
-    ageRating: 4,
+    ageRating: Rating.R,
     genres: ['драма', 'фэнтези', 'криминал'],
     userRatings: {
       kinopoisk: '9.1',

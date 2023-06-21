@@ -2,8 +2,8 @@ import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum DeliveryOptionType {
-  DEFAULT = 'default',
-  EXPRESS = 'express'
+  DEFAULT = 'DEFAULT',
+  EXPRESS = 'EXPRESS'
 }
 registerEnumType(DeliveryOptionType, {
   name: 'DeliveryOptionType'

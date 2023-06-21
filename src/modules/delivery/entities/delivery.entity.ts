@@ -8,17 +8,17 @@ import { DeliveryPerson } from './delivery-person.entity';
 import { Point } from './point.entity';
 
 export enum Payer {
-  RECEIVER = 'receiver',
-  SENDER = 'sender'
+  RECEIVER = 'RECEIVER',
+  SENDER = 'SENDER'
 }
 registerEnumType(Payer, {
   name: 'Payer'
 });
 
 export enum DeliveryStatus {
-  IN_PROCESSING,
-  SUCCESS,
-  CANCELED
+  IN_PROCESSING = 'IN_PROCESSING',
+  SUCCESS = 'SUCCESS',
+  CANCELED = 'CANCELED'
 }
 registerEnumType(DeliveryStatus, {
   name: 'DeliveryStatus'

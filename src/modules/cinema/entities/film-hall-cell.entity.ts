@@ -2,8 +2,8 @@ import { InputType, ObjectType, Field, registerEnumType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum FilmHallCellStatus {
-  DEFAULT,
-  PAYED
+  DEFAULT = 'DEFAULT',
+  PAYED = 'PAYED'
 }
 
 registerEnumType(FilmHallCellStatus, {
@@ -11,8 +11,8 @@ registerEnumType(FilmHallCellStatus, {
 });
 
 export enum FilmHallCellType {
-  ECONOM,
-  COMFORT
+  ECONOM = 'ECONOM',
+  COMFORT = 'COMFORT'
 }
 
 registerEnumType(FilmHallCellType, {

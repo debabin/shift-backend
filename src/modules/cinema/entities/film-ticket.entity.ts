@@ -4,8 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Document } from 'mongoose';
 
 export enum TicketStatus {
-  PAYED,
-  CANCELED
+  PAYED = 'PAYED',
+  CANCELED = 'CANCELED'
 }
 
 registerEnumType(TicketStatus, {

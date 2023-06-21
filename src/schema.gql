@@ -263,6 +263,16 @@ type FilmResponse {
   success: Boolean!
 }
 
+type FilmTicketSeance {
+  date: String!
+  time: String!
+}
+
+input FilmTicketSeanceInput {
+  date: String!
+  time: String!
+}
+
 type FilmUserRaiting {
   imdb: String!
   kinopoisk: String!
@@ -360,8 +370,8 @@ type PointsResponse {
 }
 
 enum Profession {
-  actor
-  director
+  ACTOR
+  DIRECTOR
 }
 
 type Query {
@@ -406,7 +416,7 @@ type Ticket {
   column: Float!
   filmId: String!
   row: Float!
-  seance: TicketSeance!
+  seance: FilmTicketSeance!
   status: TicketStatus!
 }
 
@@ -415,18 +425,8 @@ input TicketInput {
   column: Float!
   filmId: String!
   row: Float!
-  seance: TicketSeanceInput!
+  seance: FilmTicketSeanceInput!
   status: TicketStatus!
-}
-
-type TicketSeance {
-  date: String!
-  time: String!
-}
-
-input TicketSeanceInput {
-  date: String!
-  time: String!
 }
 
 enum TicketStatus {

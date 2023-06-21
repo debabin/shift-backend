@@ -2,8 +2,8 @@ import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum Profession {
-  actor,
-  director
+  ACTOR = 'ACTOR',
+  DIRECTOR = 'DIRECTOR'
 }
 
 registerEnumType(Profession, {
