@@ -4,6 +4,7 @@ import { Request } from 'express';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
+import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver } from '@/utils/services';
 
 import { User } from '../users';
@@ -12,7 +13,6 @@ import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from '
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
-import { getDDMMYYFormatDate } from '@/utils/helpers';
 
 @Resolver('🍿 cinema query')
 @DescribeContext('CinemaQuery')

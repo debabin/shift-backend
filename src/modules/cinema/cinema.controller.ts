@@ -1,8 +1,10 @@
 import { BadRequestException, Body, Controller, Get, Param, Put, Res } from '@nestjs/common';
+import { Args } from '@nestjs/graphql';
 import { ApiOperation, ApiHeader, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { ApiAuthorizedOnly } from '@/utils/guards';
+import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
@@ -11,8 +13,6 @@ import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from '
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
-import { getDDMMYYFormatDate } from '@/utils/helpers';
-import { Args } from '@nestjs/graphql';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')

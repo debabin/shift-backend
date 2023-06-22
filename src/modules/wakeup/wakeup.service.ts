@@ -9,7 +9,7 @@ export class WakeUpService {
 
   private readonly logger = new Logger(WakeUpService.name);
 
-  @Cron('0 */20 * * * *')
+  @Cron('0 */5 * * * *')
   async handleCron() {
     const request = this.httpService
       .get(process.env.WAKE_UP_URL, {
