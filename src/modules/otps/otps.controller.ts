@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Render } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { BaseResolver } from '@/utils/services';
 
 import { OtpDto } from './dto';
 import { OtpResponse } from './otps.model';
-import { OTP_EXPIRED_TIME, OtpsService } from './otps.service';
+import { OtpsService } from './otps.service';
 
 const RETRY_DELAY = 120000;
 
@@ -42,20 +42,5 @@ export class OtpsController extends BaseResolver {
     });
 
     return this.wrapSuccess({ retryDelay: RETRY_DELAY });
-  }
-
-  @Get('/otps')
-  @ApiOperation({ summary: 'страница с отп кодами' })
-  @Render('otps.hbs')
-  async otps() {
-    const otps = await this.otpsService.find({});
-
-    return {
-      otps: otps.map((otp) => ({
-        phone: otp.phone,
-        code: otp.code,
-        expiredDate: new Date(new Date(otp.created).getTime() + OTP_EXPIRED_TIME)
-      }))
-    };
   }
 }
