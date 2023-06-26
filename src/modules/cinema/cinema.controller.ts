@@ -9,7 +9,7 @@ import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
 
-import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse } from './cinema.model';
+import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse, PaymentResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
@@ -148,11 +148,11 @@ export class CinemaController extends BaseResolver {
   @ApiResponse({
     status: 200,
     description: 'payment',
-    type: BaseResponse
+    type: PaymentResponse
   })
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
-  ): Promise<BaseResponse> {
+  ): Promise<PaymentResponse> {
     const tickets: Omit<Ticket, '_id'>[] = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
       seance: createCinemaPaymentDto.seance,
@@ -162,6 +162,6 @@ export class CinemaController extends BaseResolver {
 
     await this.cinemaService.insertMany(tickets);
 
-    return this.wrapSuccess({});
+    return this.wrapSuccess({orderId: ''});
   }
 }

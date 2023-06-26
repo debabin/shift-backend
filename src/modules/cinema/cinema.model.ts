@@ -50,3 +50,10 @@ export class ScheduleResponse extends BaseResponse {
   @ApiProperty({ description: 'Расписание', type: [Schedule] })
   schedules: Schedule[];
 }
+
+@ObjectType()
+export class PaymentResponse extends BaseResponse {
+  @Field(() => String)
+  @ApiProperty({ description: 'Номер заказа' })
+  orderId: string;
+}

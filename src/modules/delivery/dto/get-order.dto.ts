@@ -7,6 +7,6 @@ export class GetDeliveryDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ description: 'Индефикатор доставки' })
+  @ApiProperty({ description: 'Идентификатор доставки' })
   orderId: string;
 }

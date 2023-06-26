@@ -12,7 +12,8 @@ registerEnumType(FilmHallCellStatus, {
 
 export enum FilmHallCellType {
   ECONOM = 'ECONOM',
-  COMFORT = 'COMFORT'
+  COMFORT = 'COMFORT',
+  BLOCKED = 'BLOCKED'
 }
 
 registerEnumType(FilmHallCellType, {

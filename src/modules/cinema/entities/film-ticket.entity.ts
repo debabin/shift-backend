@@ -38,7 +38,7 @@ export class Ticket {
 
   @Field(() => String)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Индефикатор фильма' })
+  @ApiProperty({ description: 'Идентификатор фильма' })
   filmId: string;
 
   @Field(() => Number)
