@@ -10,8 +10,8 @@ export enum Rating {
   G = 'G',
   PG = 'PG',
   PG13 = 'PG13',
-  N17 = 'N17',
-  R = 'R'
+  R = 'R',
+  NC17 = 'NC17'
 }
 
 registerEnumType(Rating, {
