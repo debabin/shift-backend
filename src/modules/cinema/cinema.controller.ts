@@ -9,7 +9,13 @@ import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import { User } from '../users';
 
-import { FilmResponse, FilmsResponse, TicketsResponse, ScheduleResponse, PaymentResponse } from './cinema.model';
+import {
+  FilmResponse,
+  FilmsResponse,
+  TicketsResponse,
+  ScheduleResponse,
+  PaymentResponse
+} from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
@@ -162,6 +168,6 @@ export class CinemaController extends BaseResolver {
 
     await this.cinemaService.insertMany(tickets);
 
-    return this.wrapSuccess({orderId: ''});
+    return this.wrapSuccess({ orderId: '' });
   }
 }

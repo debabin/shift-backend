@@ -48,5 +48,5 @@ export const red = [
     { price: 100, type: FilmHallCellType.ECONOM },
     { price: 100, type: FilmHallCellType.ECONOM },
     { price: 100, type: FilmHallCellType.ECONOM }
-  ],
+  ]
 ];

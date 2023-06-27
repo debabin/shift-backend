@@ -695,5 +695,5 @@ export const films: Film[] = [
       imdb: '6.0'
     },
     img: '/static/images/cinema/film_10.webp'
-  },
+  }
 ];
