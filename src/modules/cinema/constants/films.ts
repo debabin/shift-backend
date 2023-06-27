@@ -548,152 +548,152 @@ export const films: Film[] = [
   },
   {
     id: '9',
-    name: 'TODO',
-    originalName: 'The Green Mile',
+    name: 'Человеческая многоножка',
+    originalName: 'The Human Centipede III (Final Sequence)',
     description:
-      'Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора», каждый из узников которого однажды проходит «зеленую милю» по пути к месту казни. Пол повидал много заключённых и надзирателей за время работы. Однако гигант Джон Коффи, обвинённый в страшном преступлении, стал одним из самых необычных обитателей блока.',
-    releaseDate: '6 декабря 1999',
+      'Надзиратель американской тюрьмы, у которого не получается заслужить уважение заключенных и губернатора штата, решается на внедрение революционного наказания, способного не только навести порядок, но и сэкономить миллионы долларов, — в буквальном смысле поставить заключенных на колени, сшив их в гигантскую многоножку из 500 человек.',
+    releaseDate: '22 мая 2015',
     actors: [
       {
         id: '1',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Том Хэнкс'
+        professions: [Profession.ACTOR],
+        fullName: 'Дитер Лазер'
       },
       {
         id: '2',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Дэвид Морс'
+        professions: [Profession.ACTOR],
+        fullName: 'Лоуренс Р. Харви'
       },
       {
         id: '3',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Бонни Хант'
+        professions: [Profession.ACTOR],
+        fullName: 'Эрик Робертс'
       },
       {
         id: '4',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Майкл Кларк Дункан'
+        professions: [Profession.ACTOR],
+        fullName: 'Роберт ЛаСардо'
       },
       {
         id: '5',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Джеймс Кромуэлл'
+        professions: [Profession.ACTOR],
+        fullName: 'Том ’Тайни’ Листер мл.'
       },
       {
         id: '6',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Майкл Джитер'
+        professions: [Profession.ACTOR],
+        fullName: 'Джей Таваре'
       },
       {
         id: '7',
         professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Грэм Грин'
+        fullName: 'Клэйтон Ронер'
       },
       {
         id: '8',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Даг Хатчисон'
+        professions: [Profession.ACTOR],
+        fullName: 'Бри Олсон'
       },
       {
         id: '9',
         professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Сэм Рокуэлл'
+        fullName: 'Акихиро Китамура'
       },
       {
         id: '10',
         professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Барри Пеппер'
+        fullName: 'Билл Хатченс'
       }
     ],
     directors: [
       {
         id: '1',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Фрэнк Дарабонт'
+        professions: [Profession.DIRECTOR],
+        fullName: 'Том Сикс'
       }
     ],
-    runtime: 189,
-    ageRating: Rating.R,
-    genres: ['драма', 'фэнтези', 'криминал'],
+    runtime: 102,
+    ageRating: Rating.NC17,
+    genres: ['ужасы', 'комедия', 'криминал'],
     userRatings: {
-      kinopoisk: '9.1',
-      imdb: '8.6'
+      kinopoisk: '3.9',
+      imdb: '2.8'
     },
-    img: '/static/images/cinema/film_1.webp'
+    img: '/static/images/cinema/film_9.webp'
   },
   {
     id: '10',
-    name: 'TODO',
-    originalName: 'The Green Mile',
+    name: 'Кокаиновый медведь',
+    originalName: 'Cocaine Bear',
     description:
-      'Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора», каждый из узников которого однажды проходит «зеленую милю» по пути к месту казни. Пол повидал много заключённых и надзирателей за время работы. Однако гигант Джон Коффи, обвинённый в страшном преступлении, стал одним из самых необычных обитателей блока.',
-    releaseDate: '6 декабря 1999',
+      '1985 год. Из пролетающего над лесами штата Джорджия самолёта наркокурьер выбрасывает несколько пакетов кокаина, часть из них находит барибал и съедает содержимое. Животное приходит в неистовство, и теперь всем туристам, рейнджерам и случайно попавшимся ему на пути бедолагам сильно не поздоровится.',
+    releaseDate: '22 февраля 2023',
     actors: [
       {
         id: '1',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Том Хэнкс'
+        professions: [Profession.ACTOR],
+        fullName: 'Кери Рассел'
       },
       {
         id: '2',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Дэвид Морс'
+        professions: [Profession.ACTOR],
+        fullName: 'Олден Эренрайк'
       },
       {
         id: '3',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Бонни Хант'
+        professions: [Profession.ACTOR],
+        fullName: 'О’Ши Джексон мл.'
       },
       {
         id: '4',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Майкл Кларк Дункан'
+        professions: [Profession.ACTOR],
+        fullName: 'Рэй Лиотта'
       },
       {
         id: '5',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Джеймс Кромуэлл'
+        professions: [Profession.ACTOR],
+        fullName: 'Исайя Уитлок мл.'
       },
       {
         id: '6',
         professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Майкл Джитер'
+        fullName: 'Бруклин Принс'
       },
       {
         id: '7',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Грэм Грин'
+        professions: [Profession.ACTOR],
+        fullName: 'Кристиан Конвери'
       },
       {
         id: '8',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Даг Хатчисон'
+        professions: [Profession.ACTOR],
+        fullName: 'Марго Мартиндейл'
       },
       {
         id: '9',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Сэм Рокуэлл'
+        professions: [Profession.ACTOR],
+        fullName: 'Джесси Тайлер Фергюсон'
       },
       {
         id: '10',
-        professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Барри Пеппер'
+        professions: [Profession.ACTOR],
+        fullName: 'Ханна Хукстра'
       }
     ],
     directors: [
       {
         id: '1',
         professions: [Profession.ACTOR, Profession.DIRECTOR],
-        fullName: 'Фрэнк Дарабонт'
+        fullName: 'Элизабет Бэнкс'
       }
     ],
-    runtime: 189,
+    runtime: 95,
     ageRating: Rating.R,
-    genres: ['драма', 'фэнтези', 'криминал'],
+    genres: ['триллер', 'комедия'],
     userRatings: {
-      kinopoisk: '9.1',
-      imdb: '8.6'
+      kinopoisk: '5.9',
+      imdb: '6.0'
     },
-    img: '/static/images/cinema/film_1.webp'
+    img: '/static/images/cinema/film_10.webp'
   },
 ];
