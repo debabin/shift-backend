@@ -57,6 +57,11 @@ export class Ticket {
   @Prop({ required: true, default: TicketStatus.PAYED })
   @ApiProperty({ description: 'Статус билета', enum: TicketStatus })
   status: TicketStatus;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  @ApiProperty({ example: '89990009999', description: 'Телефон' })
+  phone: string;
 }
 
 export type TicketDocument = Ticket & Document;

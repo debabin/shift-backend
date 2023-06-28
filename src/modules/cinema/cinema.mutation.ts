@@ -5,15 +5,20 @@ import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { BaseResolver, BaseResponse } from '@/utils/services';
 
+import { PaymentResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
+import { CinemaOrderService } from './modules';
 
 @Resolver('📦 cinema mutation')
 @DescribeContext('CinemaMutation')
 @Resolver(() => Ticket)
 export class CinemaMutation extends BaseResolver {
-  constructor(private readonly cinemaService: CinemaService) {
+  constructor(
+    private readonly cinemaService: CinemaService,
+    private readonly cinemaOrderService: CinemaOrderService
+  ) {
     super();
   }
 
@@ -40,19 +45,27 @@ export class CinemaMutation extends BaseResolver {
     return this.wrapSuccess();
   }
 
-  @Mutation(() => BaseResponse)
+  @Mutation(() => PaymentResponse)
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
-  ): Promise<BaseResponse> {
-    const tickets: Omit<Ticket, '_id'>[] = createCinemaPaymentDto.tickets.map((ticket) => ({
-      filmId: createCinemaPaymentDto.filmId,
-      seance: createCinemaPaymentDto.seance,
-      status: TicketStatus.PAYED,
-      ...ticket
-    }));
+  ): Promise<PaymentResponse> {
+    const tickets = await this.cinemaService.insertMany(
+      createCinemaPaymentDto.tickets.map((ticket) => ({
+        filmId: createCinemaPaymentDto.filmId,
+        seance: createCinemaPaymentDto.seance,
+        status: TicketStatus.PAYED,
+        phone: createCinemaPaymentDto.person.phone,
+        ...ticket
+      }))
+    );
 
-    await this.cinemaService.insertMany(tickets);
+    const orderId = Math.floor(Math.random() * 10 ** 6);
+    const order = await this.cinemaOrderService.create({
+      orderId,
+      tickets,
+      phone: createCinemaPaymentDto.person.phone
+    });
 
-    return this.wrapSuccess({});
+    return this.wrapSuccess({ order });
   }
 }

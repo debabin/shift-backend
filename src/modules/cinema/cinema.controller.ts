@@ -18,14 +18,16 @@ import {
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
-import { Ticket, TicketStatus } from './entities';
+import { TicketStatus } from './entities';
+import { CinemaOrderService } from './modules';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')
 export class CinemaController extends BaseResolver {
   constructor(
     private readonly authService: AuthService,
-    private readonly cinemaService: CinemaService
+    private readonly cinemaService: CinemaService,
+    private readonly cinemaOrderService: CinemaOrderService
   ) {
     super();
   }
@@ -159,15 +161,23 @@ export class CinemaController extends BaseResolver {
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
   ): Promise<PaymentResponse> {
-    const tickets: Omit<Ticket, '_id'>[] = createCinemaPaymentDto.tickets.map((ticket) => ({
-      filmId: createCinemaPaymentDto.filmId,
-      seance: createCinemaPaymentDto.seance,
-      status: TicketStatus.PAYED,
-      ...ticket
-    }));
+    const tickets = await this.cinemaService.insertMany(
+      createCinemaPaymentDto.tickets.map((ticket) => ({
+        filmId: createCinemaPaymentDto.filmId,
+        seance: createCinemaPaymentDto.seance,
+        status: TicketStatus.PAYED,
+        phone: createCinemaPaymentDto.person.phone,
+        ...ticket
+      }))
+    );
 
-    await this.cinemaService.insertMany(tickets);
+    const orderId = Math.floor(Math.random() * 10 ** 6);
+    const order = await this.cinemaOrderService.create({
+      orderId,
+      tickets,
+      phone: createCinemaPaymentDto.person.phone
+    });
 
-    return this.wrapSuccess({ orderId: '' });
+    return this.wrapSuccess({ order });
   }
 }

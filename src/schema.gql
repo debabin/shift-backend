@@ -39,6 +39,20 @@ type CalculateDeliveryResponse {
   success: Boolean!
 }
 
+type CinemaOrder {
+  _id: String!
+  orderId: Float!
+  phone: String!
+  tickets: [Ticket!]!
+}
+
+input CinemaOrderInput {
+  _id: String!
+  orderId: Float!
+  phone: String!
+  tickets: [TicketInput!]!
+}
+
 input CinemaPersonInput {
   fullName: String!
   id: String!
@@ -226,6 +240,7 @@ input FilmHallCellInput {
 }
 
 enum FilmHallCellType {
+  BLOCKED
   COMFORT
   ECONOM
 }
@@ -292,7 +307,7 @@ type FilmsResponse {
 type Mutation {
   calculateDelivery(package: CalculateDeliveryPackageDto!, receiverPoint: CalculateDeliveryPointDto!, senderPoint: CalculateDeliveryPointDto!): CalculateDeliveryResponse!
   cancelDeliveryOrder(orderId: String!): BaseResponse!
-  createCinemaPayment(debitCard: CreatePaymentDebitCardDto!, filmId: String!, person: CreatePaymentPersonDto!, seance: CreatePaymentSeanceDto!, tickets: CreatePaymentTicketsDto!): BaseResponse!
+  createCinemaPayment(debitCard: CreatePaymentDebitCardDto!, filmId: String!, person: CreatePaymentPersonDto!, seance: CreatePaymentSeanceDto!, tickets: CreatePaymentTicketsDto!): PaymentResponse!
   createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
   signin(code: String!, phone: String!): UserResponse!
@@ -349,6 +364,12 @@ enum Payer {
   SENDER
 }
 
+type PaymentResponse {
+  order: String!
+  reason: String
+  success: Boolean!
+}
+
 type Point {
   id: String!
   latitude: Float!
@@ -382,13 +403,14 @@ type Query {
   getDeliveryPoints: PointsResponse!
   getFilm(filmId: String!): FilmResponse!
   getFilmSchedule(filmId: String!): ScheduleResponse!
+  getOrders: TicketsResponse!
   getTickets: TicketsResponse!
   me: UserResponse!
 }
 
 enum Rating {
   G
-  N17
+  NC17
   PG
   PG13
   R
@@ -415,6 +437,7 @@ type Ticket {
   _id: String!
   column: Float!
   filmId: String!
+  phone: String!
   row: Float!
   seance: FilmTicketSeance!
   status: TicketStatus!
@@ -424,6 +447,7 @@ input TicketInput {
   _id: String!
   column: Float!
   filmId: String!
+  phone: String!
   row: Float!
   seance: FilmTicketSeanceInput!
   status: TicketStatus!

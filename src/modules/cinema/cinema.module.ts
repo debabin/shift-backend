@@ -8,10 +8,15 @@ import { CinemaMutation } from './cinema.mutation';
 import { CinemaQuery } from './cinema.query';
 import { CinemaService } from './cinema.service';
 import { Ticket, TicketSchema } from './entities';
+import { CinemaOrderModule } from './modules';
 
 @Module({
   controllers: [CinemaController],
-  imports: [AuthModule, MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }])],
+  imports: [
+    AuthModule,
+    CinemaOrderModule,
+    MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }])
+  ],
   providers: [CinemaService, CinemaMutation, CinemaQuery],
   exports: [CinemaService]
 })

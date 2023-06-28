@@ -9,10 +9,17 @@ import { AuthService, BaseResolver } from '@/utils/services';
 
 import { User } from '../users';
 
-import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from './cinema.model';
+import {
+  FilmResponse,
+  FilmsResponse,
+  ScheduleResponse,
+  TicketsResponse,
+  CinemaOrdersResponse
+} from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
+import { CinemaOrderService } from './modules';
 
 @Resolver('🍿 cinema query')
 @DescribeContext('CinemaQuery')
@@ -20,7 +27,8 @@ import { TicketStatus } from './entities';
 export class CinemaQuery extends BaseResolver {
   constructor(
     private readonly authService: AuthService,
-    private readonly cinemaService: CinemaService
+    private readonly cinemaService: CinemaService,
+    private readonly cinemaOrderService: CinemaOrderService
   ) {
     super();
   }
@@ -83,5 +91,20 @@ export class CinemaQuery extends BaseResolver {
     const tickets = await this.cinemaService.find({ phone: decodedJwtAccessToken.phone });
 
     return this.wrapSuccess({ tickets });
+  }
+
+  @GqlAuthorizedOnly()
+  @Query(() => TicketsResponse)
+  async getOrders(@Context() context: { req: Request }): Promise<CinemaOrdersResponse> {
+    const token = context.req.headers.authorization.split(' ')[1];
+    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
+
+    if (!decodedJwtAccessToken) {
+      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
+    }
+
+    const orders = await this.cinemaOrderService.find({ phone: decodedJwtAccessToken.phone });
+
+    return this.wrapSuccess({ orders });
   }
 }

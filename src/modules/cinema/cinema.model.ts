@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponse } from '@/utils/services';
 
 import { Film, FilmSeance, Ticket } from './entities';
+import { CinemaOrder } from './modules';
 
 @ObjectType()
 export class FilmsResponse extends BaseResponse {
@@ -17,6 +18,13 @@ export class TicketsResponse extends BaseResponse {
   @Field(() => [Ticket])
   @ApiProperty({ description: 'Билеты', type: [Ticket] })
   tickets: Ticket[];
+}
+
+@ObjectType()
+export class CinemaOrdersResponse extends BaseResponse {
+  @Field(() => [CinemaOrder])
+  @ApiProperty({ description: '', type: [CinemaOrder] })
+  orders: CinemaOrder[];
 }
 
 @ObjectType()
@@ -55,5 +63,5 @@ export class ScheduleResponse extends BaseResponse {
 export class PaymentResponse extends BaseResponse {
   @Field(() => String)
   @ApiProperty({ description: 'Номер заказа' })
-  orderId: string;
+  order: CinemaOrder;
 }
