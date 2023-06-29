@@ -24,7 +24,7 @@ export class CinemaOrder {
 
   @Field(() => [Ticket])
   @Prop({ required: true })
-  @ApiProperty({ description: 'Город отправки', type: [Ticket] })
+  @ApiProperty({ description: 'Билеты', type: [Ticket] })
   tickets: Ticket[];
 
   @Field(() => String)

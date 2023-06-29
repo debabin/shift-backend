@@ -6,7 +6,7 @@ import { OtpsService } from '@/modules/otps';
 import { DescribeContext } from '@/utils/decorators';
 import { BaseResolver, AuthService } from '@/utils/services';
 
-import { SingInDto } from './dto';
+import { SignInDto } from './dto';
 import { User } from './entities';
 import { UserResponse } from './users.model';
 import { UsersService } from './users.service';
@@ -24,17 +24,17 @@ export class UsersMutation extends BaseResolver {
   }
 
   @Mutation(() => UserResponse)
-  async signin(
-    @Args() singInDto: SingInDto,
+  async signIn(
+    @Args() signInDto: SignInDto,
     @Context() context: { res: Response }
   ): Promise<UserResponse> {
-    const user = await this.usersService.findOne({ phone: singInDto.phone });
+    const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
-      await this.usersService.create({ phone: singInDto.phone });
+      await this.usersService.create({ phone: signInDto.phone });
     }
 
-    const otp = await this.otpsService.findOne({ phone: singInDto.phone, code: singInDto.code });
+    const otp = await this.otpsService.findOne({ phone: signInDto.phone, code: signInDto.code });
 
     if (!otp) {
       throw new BadRequestException(this.wrapFail('Неправильный отп код'));

@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { OtpsService } from '@/modules/otps';
 import { BaseResolver, AuthService } from '@/utils/services';
 
-import { SingInDto } from './dto';
+import { SignInDto } from './dto';
 import { User } from './entities';
 import { UserResponse } from './users.model';
 import { UsersService } from './users.service';
@@ -21,21 +21,21 @@ export class UsersController extends BaseResolver {
     super();
   }
 
-  @Post('/singin')
+  @Post('/signIn')
   @ApiOperation({ summary: 'авторизация' })
   @ApiResponse({
     status: 200,
-    description: 'singin',
+    description: 'signIn',
     type: UserResponse
   })
-  async singin(@Body() singInDto: SingInDto, @Res() response: Response): Promise<UserResponse> {
-    const user = await this.usersService.findOne({ phone: singInDto.phone });
+  async signIn(@Body() signInDto: SignInDto, @Res() response: Response): Promise<UserResponse> {
+    const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
-      await this.usersService.create({ phone: singInDto.phone });
+      await this.usersService.create({ phone: signInDto.phone });
     }
 
-    const otp = await this.otpsService.findOne({ phone: singInDto.phone, code: singInDto.code });
+    const otp = await this.otpsService.findOne({ phone: signInDto.phone, code: signInDto.code });
 
     if (!otp) {
       throw new BadRequestException(this.wrapFail('Неправильный отп код'));

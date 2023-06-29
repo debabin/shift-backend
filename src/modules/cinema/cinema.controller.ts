@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Put, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Put, Res, Post } from '@nestjs/common';
 import { Args } from '@nestjs/graphql';
 import { ApiOperation, ApiHeader, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -14,7 +14,8 @@ import {
   FilmsResponse,
   TicketsResponse,
   ScheduleResponse,
-  PaymentResponse
+  PaymentResponse,
+  CinemaOrdersResponse
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
@@ -151,7 +152,7 @@ export class CinemaController extends BaseResolver {
     return this.wrapSuccess({ schedules: updatedFilmSchedule });
   }
 
-  @Get('/payment')
+  @Post('/payment')
   @ApiOperation({ summary: 'Оплатить билеты' })
   @ApiResponse({
     status: 200,
@@ -179,5 +180,30 @@ export class CinemaController extends BaseResolver {
     });
 
     return this.wrapSuccess({ order });
+  }
+
+  @ApiAuthorizedOnly()
+  @Get('/orders')
+  @ApiOperation({ summary: 'получить все заказы билетов' })
+  @ApiResponse({
+    status: 200,
+    description: 'orders',
+    type: CinemaOrdersResponse
+  })
+  @ApiHeader({
+    name: 'authorization'
+  })
+  @ApiBearerAuth()
+  async getOrders(@Res() request: Request): Promise<CinemaOrdersResponse> {
+    const token = request.headers.authorization.split(' ')[1];
+    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
+
+    if (!decodedJwtAccessToken) {
+      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
+    }
+
+    const orders = await this.cinemaOrderService.find({ phone: decodedJwtAccessToken.phone });
+
+    return this.wrapSuccess({ orders });
   }
 }

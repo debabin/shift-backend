@@ -310,7 +310,7 @@ type Mutation {
   createCinemaPayment(debitCard: CreatePaymentDebitCardDto!, filmId: String!, person: CreatePaymentPersonDto!, seance: CreatePaymentSeanceDto!, tickets: CreatePaymentTicketsDto!): PaymentResponse!
   createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
-  signin(code: String!, phone: String!): UserResponse!
+  signIn(code: Float!, phone: String!): UserResponse!
 }
 
 type Otp {

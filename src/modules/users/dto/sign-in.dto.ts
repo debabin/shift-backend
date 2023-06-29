@@ -1,18 +1,18 @@
 import { Field, ArgsType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @ArgsType()
-export class SingInDto {
+export class SignInDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
   @ApiProperty({ example: '89990009999', description: 'Номер телефона' })
   phone: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  @Field(() => String)
+  @Field(() => Number)
   @ApiProperty({ example: 345231, description: 'Отп код' })
   code: number;
 }

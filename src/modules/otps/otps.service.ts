@@ -19,10 +19,10 @@ export class OtpsService extends BaseService<OtpDocument, Otp> {
   async handleCron() {
     const otps = await this.find({});
 
-    const exprideOtpsIds = otps
+    const expiredOtpsIds = otps
       .filter((otp) => new Date(otp.created).getTime() + OTP_EXPIRED_TIME < new Date().getTime())
       .map((otp) => otp._id);
 
-    await this.delete({ _id: { $in: exprideOtpsIds } });
+    await this.delete({ _id: { $in: expiredOtpsIds } });
   }
 }

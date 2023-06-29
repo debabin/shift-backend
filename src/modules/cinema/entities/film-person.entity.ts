@@ -18,7 +18,7 @@ export class FilmPerson {
   id: string;
 
   @Field(() => [Profession])
-  @ApiProperty({ description: 'Список профессий', enum: [Profession] })
+  @ApiProperty({ description: 'Список профессий', enum: Profession })
   professions: Profession[];
 
   @Field(() => String)

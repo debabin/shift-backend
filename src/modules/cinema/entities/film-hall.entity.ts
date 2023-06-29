@@ -7,7 +7,7 @@ import { FilmHallCell } from './film-hall-cell.entity';
 @ObjectType()
 export class FilmHall {
   @Field(() => String)
-  @ApiProperty({ example: 'name', description: 'Название зала' })
+  @ApiProperty({ example: 'red', description: 'Название зала' })
   name: string;
 
   @Field(() => [[FilmHallCell]])

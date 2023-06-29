@@ -1,1 +1,1 @@
-export * from './sing-in.dot';
+export * from './sign-in.dto';
