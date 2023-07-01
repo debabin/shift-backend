@@ -3,14 +3,13 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { DescribeContext } from '@/utils/decorators';
 import { BaseResolver } from '@/utils/services';
 
-import { OtpDto } from './dto';
+import { RETRY_DELAY } from './constants';
+import { CreateOtpDto } from './dto';
 import { Otp } from './entities';
 import { OtpResponse } from './otps.model';
 import { OtpsService } from './otps.service';
 
-const RETRY_DELAY = 120000;
-
-@Resolver('☄️ auth mutation')
+@Resolver('☄️ otps mutation')
 @DescribeContext('OtpsMutation')
 @Resolver(() => Otp)
 export class OtpsMutation extends BaseResolver {
@@ -19,8 +18,8 @@ export class OtpsMutation extends BaseResolver {
   }
 
   @Mutation(() => OtpResponse)
-  async createOtp(@Args() otpDto: OtpDto) {
-    const existingOtp = await this.otpsService.findOne({ phone: otpDto.phone });
+  async createOtp(@Args() createOtpDto: CreateOtpDto) {
+    const existingOtp = await this.otpsService.findOne({ phone: createOtpDto.phone });
 
     if (existingOtp) {
       const { retryDelay, created } = existingOtp;
@@ -32,7 +31,7 @@ export class OtpsMutation extends BaseResolver {
 
     const code = Math.floor(100000 + Math.random() * 900000);
     await this.otpsService.create({
-      phone: `${otpDto.phone}`,
+      phone: `${createOtpDto.phone}`,
       code,
       retryDelay: RETRY_DELAY
     });

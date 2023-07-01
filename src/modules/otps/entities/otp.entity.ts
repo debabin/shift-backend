@@ -31,7 +31,7 @@ export class Otp {
 
   @Field(() => Number)
   @Prop({ required: true })
-  @ApiProperty({ example: 120000, description: 'Время запроса повтороного отп кода' })
+  @ApiProperty({ example: 120000, description: 'Время запроса повторного отп кода' })
   retryDelay: number;
 }
 

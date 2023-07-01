@@ -38,6 +38,7 @@ import { AppController } from './app.controller';
       context: ({ req, res }) => ({ req, res })
     }),
     ServeStaticModule.forRoot({
+      serveRoot: '/static',
       rootPath: path.join(__dirname, '..', 'static')
     }),
     OtpsModule,

@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
-@InputType('PackageTypeInput')
+@InputType('DeliveryPackageTypeInput')
 @ObjectType()
-export class PackageType {
+export class DeliveryPackageType {
   @Field(() => String)
   @ApiProperty({ example: '1', description: 'Индентификатор типа посылки' })
   id: string;

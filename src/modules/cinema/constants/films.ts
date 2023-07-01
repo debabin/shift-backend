@@ -74,7 +74,7 @@ export const films: Film[] = [
       kinopoisk: '9.1',
       imdb: '8.6'
     },
-    img: '/images/cinema/film_1.webp'
+    img: '/static/static/images/cinema/film_1.webp'
   },
   {
     id: '2',
@@ -139,7 +139,7 @@ export const films: Film[] = [
       kinopoisk: '5.1',
       imdb: '4.9'
     },
-    img: '/images/cinema/film_2.webp'
+    img: '/static/images/cinema/film_2.webp'
   },
   {
     id: '3',
@@ -214,7 +214,7 @@ export const films: Film[] = [
       kinopoisk: '7.6',
       imdb: '7.7'
     },
-    img: '/images/cinema/film_3.webp'
+    img: '/static/images/cinema/film_3.webp'
   },
   {
     id: '4',
@@ -294,7 +294,7 @@ export const films: Film[] = [
       kinopoisk: '6.9',
       imdb: '6.6'
     },
-    img: '/images/cinema/film_4.webp'
+    img: '/static/images/cinema/film_4.webp'
   },
   {
     id: '5',
@@ -369,7 +369,7 @@ export const films: Film[] = [
       kinopoisk: '5.8',
       imdb: '5.9'
     },
-    img: '/images/cinema/film_5.webp'
+    img: '/static/images/cinema/film_5.webp'
   },
   {
     id: '6',
@@ -444,7 +444,7 @@ export const films: Film[] = [
       kinopoisk: '8.1',
       imdb: '8.4'
     },
-    img: '/images/cinema/film_6.webp'
+    img: '/static/images/cinema/film_6.webp'
   },
   {
     id: '7',
@@ -499,7 +499,7 @@ export const films: Film[] = [
       kinopoisk: '6.1',
       imdb: '6.0'
     },
-    img: '/images/cinema/film_7.webp'
+    img: '/static/images/cinema/film_7.webp'
   },
   {
     id: '8',
@@ -544,7 +544,7 @@ export const films: Film[] = [
       kinopoisk: '5.6',
       imdb: '5.3'
     },
-    img: '/images/cinema/film_8.webp'
+    img: '/static/images/cinema/film_8.webp'
   },
   {
     id: '9',
@@ -619,7 +619,7 @@ export const films: Film[] = [
       kinopoisk: '3.9',
       imdb: '2.8'
     },
-    img: '/images/cinema/film_9.webp'
+    img: '/static/images/cinema/film_9.webp'
   },
   {
     id: '10',
@@ -694,6 +694,6 @@ export const films: Film[] = [
       kinopoisk: '5.9',
       imdb: '6.0'
     },
-    img: '/images/cinema/film_10.webp'
+    img: '/static/images/cinema/film_10.webp'
   }
 ];

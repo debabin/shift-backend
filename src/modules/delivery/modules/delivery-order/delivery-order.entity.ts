@@ -3,9 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Document } from 'mongoose';
 
-import { Address } from './address.entity';
-import { DeliveryPerson } from './delivery-person.entity';
-import { Point } from './point.entity';
+import { DeliveryPoint, DeliveryPerson, Address } from '../../entities';
 
 export enum Payer {
   RECEIVER = 'RECEIVER',
@@ -16,30 +14,32 @@ registerEnumType(Payer, {
 });
 
 export enum DeliveryStatus {
-  IN_PROCESSING = 'IN_PROCESSING',
-  SUCCESS = 'SUCCESS',
-  CANCELED = 'CANCELED'
+  IN_PROCESSING,
+  WAITING_COURIER,
+  ON_MY_WAY,
+  SUCCESS,
+  CANCELED
 }
 registerEnumType(DeliveryStatus, {
   name: 'DeliveryStatus'
 });
 
-@InputType('DeliveryInput')
+@InputType('DeliveryOrderInput')
 @ObjectType()
 @Schema({
-  collection: 'delivery',
+  collection: 'delivery/order',
   versionKey: false,
   minimize: false,
   timestamps: { createdAt: 'created', updatedAt: 'updated' }
 })
-export class Delivery {
+export class DeliveryOrder {
   @Field(() => String)
   _id: MongooseSchema.Types.ObjectId;
 
-  @Field(() => Point)
+  @Field(() => DeliveryPoint)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Город отправки', type: Point })
-  senderPoint: Point;
+  @ApiProperty({ description: 'Город отправки', type: DeliveryPoint })
+  senderPoint: DeliveryPoint;
 
   @Field(() => Address)
   @Prop({ required: true })
@@ -51,10 +51,10 @@ export class Delivery {
   @ApiProperty({ description: 'Отправитель', type: DeliveryPerson })
   sender: DeliveryPerson;
 
-  @Field(() => Point)
+  @Field(() => DeliveryPoint)
   @Prop({ required: true })
-  @ApiProperty({ description: 'Город получения', type: Point })
-  receiverPoint: Point;
+  @ApiProperty({ description: 'Город получения', type: DeliveryPoint })
+  receiverPoint: DeliveryPoint;
 
   @Field(() => Address)
   @Prop({ required: true })
@@ -77,5 +77,5 @@ export class Delivery {
   status: DeliveryStatus;
 }
 
-export type DeliveryDocument = Delivery & Document;
-export const DeliverySchema = SchemaFactory.createForClass(Delivery);
+export type DeliveryOrderDocument = DeliveryOrder & Document;
+export const DeliveryOrderSchema = SchemaFactory.createForClass(DeliveryOrder);

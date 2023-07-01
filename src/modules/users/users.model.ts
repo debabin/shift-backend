@@ -6,8 +6,19 @@ import { BaseResponse } from '@/utils/services';
 import { User } from './entities';
 
 @ObjectType()
-export class UserResponse extends BaseResponse {
-  @Field(() => User, { nullable: true })
+export class SessionResponse extends BaseResponse {
+  @Field(() => User)
   @ApiProperty({ description: 'Пользователь', type: User })
-  user?: User;
+  user: User;
+}
+
+@ObjectType()
+export class SignInResponse extends BaseResponse {
+  @Field(() => User)
+  @ApiProperty({ description: 'Пользователь', type: User })
+  user: User;
+
+  @Field(() => String)
+  @ApiProperty({ description: 'Пользовательский токен' })
+  token: string;
 }

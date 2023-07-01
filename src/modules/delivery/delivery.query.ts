@@ -10,13 +10,13 @@ import { User } from '../users';
 
 import { points, packages } from './constants';
 import {
-  PointsResponse,
-  PackageTypesResponse,
-  DeliveriesResponse,
-  DeliveryResponse
+  DeliveryPointsResponse,
+  DeliveryPackageTypesResponse,
+  DeliveryOrdersResponse,
+  DeliveryOrderResponse
 } from './delivery.model';
-import { DeliveryService } from './delivery.service';
-import { GetDeliveryDto } from './dto';
+import { GetDeliveryOrderDto } from './dto';
+import { DeliveryOrderService } from './modules';
 
 @Resolver('📦 delivery query')
 @DescribeContext('DeliveryQuery')
@@ -24,24 +24,24 @@ import { GetDeliveryDto } from './dto';
 export class DeliveryQuery extends BaseResolver {
   constructor(
     private readonly authService: AuthService,
-    private readonly deliveryService: DeliveryService
+    private readonly deliveryOrderService: DeliveryOrderService
   ) {
     super();
   }
 
-  @Query(() => PointsResponse)
-  getDeliveryPoints(): PointsResponse {
+  @Query(() => DeliveryPointsResponse)
+  getDeliveryPoints(): DeliveryPointsResponse {
     return this.wrapSuccess({ points });
   }
 
-  @Query(() => PackageTypesResponse)
-  getDeliveryPackageTypes(): PackageTypesResponse {
+  @Query(() => DeliveryPackageTypesResponse)
+  getDeliveryPackageTypes(): DeliveryPackageTypesResponse {
     return this.wrapSuccess({ packages });
   }
 
   @GqlAuthorizedOnly()
-  @Query(() => DeliveriesResponse)
-  async getDeliveries(@Context() context: { req: Request }): Promise<DeliveriesResponse> {
+  @Query(() => DeliveryOrdersResponse)
+  async getDeliveryOrders(@Context() context: { req: Request }): Promise<DeliveryOrdersResponse> {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -49,22 +49,22 @@ export class DeliveryQuery extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
     }
 
-    const deliveries = await this.deliveryService.find({
+    const orders = await this.deliveryOrderService.find({
       $or: [
         { 'sender.phone': decodedJwtAccessToken.phone },
         { 'receiver.phone': decodedJwtAccessToken.phone }
       ]
     });
 
-    return this.wrapSuccess({ deliveries });
+    return this.wrapSuccess({ orders });
   }
 
   @GqlAuthorizedOnly()
-  @Query(() => DeliveryResponse)
-  async getDelivery(
-    @Args() getDeliveryDto: GetDeliveryDto,
+  @Query(() => DeliveryOrderResponse)
+  async getDeliveryOrder(
+    @Args() getDeliveryOrderDto: GetDeliveryOrderDto,
     @Context() context: { req: Request }
-  ): Promise<DeliveryResponse> {
+  ): Promise<DeliveryOrderResponse> {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -72,18 +72,18 @@ export class DeliveryQuery extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
     }
 
-    const delivery = await this.deliveryService.findOne({
-      _id: getDeliveryDto.orderId,
+    const order = await this.deliveryOrderService.findOne({
+      _id: getDeliveryOrderDto.orderId,
       $or: [
         { 'sender.phone': decodedJwtAccessToken.phone },
         { 'receiver.phone': decodedJwtAccessToken.phone }
       ]
     });
 
-    if (!delivery) {
+    if (!order) {
       throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    return this.wrapSuccess({ delivery });
+    return this.wrapSuccess({ order });
   }
 }

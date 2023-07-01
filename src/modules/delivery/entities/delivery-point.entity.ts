@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
-@InputType('PointInput')
+@InputType('DeliveryPointInput')
 @ObjectType()
-export class Point {
+export class DeliveryPoint {
   @Field(() => String)
   @ApiProperty({ example: '1', description: 'Индентификатор пункта' })
   id: string;
@@ -16,7 +16,7 @@ export class Point {
   @ApiProperty({ example: 'latitude', description: 'Широта' })
   latitude: number;
 
-  @Field(() => String)
+  @Field(() => Number)
   @ApiProperty({ example: 'longitude', description: 'Долгота' })
   longitude: number;
 }

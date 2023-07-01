@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import { BadRequestException, Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
@@ -12,27 +12,27 @@ import { User } from '../users';
 
 import { packages, points } from './constants';
 import {
-  PointsResponse,
-  PackageTypesResponse,
+  DeliveryPointsResponse,
+  DeliveryPackageTypesResponse,
   DeliverResponse,
-  DeliveriesResponse,
-  DeliveryResponse,
+  DeliveryOrdersResponse,
+  DeliveryOrderResponse,
   CalculateDeliveryResponse
 } from './delivery.model';
-import { DeliveryService } from './delivery.service';
 import {
   CalculateDeliveryDto,
   CancelDeliveryOrderDto,
   CreateDeliveryOrderDto,
-  GetDeliveryDto
+  GetDeliveryOrderDto
 } from './dto';
-import { DeliveryOption, DeliveryOptionType, DeliveryStatus } from './entities';
+import { DeliveryOption, DeliveryOptionType } from './entities';
+import { DeliveryOrderService, DeliveryStatus } from './modules';
 
 @ApiTags('📦 delivery')
 @Controller('/delivery')
 export class DeliveryController extends BaseResolver {
   constructor(
-    private readonly deliveryService: DeliveryService,
+    private readonly deliveryOrderService: DeliveryOrderService,
     private readonly authService: AuthService
   ) {
     super();
@@ -43,9 +43,9 @@ export class DeliveryController extends BaseResolver {
   @ApiResponse({
     status: 200,
     description: 'points',
-    type: PointsResponse
+    type: DeliveryPointsResponse
   })
-  getPoints(): PointsResponse {
+  getPoints(): DeliveryPointsResponse {
     return this.wrapSuccess({ points });
   }
 
@@ -54,9 +54,9 @@ export class DeliveryController extends BaseResolver {
   @ApiResponse({
     status: 200,
     description: 'package types',
-    type: PackageTypesResponse
+    type: DeliveryPackageTypesResponse
   })
-  getPackageTypes(): PackageTypesResponse {
+  getPackageTypes(): DeliveryPackageTypesResponse {
     return this.wrapSuccess({ packages });
   }
 
@@ -116,7 +116,7 @@ export class DeliveryController extends BaseResolver {
   async createOrder(
     @Body() createDeliveryOrderDto: CreateDeliveryOrderDto
   ): Promise<DeliverResponse> {
-    const order = await this.deliveryService.create({
+    const order = await this.deliveryOrderService.create({
       ...createDeliveryOrderDto,
       status: DeliveryStatus.IN_PROCESSING
     });
@@ -130,13 +130,13 @@ export class DeliveryController extends BaseResolver {
   @ApiResponse({
     status: 200,
     description: 'orders',
-    type: DeliveriesResponse
+    type: DeliveryOrdersResponse
   })
   @ApiHeader({
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async getDeliveries(@Res() request: Request): Promise<DeliveriesResponse> {
+  async getDeliveries(@Req() request: Request): Promise<DeliveryOrdersResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -144,14 +144,14 @@ export class DeliveryController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
     }
 
-    const deliveries = await this.deliveryService.find({
+    const orders = await this.deliveryOrderService.find({
       $or: [
         { 'sender.phone': decodedJwtAccessToken.phone },
         { 'receiver.phone': decodedJwtAccessToken.phone }
       ]
     });
 
-    return this.wrapSuccess({ deliveries });
+    return this.wrapSuccess({ orders });
   }
 
   @ApiAuthorizedOnly()
@@ -160,16 +160,16 @@ export class DeliveryController extends BaseResolver {
   @ApiResponse({
     status: 200,
     description: 'order',
-    type: DeliveriesResponse
+    type: DeliveryOrderResponse
   })
   @ApiHeader({
     name: 'authorization'
   })
   @ApiBearerAuth()
   async getDelivery(
-    @Param() getDeliveryDto: GetDeliveryDto,
-    @Res() request: Request
-  ): Promise<DeliveryResponse> {
+    @Param() getDeliveryOrderDto: GetDeliveryOrderDto,
+    @Req() request: Request
+  ): Promise<DeliveryOrderResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -177,19 +177,19 @@ export class DeliveryController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
     }
 
-    const delivery = await this.deliveryService.findOne({
-      _id: getDeliveryDto.orderId,
+    const order = await this.deliveryOrderService.findOne({
+      _id: getDeliveryOrderDto.orderId,
       $or: [
         { 'sender.phone': decodedJwtAccessToken.phone },
         { 'receiver.phone': decodedJwtAccessToken.phone }
       ]
     });
 
-    if (!delivery) {
+    if (!order) {
       throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    return this.wrapSuccess({ delivery });
+    return this.wrapSuccess({ order });
   }
 
   @ApiAuthorizedOnly()
@@ -207,7 +207,7 @@ export class DeliveryController extends BaseResolver {
   async cancelDeliveryOrder(
     @Body() cancelDeliveryOrderDto: CancelDeliveryOrderDto
   ): Promise<BaseResponse> {
-    const order = await this.deliveryService.findOne({ _id: cancelDeliveryOrderDto.orderId });
+    const order = await this.deliveryOrderService.findOne({ _id: cancelDeliveryOrderDto.orderId });
 
     if (!order) {
       throw new BadRequestException(this.wrapFail('Доставка не найдена'));
@@ -217,7 +217,7 @@ export class DeliveryController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Доставка нельзя отменить'));
     }
 
-    await this.deliveryService.updateOne(
+    await this.deliveryOrderService.updateOne(
       { _id: cancelDeliveryOrderDto.orderId },
       { $set: { status: DeliveryStatus.CANCELED } }
     );

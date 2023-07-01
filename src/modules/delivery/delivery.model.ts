@@ -3,42 +3,43 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseResponse } from '@/utils/services';
 
-import { Point, PackageType, Delivery } from './entities';
+import { DeliveryPoint, DeliveryPackageType } from './entities';
 import { DeliveryOption } from './entities/delivery-option.entity';
+import { DeliveryOrder } from './modules';
 
 @ObjectType()
-export class PointsResponse extends BaseResponse {
-  @Field(() => [Point])
-  @ApiProperty({ description: 'Пункты доставки', type: [Point] })
-  points: Point[];
+export class DeliveryPointsResponse extends BaseResponse {
+  @Field(() => [DeliveryPoint])
+  @ApiProperty({ description: 'Пункты доставки', type: [DeliveryPoint] })
+  points: DeliveryPoint[];
 }
 
 @ObjectType()
-export class PackageTypesResponse extends BaseResponse {
-  @Field(() => [PackageType])
-  @ApiProperty({ description: 'Типы ', type: [PackageType] })
-  packages: PackageType[];
+export class DeliveryPackageTypesResponse extends BaseResponse {
+  @Field(() => [DeliveryPackageType])
+  @ApiProperty({ description: 'Типы ', type: [DeliveryPackageType] })
+  packages: DeliveryPackageType[];
 }
 
 @ObjectType()
 export class DeliverResponse extends BaseResponse {
-  @Field(() => Delivery)
-  @ApiProperty({ description: 'Доставка', type: Delivery })
-  order: Delivery;
+  @Field(() => DeliveryOrder)
+  @ApiProperty({ description: 'Доставка', type: DeliveryOrder })
+  order: DeliveryOrder;
 }
 
 @ObjectType()
-export class DeliveriesResponse extends BaseResponse {
-  @Field(() => [Delivery])
-  @ApiProperty({ description: 'Доставки', type: [Delivery] })
-  deliveries: Delivery[];
+export class DeliveryOrdersResponse extends BaseResponse {
+  @Field(() => [DeliveryOrder])
+  @ApiProperty({ description: 'Доставки', type: [DeliveryOrder] })
+  orders: DeliveryOrder[];
 }
 
 @ObjectType()
-export class DeliveryResponse extends BaseResponse {
-  @Field(() => Delivery)
-  @ApiProperty({ description: 'Доставка', type: Delivery })
-  delivery: Delivery;
+export class DeliveryOrderResponse extends BaseResponse {
+  @Field(() => DeliveryOrder)
+  @ApiProperty({ description: 'Доставка', type: DeliveryOrder })
+  order: DeliveryOrder;
 }
 
 @ObjectType()

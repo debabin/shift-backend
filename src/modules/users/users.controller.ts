@@ -1,13 +1,14 @@
-import { BadRequestException, Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 import { OtpsService } from '@/modules/otps';
+import { ApiAuthorizedOnly } from '@/utils/guards';
 import { BaseResolver, AuthService } from '@/utils/services';
 
 import { SignInDto } from './dto';
 import { User } from './entities';
-import { UserResponse } from './users.model';
+import { SessionResponse, SignInResponse } from './users.model';
 import { UsersService } from './users.service';
 
 @ApiTags('💂‍♂️ users')
@@ -21,14 +22,14 @@ export class UsersController extends BaseResolver {
     super();
   }
 
-  @Post('/signIn')
+  @Post('/signin')
   @ApiOperation({ summary: 'авторизация' })
   @ApiResponse({
     status: 200,
-    description: 'signIn',
-    type: UserResponse
+    description: 'signin',
+    type: SignInResponse
   })
-  async signIn(@Body() signInDto: SignInDto, @Res() response: Response): Promise<UserResponse> {
+  async signin(@Body() signInDto: SignInDto): Promise<SignInResponse> {
     const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
@@ -43,25 +44,22 @@ export class UsersController extends BaseResolver {
 
     await this.otpsService.delete({ _id: otp._id });
     const { token } = await this.authService.login(user);
-    response.cookie('authorization', `Bearer ${token}`);
 
-    return this.wrapSuccess({ user });
+    return this.wrapSuccess({ user, token });
   }
 
+  @ApiAuthorizedOnly()
   @Get('/session')
   @ApiOperation({ summary: 'получить сессию пользователя' })
   @ApiResponse({
     status: 200,
     description: 'session',
-    type: UserResponse
+    type: SessionResponse
   })
-  async me(@Res() request: Request): Promise<UserResponse> {
+  async me(@Req() request: Request): Promise<SessionResponse> {
     const token = request.headers.authorization.split(' ')[1];
-    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
-    if (!decodedJwtAccessToken) {
-      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
-    }
+    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
     const user = await this.usersService.findOne({
       phone: decodedJwtAccessToken.phone

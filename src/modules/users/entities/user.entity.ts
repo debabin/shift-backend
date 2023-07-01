@@ -8,8 +8,7 @@ import { Schema as MongooseSchema, Document } from 'mongoose';
 @Schema({
   collection: 'users',
   versionKey: false,
-  minimize: false,
-  timestamps: { createdAt: 'created', updatedAt: 'updated' }
+  minimize: false
 })
 export class User {
   @Field(() => String)

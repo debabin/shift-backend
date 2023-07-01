@@ -2,7 +2,8 @@ import { Field, ArgsType, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
 
-import { DeliveryOptionType, Payer } from '../entities';
+import { DeliveryOptionType } from '../entities';
+import { Payer } from '../modules';
 
 @InputType('CreateDeliveryOrderDeliveryOptionDto')
 export class CreateDeliveryOrderDeliveryOptionDto {
@@ -53,13 +54,13 @@ export class CreateDeliveryOrderPointDto {
   @IsNumber()
   @IsNotEmpty()
   @Field(() => Number)
-  @ApiProperty({ example: 'latitude', description: 'Широта' })
+  @ApiProperty({ example: 100, description: 'Широта' })
   latitude: number;
 
   @IsNumber()
   @IsNotEmpty()
-  @Field(() => String)
-  @ApiProperty({ example: 'longitude', description: 'Долгота' })
+  @Field(() => Number)
+  @ApiProperty({ example: 100, description: 'Долгота' })
   longitude: number;
 }
 

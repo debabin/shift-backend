@@ -1,6 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { Response } from 'express';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { OtpsService } from '@/modules/otps';
 import { DescribeContext } from '@/utils/decorators';
@@ -8,7 +7,7 @@ import { BaseResolver, AuthService } from '@/utils/services';
 
 import { SignInDto } from './dto';
 import { User } from './entities';
-import { UserResponse } from './users.model';
+import { SignInResponse } from './users.model';
 import { UsersService } from './users.service';
 
 @Resolver('💂‍♂️ users mutation')
@@ -23,11 +22,8 @@ export class UsersMutation extends BaseResolver {
     super();
   }
 
-  @Mutation(() => UserResponse)
-  async signIn(
-    @Args() signInDto: SignInDto,
-    @Context() context: { res: Response }
-  ): Promise<UserResponse> {
+  @Mutation(() => SignInResponse)
+  async signin(@Args() signInDto: SignInDto): Promise<SignInResponse> {
     const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
@@ -42,8 +38,7 @@ export class UsersMutation extends BaseResolver {
 
     await this.otpsService.delete({ _id: otp._id });
     const { token } = await this.authService.login(user);
-    context.res.cookie('authorization', `Bearer ${token}`);
 
-    return this.wrapSuccess({ user });
+    return this.wrapSuccess({ user, token });
   }
 }

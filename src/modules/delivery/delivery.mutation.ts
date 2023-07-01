@@ -9,15 +9,15 @@ import { getDistance } from '@/utils/helpers';
 import { BaseResolver, BaseResponse } from '@/utils/services';
 
 import { DeliverResponse, CalculateDeliveryResponse } from './delivery.model';
-import { DeliveryService } from './delivery.service';
 import { CalculateDeliveryDto, CancelDeliveryOrderDto, CreateDeliveryOrderDto } from './dto';
-import { Delivery, DeliveryStatus, DeliveryOption, DeliveryOptionType } from './entities';
+import { DeliveryOption, DeliveryOptionType } from './entities';
+import { DeliveryOrderService, DeliveryStatus } from './modules';
 
 @Resolver('📦 delivery mutation')
 @DescribeContext('DeliveryMutation')
-@Resolver(() => Delivery)
+@Resolver()
 export class DeliveryMutation extends BaseResolver {
-  constructor(private readonly deliveryService: DeliveryService) {
+  constructor(private readonly deliveryOrderService: DeliveryOrderService) {
     super();
   }
 
@@ -26,7 +26,7 @@ export class DeliveryMutation extends BaseResolver {
   async cancelDeliveryOrder(
     @Args() cancelDeliveryOrderDto: CancelDeliveryOrderDto
   ): Promise<BaseResponse> {
-    const order = await this.deliveryService.findOne({ _id: cancelDeliveryOrderDto.orderId });
+    const order = await this.deliveryOrderService.findOne({ _id: cancelDeliveryOrderDto.orderId });
 
     if (!order) {
       throw new BadRequestException(this.wrapFail('Доставка не найдена'));
@@ -36,7 +36,7 @@ export class DeliveryMutation extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Доставка нельзя отменить'));
     }
 
-    await this.deliveryService.updateOne(
+    await this.deliveryOrderService.updateOne(
       { _id: cancelDeliveryOrderDto.orderId },
       { $set: { status: DeliveryStatus.CANCELED } }
     );
@@ -48,7 +48,7 @@ export class DeliveryMutation extends BaseResolver {
   async createDeliveryOrder(
     @Args() createDeliveryOrderDto: CreateDeliveryOrderDto
   ): Promise<DeliverResponse> {
-    const order = await this.deliveryService.create({
+    const order = await this.deliveryOrderService.create({
       ...createDeliveryOrderDto,
       status: DeliveryStatus.IN_PROCESSING
     });

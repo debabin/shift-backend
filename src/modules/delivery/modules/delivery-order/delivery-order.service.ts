@@ -5,22 +5,22 @@ import { Model } from 'mongoose';
 
 import { BaseService } from '@/utils/services';
 
-import { DeliveryDocument, Delivery, DeliveryStatus } from './entities';
-
-export const OTP_EXPIRED_TIME = 10 * 60000;
+import { DeliveryOrder, DeliveryOrderDocument, DeliveryStatus } from './delivery-order.entity';
 
 @Injectable()
-export class DeliveryService extends BaseService<DeliveryDocument, Delivery> {
-  constructor(@InjectModel(Delivery.name) private DeliveryModel: Model<DeliveryDocument>) {
-    super(DeliveryModel);
+export class DeliveryOrderService extends BaseService<DeliveryOrderDocument, DeliveryOrder> {
+  constructor(
+    @InjectModel(DeliveryOrder.name) private DeliveryOrderModel: Model<DeliveryOrderDocument>
+  ) {
+    super(DeliveryOrderModel);
   }
 
-  @Cron('0 0 */5 * * *')
+  @Cron('* * */5 * * *')
   async handleCron() {
     const deliveries = await this.find({
       $and: [
-        { status: { $not: DeliveryStatus.SUCCESS } },
-        { status: { $not: DeliveryStatus.CANCELED } }
+        { status: { $ne: DeliveryStatus.SUCCESS } },
+        { status: { $ne: DeliveryStatus.CANCELED } }
       ]
     });
 

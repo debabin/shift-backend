@@ -98,7 +98,7 @@ input CreateDeliveryOrderPersonDto {
 input CreateDeliveryOrderPointDto {
   id: String!
   latitude: Float!
-  longitude: String!
+  longitude: Float!
   name: String!
 }
 
@@ -126,39 +126,9 @@ input CreatePaymentTicketsDto {
 }
 
 type DeliverResponse {
-  order: Delivery!
+  order: DeliveryOrder!
   reason: String
   success: Boolean!
-}
-
-type DeliveriesResponse {
-  deliveries: [Delivery!]!
-  reason: String
-  success: Boolean!
-}
-
-type Delivery {
-  _id: String!
-  payer: Payer!
-  receiver: DeliveryPerson!
-  receiverAddress: Address!
-  receiverPoint: Point!
-  sender: DeliveryPerson!
-  senderAddress: Address!
-  senderPoint: Point!
-  status: DeliveryStatus!
-}
-
-input DeliveryInput {
-  _id: String!
-  payer: Payer!
-  receiver: DeliveryPersonInput!
-  receiverAddress: AddressInput!
-  receiverPoint: PointInput!
-  sender: DeliveryPersonInput!
-  senderAddress: AddressInput!
-  senderPoint: PointInput!
-  status: DeliveryStatus!
 }
 
 type DeliveryOption {
@@ -182,6 +152,66 @@ input DeliveryOpttionInput {
   type: DeliveryOptionType!
 }
 
+type DeliveryOrder {
+  _id: String!
+  payer: Payer!
+  receiver: DeliveryPerson!
+  receiverAddress: Address!
+  receiverPoint: DeliveryPoint!
+  sender: DeliveryPerson!
+  senderAddress: Address!
+  senderPoint: DeliveryPoint!
+  status: DeliveryStatus!
+}
+
+input DeliveryOrderInput {
+  _id: String!
+  payer: Payer!
+  receiver: DeliveryPersonInput!
+  receiverAddress: AddressInput!
+  receiverPoint: DeliveryPointInput!
+  sender: DeliveryPersonInput!
+  senderAddress: AddressInput!
+  senderPoint: DeliveryPointInput!
+  status: DeliveryStatus!
+}
+
+type DeliveryOrderResponse {
+  order: DeliveryOrder!
+  reason: String
+  success: Boolean!
+}
+
+type DeliveryOrdersResponse {
+  orders: [DeliveryOrder!]!
+  reason: String
+  success: Boolean!
+}
+
+type DeliveryPackageType {
+  height: Float!
+  id: String!
+  length: Float!
+  name: String!
+  weight: Float!
+  width: Float!
+}
+
+input DeliveryPackageTypeInput {
+  height: Float!
+  id: String!
+  length: Float!
+  name: String!
+  weight: Float!
+  width: Float!
+}
+
+type DeliveryPackageTypesResponse {
+  packages: [DeliveryPackageType!]!
+  reason: String
+  success: Boolean!
+}
+
 type DeliveryPerson {
   firstname: String!
   lastname: String!
@@ -196,8 +226,22 @@ input DeliveryPersonInput {
   phone: String!
 }
 
-type DeliveryResponse {
-  delivery: Delivery!
+type DeliveryPoint {
+  id: String!
+  latitude: Float!
+  longitude: Float!
+  name: String!
+}
+
+input DeliveryPointInput {
+  id: String!
+  latitude: Float!
+  longitude: Float!
+  name: String!
+}
+
+type DeliveryPointsResponse {
+  points: [DeliveryPoint!]!
   reason: String
   success: Boolean!
 }
@@ -205,7 +249,9 @@ type DeliveryResponse {
 enum DeliveryStatus {
   CANCELED
   IN_PROCESSING
+  ON_MY_WAY
   SUCCESS
+  WAITING_COURIER
 }
 
 type Film {
@@ -310,7 +356,7 @@ type Mutation {
   createCinemaPayment(debitCard: CreatePaymentDebitCardDto!, filmId: String!, person: CreatePaymentPersonDto!, seance: CreatePaymentSeanceDto!, tickets: CreatePaymentTicketsDto!): PaymentResponse!
   createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
-  signIn(code: Float!, phone: String!): UserResponse!
+  signin(code: Float!, phone: String!): SignInResponse!
 }
 
 type Otp {
@@ -335,30 +381,6 @@ type OtpResponse {
   success: Boolean!
 }
 
-type PackageType {
-  height: Float!
-  id: String!
-  length: Float!
-  name: String!
-  weight: Float!
-  width: Float!
-}
-
-input PackageTypeInput {
-  height: Float!
-  id: String!
-  length: Float!
-  name: String!
-  weight: Float!
-  width: Float!
-}
-
-type PackageTypesResponse {
-  packages: [PackageType!]!
-  reason: String
-  success: Boolean!
-}
-
 enum Payer {
   RECEIVER
   SENDER
@@ -370,26 +392,6 @@ type PaymentResponse {
   success: Boolean!
 }
 
-type Point {
-  id: String!
-  latitude: Float!
-  longitude: String!
-  name: String!
-}
-
-input PointInput {
-  id: String!
-  latitude: Float!
-  longitude: String!
-  name: String!
-}
-
-type PointsResponse {
-  points: [Point!]!
-  reason: String
-  success: Boolean!
-}
-
 enum Profession {
   ACTOR
   DIRECTOR
@@ -397,15 +399,15 @@ enum Profession {
 
 type Query {
   getCinemaToday: FilmsResponse!
-  getDeliveries: DeliveriesResponse!
-  getDelivery(orderId: String!): DeliveryResponse!
-  getDeliveryPackageTypes: PackageTypesResponse!
-  getDeliveryPoints: PointsResponse!
+  getDeliveryOrder(orderId: String!): DeliveryOrderResponse!
+  getDeliveryOrders: DeliveryOrdersResponse!
+  getDeliveryPackageTypes: DeliveryPackageTypesResponse!
+  getDeliveryPoints: DeliveryPointsResponse!
   getFilm(filmId: String!): FilmResponse!
   getFilmSchedule(filmId: String!): ScheduleResponse!
   getOrders: TicketsResponse!
   getTickets: TicketsResponse!
-  me: UserResponse!
+  me: SessionResponse!
 }
 
 enum Rating {
@@ -431,6 +433,19 @@ type ScheduleSeance {
   hall: FilmHall!
   payedTickets: [Ticket!]!
   time: String!
+}
+
+type SessionResponse {
+  reason: String
+  success: Boolean!
+  user: User!
+}
+
+type SignInResponse {
+  reason: String
+  success: Boolean!
+  token: String!
+  user: User!
 }
 
 type Ticket {
@@ -482,10 +497,4 @@ input UserInput {
   lastname: String!
   middlename: String!
   phone: String!
-}
-
-type UserResponse {
-  reason: String
-  success: Boolean!
-  user: User
 }

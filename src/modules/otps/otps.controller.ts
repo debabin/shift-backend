@@ -3,11 +3,10 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { BaseResolver } from '@/utils/services';
 
-import { OtpDto } from './dto';
+import { RETRY_DELAY } from './constants';
+import { CreateOtpDto } from './dto';
 import { OtpResponse } from './otps.model';
 import { OtpsService } from './otps.service';
-
-const RETRY_DELAY = 120000;
 
 @ApiTags('☄️ otps')
 @Controller()
@@ -23,8 +22,8 @@ export class OtpsController extends BaseResolver {
     description: 'create otp',
     type: OtpResponse
   })
-  async otp(@Body() otpDto: OtpDto): Promise<OtpResponse> {
-    const existingOtp = await this.otpsService.findOne({ phone: otpDto.phone });
+  async createOtp(@Body() createOtpDto: CreateOtpDto): Promise<OtpResponse> {
+    const existingOtp = await this.otpsService.findOne({ phone: createOtpDto.phone });
 
     if (existingOtp) {
       const { retryDelay, created } = existingOtp;
@@ -36,7 +35,7 @@ export class OtpsController extends BaseResolver {
 
     const code = Math.floor(100000 + Math.random() * 900000);
     await this.otpsService.create({
-      phone: otpDto.phone,
+      phone: createOtpDto.phone,
       code,
       retryDelay: RETRY_DELAY
     });
