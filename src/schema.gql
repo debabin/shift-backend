@@ -43,6 +43,7 @@ type CinemaOrder {
   _id: String!
   orderId: Float!
   phone: String!
+  status: CinemaOrderStatus!
   tickets: [Ticket!]!
 }
 
@@ -50,7 +51,13 @@ input CinemaOrderInput {
   _id: String!
   orderId: Float!
   phone: String!
+  status: CinemaOrderStatus!
   tickets: [TicketInput!]!
+}
+
+enum CinemaOrderStatus {
+  CANCELED
+  PAYED
 }
 
 input CinemaPersonInput {

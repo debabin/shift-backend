@@ -9,7 +9,7 @@ import { PaymentResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelCinemaOrderDto, CreateCinemaPaymentDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
-import { CinemaOrderService } from './modules';
+import { CinemaOrderService, CinemaOrderStatus } from './modules';
 
 @Resolver('📦 cinema mutation')
 @DescribeContext('CinemaMutation')
@@ -33,17 +33,21 @@ export class CinemaMutation extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    const [ticket] = order.tickets;
-    // TODO проверка по времени
-    // if (order.status !== TicketStatus.PAYED || false) {
-    //   throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
-    // }
+    if (order.status !== CinemaOrderStatus.PAYED) {
+      throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
+    }
 
-    // TODO
-    await this.cinemaService.updateOne(
-      { _id: cancelCinemaOrderDto.orderId },
+    const updatedTickets = await this.cinemaService.updateMany(
+      { _id: { $in: order.tickets.map((ticket) => ticket._id) } },
       { $set: { status: TicketStatus.CANCELED } }
     );
+
+    await this.cinemaOrderService.updateOne(
+      { _id: cancelCinemaOrderDto.orderId },
+      { $set: { status: CinemaOrderStatus.CANCELED, tickets: updatedTickets } }
+    );
+
+    await this.cinemaService.delete({ _id: { $in: order.tickets.map((ticket) => ticket._id) } });
 
     return this.wrapSuccess();
   }
@@ -105,7 +109,8 @@ export class CinemaMutation extends BaseResolver {
     const order = await this.cinemaOrderService.create({
       orderId,
       tickets,
-      phone: createCinemaPaymentDto.person.phone
+      phone: createCinemaPaymentDto.person.phone,
+      status: CinemaOrderStatus.PAYED
     });
     return this.wrapSuccess({ order });
   }

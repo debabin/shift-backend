@@ -1,6 +1,6 @@
-import { BadRequestException, Body, Controller, Get, Param, Put, Res, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { Args } from '@nestjs/graphql';
-import { ApiOperation, ApiHeader, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { ApiAuthorizedOnly } from '@/utils/guards';
@@ -10,17 +10,17 @@ import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 import { User } from '../users';
 
 import {
+  CinemaOrdersResponse,
   FilmResponse,
   FilmsResponse,
-  TicketsResponse,
-  ScheduleResponse,
   PaymentResponse,
-  CinemaOrdersResponse
+  ScheduleResponse,
+  TicketsResponse
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelCinemaOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
-import { CinemaOrderService } from './modules';
+import { CinemaOrderService, CinemaOrderStatus } from './modules';
 
 @ApiTags('🍿 cinema')
 @Controller('/cinema')
@@ -69,7 +69,7 @@ export class CinemaController extends BaseResolver {
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async getTickets(@Res() request: Request): Promise<TicketsResponse> {
+  async getTickets(@Req() request: Request): Promise<TicketsResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
@@ -103,16 +103,21 @@ export class CinemaController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    // TODO
-    // if (order.status !== TicketStatus.PAYED || false) {
-    //   throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
-    // }
+    if (order.status !== CinemaOrderStatus.PAYED) {
+      throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
+    }
 
-    // TODO
-    await this.cinemaOrderService.updateOne(
-      { _id: cancelCinemaOrderDto.orderId },
+    const updatedTickets = await this.cinemaService.updateMany(
+      { _id: { $in: order.tickets.map((ticket) => ticket._id) } },
       { $set: { status: TicketStatus.CANCELED } }
     );
+
+    await this.cinemaOrderService.updateOne(
+      { _id: cancelCinemaOrderDto.orderId },
+      { $set: { status: CinemaOrderStatus.CANCELED, tickets: updatedTickets } }
+    );
+
+    await this.cinemaService.delete({ _id: { $in: order.tickets.map((ticket) => ticket._id) } });
 
     return this.wrapSuccess();
   }
@@ -219,7 +224,8 @@ export class CinemaController extends BaseResolver {
     const order = await this.cinemaOrderService.create({
       orderId,
       tickets,
-      phone: createCinemaPaymentDto.person.phone
+      phone: createCinemaPaymentDto.person.phone,
+      status: CinemaOrderStatus.PAYED
     });
 
     return this.wrapSuccess({ order });
@@ -237,7 +243,7 @@ export class CinemaController extends BaseResolver {
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async getOrders(@Res() request: Request): Promise<CinemaOrdersResponse> {
+  async getOrders(@Req() request: Request): Promise<CinemaOrdersResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
