@@ -1,6 +1,6 @@
 import { Field, ArgsType, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 @InputType('CreatePaymentTicketsDto')
 export class CreatePaymentTicketsDto {
@@ -100,8 +100,9 @@ export class CreateCinemaPaymentDto {
   @ApiProperty({ description: 'Сеанс фильма', type: CreatePaymentSeanceDto })
   seance: CreatePaymentSeanceDto;
 
+  @IsArray()
   @ValidateNested()
-  @Field(() => CreatePaymentTicketsDto)
-  @ApiProperty({ description: 'Билеты', type: CreatePaymentTicketsDto })
+  @Field(() => [CreatePaymentTicketsDto])
+  @ApiProperty({ description: 'Билеты', type: [CreatePaymentTicketsDto] })
   tickets: CreatePaymentTicketsDto[];
 }

@@ -24,7 +24,7 @@ export class CinemaMutation extends BaseResolver {
 
   @GqlAuthorizedOnly()
   @Mutation(() => BaseResponse)
-  async cancelCinemaOrderOrder(
+  async cancelCinemaOrder(
     @Args() cancelCinemaOrderDto: CancelCinemaOrderDto
   ): Promise<BaseResponse> {
     const order = await this.cinemaOrderService.findOne({ _id: cancelCinemaOrderDto.orderId });
@@ -33,7 +33,8 @@ export class CinemaMutation extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    // TODO
+    const [ticket] = order.tickets;
+    // TODO проверка по времени
     // if (order.status !== TicketStatus.PAYED || false) {
     //   throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
     // }
@@ -51,15 +52,54 @@ export class CinemaMutation extends BaseResolver {
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
   ): Promise<PaymentResponse> {
-    const tickets = await this.cinemaService.insertMany(
-      createCinemaPaymentDto.tickets.map((ticket) => ({
-        filmId: createCinemaPaymentDto.filmId,
-        seance: createCinemaPaymentDto.seance,
-        status: TicketStatus.PAYED,
-        phone: createCinemaPaymentDto.person.phone,
-        ...ticket
-      }))
+    const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
+      filmId: createCinemaPaymentDto.filmId,
+      seance: createCinemaPaymentDto.seance,
+      status: TicketStatus.PAYED,
+      phone: createCinemaPaymentDto.person.phone,
+      row: ticket.row,
+      column: ticket.column
+    }));
+
+    const existedTickets = [];
+    await Promise.all(
+      formatedTickets.map(async (ticket) => {
+        const existedTicket = await this.cinemaService.findOne({
+          'seance.date': ticket.seance.date,
+          'seance.time': ticket.seance.time,
+          row: ticket.row,
+          column: ticket.column
+        });
+
+        if (existedTicket) {
+          existedTickets.push(ticket);
+        }
+      })
     );
+
+    if (existedTickets.length) {
+      throw new BadRequestException(
+        this.wrapFail(
+          `Данные билеты уже куплены: ${existedTickets
+            .map(
+              (ticket, index) =>
+                `${index + 1}. ${ticket.seance.date} ${ticket.seance.time} ${ticket.row} ${
+                  ticket.column
+                }`
+            )
+            .join(' ')}`,
+          {
+            tickets: existedTickets.map((ticket) => ({
+              seance: ticket.seance,
+              row: ticket.row,
+              column: ticket.column
+            }))
+          }
+        )
+      );
+    }
+
+    const tickets = await this.cinemaService.insertMany(formatedTickets);
 
     const orderId = Math.floor(Math.random() * 10 ** 6);
     const order = await this.cinemaOrderService.create({
@@ -67,7 +107,6 @@ export class CinemaMutation extends BaseResolver {
       tickets,
       phone: createCinemaPaymentDto.person.phone
     });
-
     return this.wrapSuccess({ order });
   }
 }

@@ -27,7 +27,7 @@ export class FilmTicketSeance {
 @InputType('TicketInput')
 @ObjectType()
 @Schema({
-  collection: 'ticket',
+  collection: 'tickets',
   versionKey: false,
   minimize: false,
   timestamps: { createdAt: 'created', updatedAt: 'updated' }
@@ -42,14 +42,17 @@ export class Ticket {
   filmId: string;
 
   @Field(() => Number)
+  @Prop({ required: true })
   @ApiProperty({ example: 1, description: 'Ряд' })
   row: number;
 
   @Field(() => Number)
+  @Prop({ required: true })
   @ApiProperty({ example: 1, description: 'Место' })
   column: number;
 
   @Field(() => FilmTicketSeance)
+  @Prop({ required: true })
   @ApiProperty({ description: 'Сеанс фильма', type: FilmTicketSeance })
   seance: FilmTicketSeance;
 
