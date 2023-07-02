@@ -3,10 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @ArgsType()
-export class CancelTicketOrderDto {
+export class CancelCinemaOrderDto {
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
   @ApiProperty({ description: 'Идентификатор билета' })
-  ticketId: string;
+  orderId: string;
 }

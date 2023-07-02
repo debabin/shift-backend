@@ -7,7 +7,7 @@ import { BaseResolver, BaseResponse } from '@/utils/services';
 
 import { PaymentResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
-import { CancelTicketOrderDto, CreateCinemaPaymentDto } from './dto';
+import { CancelCinemaOrderDto, CreateCinemaPaymentDto } from './dto';
 import { Ticket, TicketStatus } from './entities';
 import { CinemaOrderService } from './modules';
 
@@ -24,21 +24,23 @@ export class CinemaMutation extends BaseResolver {
 
   @GqlAuthorizedOnly()
   @Mutation(() => BaseResponse)
-  async cancelDeliveryOrder(
-    @Args() cancelTicketOrderDto: CancelTicketOrderDto
+  async cancelCinemaOrderOrder(
+    @Args() cancelCinemaOrderDto: CancelCinemaOrderDto
   ): Promise<BaseResponse> {
-    const ticket = await this.cinemaService.findOne({ _id: cancelTicketOrderDto.ticketId });
+    const order = await this.cinemaOrderService.findOne({ _id: cancelCinemaOrderDto.orderId });
 
-    if (!ticket) {
-      throw new BadRequestException(this.wrapFail('Билет не найден'));
+    if (!order) {
+      throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    if (ticket.status !== TicketStatus.PAYED || false) {
-      throw new BadRequestException(this.wrapFail('Билет нельзя отменить'));
-    }
+    // TODO
+    // if (order.status !== TicketStatus.PAYED || false) {
+    //   throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
+    // }
 
+    // TODO
     await this.cinemaService.updateOne(
-      { _id: cancelTicketOrderDto.ticketId },
+      { _id: cancelCinemaOrderDto.orderId },
       { $set: { status: TicketStatus.CANCELED } }
     );
 

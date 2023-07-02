@@ -67,13 +67,13 @@ export class CreatePaymentPersonDto {
 export class CreatePaymentSeanceDto {
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ example: new Date().getTime(), description: 'Дата сеанса' })
+  @ApiProperty({ example: '29.06.23', description: 'Дата сеанса' })
   date: string;
 
   @IsString()
   @IsNotEmpty()
   @Field(() => String)
-  @ApiProperty({ description: 'Время сеанса' })
+  @ApiProperty({ example: '10:00', description: 'Время сеанса' })
   time: string;
 }
 

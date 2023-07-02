@@ -18,7 +18,7 @@ import {
   CinemaOrdersResponse
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
-import { CancelTicketOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
+import { CancelCinemaOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
 import { TicketStatus } from './entities';
 import { CinemaOrderService } from './modules';
 
@@ -83,30 +83,32 @@ export class CinemaController extends BaseResolver {
   }
 
   @ApiAuthorizedOnly()
-  @Put('/tickets/cancel')
-  @ApiOperation({ summary: 'отменить билет' })
+  @Put('/orders/cancel')
+  @ApiOperation({ summary: 'отменить заказ' })
   @ApiResponse({
     status: 200,
-    description: 'ticket cancel',
+    description: 'order cancel',
     type: BaseResponse
   })
   @ApiHeader({
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async cancelTicket(@Body() cancelTicketOrderDto: CancelTicketOrderDto): Promise<BaseResponse> {
-    const ticket = await this.cinemaService.findOne({ _id: cancelTicketOrderDto.ticketId });
+  async cancelCinemaOrder(@Body() cancelCinemaOrderDto: CancelCinemaOrderDto): Promise<BaseResponse> {
+    const order = await this.cinemaOrderService.findOne({ _id: cancelCinemaOrderDto.orderId });
 
-    if (!ticket) {
-      throw new BadRequestException(this.wrapFail('Билет не найден'));
+    if (!order) {
+      throw new BadRequestException(this.wrapFail('Заказ не найден'));
     }
 
-    if (ticket.status !== TicketStatus.PAYED || false) {
-      throw new BadRequestException(this.wrapFail('Билет нельзя отменить'));
-    }
+    // TODO
+    // if (order.status !== TicketStatus.PAYED || false) {
+    //   throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
+    // }
 
-    await this.cinemaService.updateOne(
-      { _id: cancelTicketOrderDto.ticketId },
+    // TODO
+    await this.cinemaOrderService.updateOne(
+      { _id: cancelCinemaOrderDto.orderId },
       { $set: { status: TicketStatus.CANCELED } }
     );
 
