@@ -57,31 +57,6 @@ export class CinemaController extends BaseResolver {
   }
 
   @ApiAuthorizedOnly()
-  @Get('/tickets')
-  @ApiOperation({ summary: 'получить все билеты' })
-  @ApiResponse({
-    status: 200,
-    description: 'orders',
-    type: TicketsResponse
-  })
-  @ApiHeader({
-    name: 'authorization'
-  })
-  @ApiBearerAuth()
-  async getTickets(@Req() request: Request): Promise<TicketsResponse> {
-    const token = request.headers.authorization.split(' ')[1];
-    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
-
-    if (!decodedJwtAccessToken) {
-      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
-    }
-
-    const tickets = await this.cinemaService.find({ phone: decodedJwtAccessToken.phone });
-
-    return this.wrapSuccess({ tickets });
-  }
-
-  @ApiAuthorizedOnly()
   @Put('/orders/cancel')
   @ApiOperation({ summary: 'отменить заказ' })
   @ApiResponse({
@@ -114,8 +89,6 @@ export class CinemaController extends BaseResolver {
       { _id: cancelCinemaOrderDto.orderId },
       { $set: { status: CinemaOrderStatus.CANCELED, tickets: updatedTickets } }
     );
-
-    await this.cinemaService.delete({ _id: { $in: order.tickets.map((ticket) => ticket._id) } });
 
     return this.wrapSuccess();
   }
@@ -239,7 +212,7 @@ export class CinemaController extends BaseResolver {
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async getOrders(@Req() request: Request): Promise<CinemaOrdersResponse> {
+  async getCinemaOrders(@Req() request: Request): Promise<CinemaOrdersResponse> {
     const token = request.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 

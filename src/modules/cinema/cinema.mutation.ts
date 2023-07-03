@@ -46,8 +46,6 @@ export class CinemaMutation extends BaseResolver {
       { $set: { status: CinemaOrderStatus.CANCELED, tickets: updatedTickets } }
     );
 
-    await this.cinemaService.delete({ _id: { $in: order.tickets.map((ticket) => ticket._id) } });
-
     return this.wrapSuccess();
   }
 
