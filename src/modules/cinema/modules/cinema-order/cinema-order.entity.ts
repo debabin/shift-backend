@@ -29,7 +29,7 @@ export class CinemaOrder {
   @Field(() => Number)
   @Prop({ required: true })
   @ApiProperty({ description: 'Номер заказа' })
-  orderId: Number;
+  orderNumber: Number;
 
   @Field(() => [Ticket])
   @Prop({ required: true })
