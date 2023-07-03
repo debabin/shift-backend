@@ -1,16 +1,7 @@
-import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Document } from 'mongoose';
-
-export enum TicketStatus {
-  PAYED = 'PAYED',
-  CANCELED = 'CANCELED'
-}
-
-registerEnumType(TicketStatus, {
-  name: 'TicketStatus'
-});
 
 @InputType('FilmTicketSeanceInput')
 @ObjectType()
@@ -55,11 +46,6 @@ export class Ticket {
   @Prop({ required: true })
   @ApiProperty({ description: 'Сеанс фильма', type: FilmTicketSeance })
   seance: FilmTicketSeance;
-
-  @Field(() => TicketStatus)
-  @Prop({ required: true, default: TicketStatus.PAYED })
-  @ApiProperty({ description: 'Статус билета', enum: TicketStatus })
-  status: TicketStatus;
 
   @Field(() => String)
   @Prop({ required: true })

@@ -8,7 +8,7 @@ import { BaseResolver, BaseResponse } from '@/utils/services';
 import { PaymentResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelCinemaOrderDto, CreateCinemaPaymentDto } from './dto';
-import { Ticket, TicketStatus } from './entities';
+import { Ticket } from './entities';
 import { CinemaOrderService, CinemaOrderStatus } from './modules';
 
 @Resolver('📦 cinema mutation')
@@ -37,10 +37,9 @@ export class CinemaMutation extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
     }
 
-    const updatedTickets = await this.cinemaService.updateMany(
-      { _id: { $in: order.tickets.map((ticket) => ticket._id) } },
-      { $set: { status: TicketStatus.CANCELED } }
-    );
+    const updatedTickets = await this.cinemaService.delete({
+      _id: { $in: order.tickets.map((ticket) => ticket._id) }
+    });
 
     await this.cinemaOrderService.updateOne(
       { _id: cancelCinemaOrderDto.orderId },
@@ -59,7 +58,6 @@ export class CinemaMutation extends BaseResolver {
     const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
       seance: createCinemaPaymentDto.seance,
-      status: TicketStatus.PAYED,
       phone: createCinemaPaymentDto.person.phone,
       row: ticket.row,
       column: ticket.column

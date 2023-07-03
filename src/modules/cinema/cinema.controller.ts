@@ -19,7 +19,6 @@ import {
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelCinemaOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';
-import { TicketStatus } from './entities';
 import { CinemaOrderService, CinemaOrderStatus } from './modules';
 
 @ApiTags('🍿 cinema')
@@ -107,10 +106,9 @@ export class CinemaController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
     }
 
-    const updatedTickets = await this.cinemaService.updateMany(
-      { _id: { $in: order.tickets.map((ticket) => ticket._id) } },
-      { $set: { status: TicketStatus.CANCELED } }
-    );
+    const updatedTickets = await this.cinemaService.delete({
+      _id: { $in: order.tickets.map((ticket) => ticket._id) }
+    });
 
     await this.cinemaOrderService.updateOne(
       { _id: cancelCinemaOrderDto.orderId },
@@ -132,7 +130,6 @@ export class CinemaController extends BaseResolver {
   async getFilmSchedule(@Param() getScheduleDto: GetScheduleDto): Promise<ScheduleResponse> {
     const filmSchedule = this.cinemaService.getFilmSchedule(getScheduleDto.filmId);
     const tickets = await this.cinemaService.find({
-      status: TicketStatus.PAYED,
       'seance.date': { $gt: new Date().getTime() }
     });
 
@@ -174,7 +171,6 @@ export class CinemaController extends BaseResolver {
     const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
       seance: createCinemaPaymentDto.seance,
-      status: TicketStatus.PAYED,
       phone: createCinemaPaymentDto.person.phone,
       row: ticket.row,
       column: ticket.column

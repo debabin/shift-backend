@@ -18,7 +18,6 @@ import {
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
-import { TicketStatus } from './entities';
 import { CinemaOrderService } from './modules';
 
 @Resolver('🍿 cinema query')
@@ -49,7 +48,6 @@ export class CinemaQuery extends BaseResolver {
   async getFilmSchedule(@Args() getScheduleDto: GetScheduleDto): Promise<ScheduleResponse> {
     const filmSchedule = this.cinemaService.getFilmSchedule(getScheduleDto.filmId);
     const tickets = await this.cinemaService.find({
-      status: TicketStatus.PAYED,
       'seance.date': { $gt: new Date().getTime() }
     });
 
@@ -80,22 +78,7 @@ export class CinemaQuery extends BaseResolver {
 
   @GqlAuthorizedOnly()
   @Query(() => TicketsResponse)
-  async getTickets(@Context() context: { req: Request }): Promise<TicketsResponse> {
-    const token = context.req.headers.authorization.split(' ')[1];
-    const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
-
-    if (!decodedJwtAccessToken) {
-      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
-    }
-
-    const tickets = await this.cinemaService.find({ phone: decodedJwtAccessToken.phone });
-
-    return this.wrapSuccess({ tickets });
-  }
-
-  @GqlAuthorizedOnly()
-  @Query(() => TicketsResponse)
-  async getOrders(@Context() context: { req: Request }): Promise<CinemaOrdersResponse> {
+  async getCinemaOrders(@Context() context: { req: Request }): Promise<CinemaOrdersResponse> {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 

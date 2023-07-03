@@ -406,6 +406,7 @@ enum Profession {
 }
 
 type Query {
+  getCinemaOrders: TicketsResponse!
   getCinemaToday: FilmsResponse!
   getDeliveryOrder(orderId: String!): DeliveryOrderResponse!
   getDeliveryOrders: DeliveryOrdersResponse!
@@ -413,8 +414,6 @@ type Query {
   getDeliveryPoints: DeliveryPointsResponse!
   getFilm(filmId: String!): FilmResponse!
   getFilmSchedule(filmId: String!): ScheduleResponse!
-  getOrders: TicketsResponse!
-  getTickets: TicketsResponse!
   me: SessionResponse!
 }
 
@@ -463,7 +462,6 @@ type Ticket {
   phone: String!
   row: Float!
   seance: FilmTicketSeance!
-  status: TicketStatus!
 }
 
 input TicketInput {
@@ -473,12 +471,6 @@ input TicketInput {
   phone: String!
   row: Float!
   seance: FilmTicketSeanceInput!
-  status: TicketStatus!
-}
-
-enum TicketStatus {
-  CANCELED
-  PAYED
 }
 
 type TicketsResponse {
