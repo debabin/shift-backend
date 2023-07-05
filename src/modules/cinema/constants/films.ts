@@ -74,7 +74,7 @@ export const films: Film[] = [
       kinopoisk: '9.1',
       imdb: '8.6'
     },
-    img: '/static/static/images/cinema/film_1.webp'
+    img: '/static/images/cinema/film_1.webp'
   },
   {
     id: '2',
