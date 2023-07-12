@@ -22,6 +22,11 @@ export class CinemaService extends BaseService<TicketDocument, Ticket> {
     return films.find((film) => film.id === id);
   }
 
+  getFilmName(id: string) {
+    const film = this.getFilm(id);
+    return film.name;
+  }
+
   getSchedules() {
     return schedules;
   }

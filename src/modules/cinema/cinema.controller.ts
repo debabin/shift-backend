@@ -188,9 +188,11 @@ export class CinemaController extends BaseResolver {
     }
 
     const tickets = await this.cinemaService.insertMany(formatedTickets);
+    const filmName = this.cinemaService.getFilmName(createCinemaPaymentDto.filmId);
 
     const orderNumber = Math.floor(Math.random() * 10 ** 6);
     const order = await this.cinemaOrderService.create({
+      filmName,
       orderNumber,
       tickets,
       phone: createCinemaPaymentDto.person.phone,

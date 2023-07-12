@@ -26,8 +26,8 @@ export class Film {
   id: string;
 
   @ApiProperty()
-  @ApiProperty({ description: 'Название фильма' })
   @Field(() => String)
+  @ApiProperty({ description: 'Название фильма' })
   name: string;
 
   @ApiProperty()

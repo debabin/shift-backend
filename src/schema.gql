@@ -41,7 +41,8 @@ type CalculateDeliveryResponse {
 
 type CinemaOrder {
   _id: String!
-  orderId: Float!
+  filmName: String!
+  orderNumber: Float!
   phone: String!
   status: CinemaOrderStatus!
   tickets: [Ticket!]!
@@ -49,7 +50,8 @@ type CinemaOrder {
 
 input CinemaOrderInput {
   _id: String!
-  orderId: Float!
+  filmName: String!
+  orderNumber: Float!
   phone: String!
   status: CinemaOrderStatus!
   tickets: [TicketInput!]!
