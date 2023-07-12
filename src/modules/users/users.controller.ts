@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { OtpsService } from '@/modules/otps';
@@ -56,6 +56,10 @@ export class UsersController extends BaseResolver {
     description: 'session',
     type: SessionResponse
   })
+  @ApiHeader({
+    name: 'authorization'
+  })
+  @ApiBearerAuth()
   async me(@Req() request: Request): Promise<SessionResponse> {
     const token = request.headers.authorization.split(' ')[1];
 
