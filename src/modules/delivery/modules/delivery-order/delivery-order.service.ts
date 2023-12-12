@@ -28,7 +28,7 @@ export class DeliveryOrderService extends BaseService<DeliveryOrderDocument, Del
 
     await this.updateMany(
       { _id: { $in: randomDeliveries.map((delivery) => delivery._id) } },
-      { $inc: { status: 1 } }
+      { $inc: { status: 1, cancellable: false } }
     );
   }
 }

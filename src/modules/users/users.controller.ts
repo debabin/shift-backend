@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Post, Req } from '@nestjs/common';
-import {ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { OtpsService } from '@/modules/otps';

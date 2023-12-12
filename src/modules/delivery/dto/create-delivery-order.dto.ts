@@ -79,7 +79,7 @@ export class CreateDeliveryOrderPersonDto {
   lastname: string;
 
   @Field(() => String, { nullable: true })
-  @ApiProperty({ example: 'middlename', description: 'Отчество' })
+  @ApiProperty({ example: 'middlename', description: 'Отчество', nullable: true })
   middlename?: string;
 
   @IsString()
@@ -111,7 +111,7 @@ export class CreateDeliveryOrderAddressDto {
 
   @IsString()
   @Field(() => String, { nullable: true })
-  @ApiProperty({ example: 'comment', description: 'Комментарий' })
+  @ApiProperty({ example: 'comment', description: 'Комментарий', nullable: true })
   comment?: string;
 }
 

@@ -75,6 +75,11 @@ export class DeliveryOrder {
   @Prop({ required: true, default: DeliveryStatus.IN_PROCESSING })
   @ApiProperty({ description: 'Статус доставки', enum: DeliveryStatus })
   status: DeliveryStatus;
+
+  @Field(() => Boolean)
+  @Prop({ required: true, default: true })
+  @ApiProperty({ description: 'Статус отмены', type: Boolean })
+  cancellable: boolean;
 }
 
 export type DeliveryOrderDocument = DeliveryOrder & Document;

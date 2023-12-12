@@ -14,8 +14,7 @@ import {
   FilmResponse,
   FilmsResponse,
   PaymentResponse,
-  ScheduleResponse,
-  TicketsResponse
+  ScheduleResponse
 } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { CancelCinemaOrderDto, CreateCinemaPaymentDto, GetFilmDto, GetScheduleDto } from './dto';

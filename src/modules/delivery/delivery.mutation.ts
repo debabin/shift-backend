@@ -50,7 +50,8 @@ export class DeliveryMutation extends BaseResolver {
   ): Promise<DeliverResponse> {
     const order = await this.deliveryOrderService.create({
       ...createDeliveryOrderDto,
-      status: DeliveryStatus.IN_PROCESSING
+      status: DeliveryStatus.IN_PROCESSING,
+      cancellable: true
     });
 
     return this.wrapSuccess({ order });
