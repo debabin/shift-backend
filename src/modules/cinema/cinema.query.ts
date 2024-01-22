@@ -1,21 +1,16 @@
 import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver } from '@/utils/services';
 
-import { User } from '../users';
+import type { User } from '../users';
 
-import {
-  FilmResponse,
-  FilmsResponse,
-  ScheduleResponse,
-  TicketsResponse,
-  CinemaOrdersResponse
-} from './cinema.model';
+import type { CinemaOrdersResponse } from './cinema.model';
+import { FilmResponse, FilmsResponse, ScheduleResponse, TicketsResponse } from './cinema.model';
 import { CinemaService } from './cinema.service';
 import { GetFilmDto, GetScheduleDto } from './dto';
 import { CinemaOrderService } from './modules';
@@ -51,27 +46,30 @@ export class CinemaQuery extends BaseResolver {
       'seance.date': { $gt: new Date().getTime() }
     });
 
-    const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
-      const formattedDate = getDDMMYYFormatDate(index);
+    const updatedFilmSchedule = filmSchedule.reduce(
+      (acc, schedule, index) => {
+        const formattedDate = getDDMMYYFormatDate(index);
 
-      const seances = schedule.map((element) => {
-        const payedTickets = tickets.filter(
-          (ticket) =>
-            ticket.seance.date === formattedDate &&
-            ticket.seance.time === element.time &&
-            ticket.filmId === getScheduleDto.filmId
-        );
+        const seances = schedule.map((element) => {
+          const payedTickets = tickets.filter(
+            (ticket) =>
+              ticket.seance.date === formattedDate &&
+              ticket.seance.time === element.time &&
+              ticket.filmId === getScheduleDto.filmId
+          );
 
-        return {
-          ...element,
-          payedTickets
-        };
-      });
+          return {
+            ...element,
+            payedTickets
+          };
+        });
 
-      acc.push({ date: formattedDate, seances });
+        acc.push({ date: formattedDate, seances });
 
-      return acc;
-    }, [] as ScheduleResponse['schedules']);
+        return acc;
+      },
+      [] as ScheduleResponse['schedules']
+    );
 
     return this.wrapSuccess({ schedules: updatedFilmSchedule });
   }

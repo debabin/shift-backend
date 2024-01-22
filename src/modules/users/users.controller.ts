@@ -1,14 +1,14 @@
-import { BadRequestException, Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Patch, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { OtpsService } from '@/modules/otps';
 import { ApiAuthorizedOnly } from '@/utils/guards';
-import { BaseResolver, AuthService } from '@/utils/services';
+import { AuthService, BaseResolver } from '@/utils/services';
 
-import { SignInDto } from './dto';
-import { User } from './entities';
-import { SessionResponse, SignInResponse } from './users.model';
+import { SignInDto, UpdateProfileDto } from './dto';
+import type { User } from './entities';
+import { SessionResponse, SignInResponse, UpdateProfileResponse } from './users.model';
 import { UsersService } from './users.service';
 
 @ApiTags('💂‍♂️ users')
@@ -30,10 +30,10 @@ export class UsersController extends BaseResolver {
     type: SignInResponse
   })
   async signin(@Body() signInDto: SignInDto): Promise<SignInResponse> {
-    const user = await this.usersService.findOne({ phone: signInDto.phone });
+    let user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
-      await this.usersService.create({ phone: signInDto.phone });
+      user = await this.usersService.create({ phone: signInDto.phone });
     }
 
     const otp = await this.otpsService.findOne({ phone: signInDto.phone, code: signInDto.code });
@@ -46,6 +46,39 @@ export class UsersController extends BaseResolver {
     const { token } = await this.authService.login(user);
 
     return this.wrapSuccess({ user, token });
+  }
+
+  @ApiAuthorizedOnly()
+  @Patch('/profile')
+  @ApiOperation({ summary: 'обновить профиль пользователя' })
+  @ApiResponse({
+    status: 200,
+    description: 'update profile',
+    type: UpdateProfileResponse
+  })
+  @ApiHeader({
+    name: 'authorization'
+  })
+  @ApiBearerAuth()
+  async updateProfile(@Body() updateProfileDto: UpdateProfileDto): Promise<UpdateProfileResponse> {
+    const user = await this.usersService.findOne({ phone: updateProfileDto.phone });
+
+    if (!user) {
+      throw new BadRequestException(this.wrapFail('Пользователь не существует'));
+    }
+
+    const updatedUser = await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: updateProfileDto.profile.firstname,
+          lastname: updateProfileDto.profile.lastname,
+          middlename: updateProfileDto.profile.middlename
+        }
+      }
+    );
+
+    return this.wrapSuccess({ user: updatedUser });
   }
 
   @ApiAuthorizedOnly()

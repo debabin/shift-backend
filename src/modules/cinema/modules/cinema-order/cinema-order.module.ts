@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { CinemaOrderSchema, CinemaOrder } from './cinema-order.entity';
+import { CinemaOrder, CinemaOrderSchema } from './cinema-order.entity';
 import { CinemaOrderService } from './cinema-order.service';
 
 @Module({

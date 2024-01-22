@@ -163,6 +163,7 @@ input DeliveryOpttionInput {
 
 type DeliveryOrder {
   _id: String!
+  cancellable: Boolean!
   payer: Payer!
   receiver: DeliveryPerson!
   receiverAddress: Address!
@@ -175,6 +176,7 @@ type DeliveryOrder {
 
 input DeliveryOrderInput {
   _id: String!
+  cancellable: Boolean!
   payer: Payer!
   receiver: DeliveryPersonInput!
   receiverAddress: AddressInput!
@@ -367,6 +369,7 @@ type Mutation {
   createDeliveryOrder(option: CreateDeliveryOrderDeliveryOptionDto!, payer: Payer!, receiver: CreateDeliveryOrderPersonDto!, receiverAddress: CreateDeliveryOrderAddressDto!, receiverPoint: CreateDeliveryOrderPointDto!, sender: CreateDeliveryOrderPersonDto!, senderAddress: CreateDeliveryOrderAddressDto!, senderPoint: CreateDeliveryOrderPointDto!): DeliverResponse!
   createOtp(phone: String!): OtpResponse!
   signin(code: Float!, phone: String!): SignInResponse!
+  updateProfile(phone: String!, profile: UpdateProfileProfileDto!): UpdateProfileResponse!
 }
 
 type Otp {
@@ -479,6 +482,19 @@ type TicketsResponse {
   reason: String
   success: Boolean!
   tickets: [Ticket!]!
+}
+
+input UpdateProfileProfileDto {
+  email: String!
+  firstname: String!
+  lastname: String!
+  middlename: String!
+}
+
+type UpdateProfileResponse {
+  reason: String
+  success: Boolean!
+  user: User!
 }
 
 type User {

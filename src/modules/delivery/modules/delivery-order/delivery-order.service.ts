@@ -5,7 +5,8 @@ import { Model } from 'mongoose';
 
 import { BaseService } from '@/utils/services';
 
-import { DeliveryOrder, DeliveryOrderDocument, DeliveryStatus } from './delivery-order.entity';
+import type { DeliveryOrderDocument } from './delivery-order.entity';
+import { DeliveryOrder, DeliveryStatus } from './delivery-order.entity';
 
 @Injectable()
 export class DeliveryOrderService extends BaseService<DeliveryOrderDocument, DeliveryOrder> {

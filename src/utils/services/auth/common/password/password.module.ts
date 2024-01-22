@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtModuleAsyncOptions } from '@nestjs/jwt';
+import type { JwtModuleAsyncOptions } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 
 import { PasswordService } from './password.service';
 

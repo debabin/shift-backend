@@ -1,23 +1,22 @@
-import { randomUUID } from 'crypto';
-
 import { BadRequestException, Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { randomUUID } from 'crypto';
 import { Request } from 'express';
 
 import { ApiAuthorizedOnly } from '@/utils/guards';
 import { getDistance } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
-import { User } from '../users';
+import type { User } from '../users';
 
 import { packages, points } from './constants';
 import {
-  DeliveryPointsResponse,
-  DeliveryPackageTypesResponse,
+  CalculateDeliveryResponse,
   DeliverResponse,
-  DeliveryOrdersResponse,
   DeliveryOrderResponse,
-  CalculateDeliveryResponse
+  DeliveryOrdersResponse,
+  DeliveryPackageTypesResponse,
+  DeliveryPointsResponse
 } from './delivery.model';
 import {
   CalculateDeliveryDto,
@@ -25,7 +24,8 @@ import {
   CreateDeliveryOrderDto,
   GetDeliveryOrderDto
 } from './dto';
-import { DeliveryOption, DeliveryOptionType } from './entities';
+import type { DeliveryOption } from './entities';
+import { DeliveryOptionType } from './entities';
 import { DeliveryOrderService, DeliveryStatus } from './modules';
 
 @ApiTags('📦 delivery')

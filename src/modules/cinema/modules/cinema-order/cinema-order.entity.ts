@@ -1,7 +1,8 @@
 import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Document } from 'mongoose';
+import type { Document } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
 import { Ticket } from '../../entities';
 
@@ -34,7 +35,7 @@ export class CinemaOrder {
   @Field(() => Number)
   @Prop({ required: true })
   @ApiProperty({ description: 'Номер заказа' })
-  orderNumber: Number;
+  orderNumber: number;
 
   @Field(() => [Ticket])
   @Prop({ required: true })

@@ -1,2 +1,2 @@
-export * from './points';
 export * from './packages';
+export * from './points';

@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 import { Context, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
-import { BaseResolver, AuthService } from '@/utils/services';
+import { AuthService, BaseResolver } from '@/utils/services';
 
 import { User } from './entities';
 import { SessionResponse } from './users.model';

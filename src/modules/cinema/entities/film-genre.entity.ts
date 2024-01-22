@@ -1,4 +1,4 @@
-import { InputType, ObjectType, Field } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
 @InputType('FilmGenreInput')

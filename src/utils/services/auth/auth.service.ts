@@ -6,7 +6,10 @@ import { PasswordService } from './common/password';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private passwordService: PasswordService) {}
+  constructor(
+    private jwtService: JwtService,
+    private passwordService: PasswordService
+  ) {}
 
   async register<T extends { phone: string }>(user: T) {
     return this.authenticate(user);

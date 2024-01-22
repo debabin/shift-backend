@@ -1,16 +1,16 @@
-import { randomUUID } from 'crypto';
-
 import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { randomUUID } from 'crypto';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { getDistance } from '@/utils/helpers';
 import { BaseResolver, BaseResponse } from '@/utils/services';
 
-import { DeliverResponse, CalculateDeliveryResponse } from './delivery.model';
+import { CalculateDeliveryResponse, DeliverResponse } from './delivery.model';
 import { CalculateDeliveryDto, CancelDeliveryOrderDto, CreateDeliveryOrderDto } from './dto';
-import { DeliveryOption, DeliveryOptionType } from './entities';
+import type { DeliveryOption } from './entities';
+import { DeliveryOptionType } from './entities';
 import { DeliveryOrderService, DeliveryStatus } from './modules';
 
 @Resolver('📦 delivery mutation')
