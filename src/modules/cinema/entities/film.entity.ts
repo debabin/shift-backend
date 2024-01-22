@@ -22,7 +22,7 @@ registerEnumType(Rating, {
 @ObjectType()
 export class Film {
   @Field(() => String)
-  @ApiProperty({ example: '1', description: 'Индентификатор фильма' })
+  @ApiProperty({ example: '1', description: 'Идентификатор фильма' })
   id: string;
 
   @ApiProperty()

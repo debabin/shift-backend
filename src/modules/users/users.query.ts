@@ -23,7 +23,7 @@ export class UsersQuery extends BaseResolver {
   }
 
   @Query(() => SessionResponse)
-  async me(@Context() context: { req: Request }): Promise<SessionResponse> {
+  async session(@Context() context: { req: Request }): Promise<SessionResponse> {
     const token = context.req.headers.authorization.split(' ')[1];
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 

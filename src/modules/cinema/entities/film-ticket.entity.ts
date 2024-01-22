@@ -11,7 +11,7 @@ export class FilmTicketSeance {
   date: string;
 
   @Field(() => String)
-  @ApiProperty({ example: '21:57', description: 'Время сеанса' })
+  @ApiProperty({ example: '21:50', description: 'Время сеанса' })
   time: string;
 }
 

@@ -163,6 +163,7 @@ input DeliveryOpttionInput {
 
 type DeliveryOrder {
   _id: String!
+  cancellable: Boolean!
   payer: Payer!
   receiver: DeliveryPerson!
   receiverAddress: Address!
@@ -175,6 +176,7 @@ type DeliveryOrder {
 
 input DeliveryOrderInput {
   _id: String!
+  cancellable: Boolean!
   payer: Payer!
   receiver: DeliveryPersonInput!
   receiverAddress: AddressInput!
@@ -416,7 +418,7 @@ type Query {
   getDeliveryPoints: DeliveryPointsResponse!
   getFilm(filmId: String!): FilmResponse!
   getFilmSchedule(filmId: String!): ScheduleResponse!
-  me: SessionResponse!
+  session: SessionResponse!
 }
 
 enum Rating {

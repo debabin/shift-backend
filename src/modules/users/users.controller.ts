@@ -60,7 +60,7 @@ export class UsersController extends BaseResolver {
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async me(@Req() request: Request): Promise<SessionResponse> {
+  async session(@Req() request: Request): Promise<SessionResponse> {
     const token = request.headers.authorization.split(' ')[1];
 
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;

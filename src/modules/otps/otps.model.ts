@@ -8,7 +8,7 @@ import { Otp } from './entities';
 @ObjectType()
 export class OtpResponse extends BaseResponse {
   @Field(() => Number)
-  @ApiProperty({ example: 120000, description: 'Время запроса повтороного отп кода в мс' })
+  @ApiProperty({ example: 120000, description: 'Время запроса повторного отп кода в мс' })
   retryDelay: number;
 }
 
