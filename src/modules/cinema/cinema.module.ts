@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import {UsersModule} from "@/modules/users";
+import { UsersModule } from '@/modules/users';
 import { AuthModule } from '@/utils/services';
 
 import { CinemaController } from './cinema.controller';
@@ -15,7 +15,7 @@ import { CinemaOrderModule } from './modules';
   controllers: [CinemaController],
   imports: [
     AuthModule,
-      UsersModule,
+    UsersModule,
     CinemaOrderModule,
     MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }])
   ],

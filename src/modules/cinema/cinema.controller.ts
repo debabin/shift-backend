@@ -7,7 +7,7 @@ import { ApiAuthorizedOnly } from '@/utils/guards';
 import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
-import {User, UsersService} from '../users';
+import { User, UsersService } from '../users';
 
 import {
   CinemaOrdersResponse,
@@ -141,7 +141,7 @@ export class CinemaController extends BaseResolver {
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
   ): Promise<PaymentResponse> {
-    const {person} = createCinemaPaymentDto;
+    const { person } = createCinemaPaymentDto;
 
     const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
@@ -202,8 +202,14 @@ export class CinemaController extends BaseResolver {
     });
     // await this.usersService.create(person);
     await this.usersService.updateOne(
-        { phone: person.phone },
-        { $set: { firstname: person.firstname, lastname: person.lastname, middlename: person.middlename } }
+      { phone: person.phone },
+      {
+        $set: {
+          firstname: person.firstname,
+          lastname: person.lastname,
+          middlename: person.middlename
+        }
+      }
     );
 
     return this.wrapSuccess({ order });
