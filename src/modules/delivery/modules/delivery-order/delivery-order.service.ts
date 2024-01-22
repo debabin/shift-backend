@@ -16,7 +16,7 @@ export class DeliveryOrderService extends BaseService<DeliveryOrderDocument, Del
     super(DeliveryOrderModel);
   }
 
-  @Cron('* * */5 * * *')
+  @Cron('0 0 */5 * * *')
   async handleCron() {
     const deliveries = await this.find({
       $and: [
@@ -26,6 +26,8 @@ export class DeliveryOrderService extends BaseService<DeliveryOrderDocument, Del
     });
 
     const randomDeliveries = deliveries.filter(() => Math.random() < 0.3);
+
+    if (!randomDeliveries.length) return;
 
     await this.updateMany(
       { _id: { $in: randomDeliveries.map((delivery) => delivery._id) } },
