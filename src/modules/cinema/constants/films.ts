@@ -1,4 +1,5 @@
-import { Film, Profession, Rating } from '../entities';
+import type { Film } from '../entities';
+import { Profession, Rating } from '../entities';
 
 export const films: Film[] = [
   {

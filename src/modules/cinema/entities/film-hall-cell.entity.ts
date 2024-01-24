@@ -1,4 +1,4 @@
-import { InputType, ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum FilmHallCellStatus {

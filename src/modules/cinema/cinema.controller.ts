@@ -7,7 +7,8 @@ import { ApiAuthorizedOnly } from '@/utils/guards';
 import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
-import { User, UsersService } from '../users';
+import type { User } from '../users';
+import { UsersService } from '../users';
 
 import {
   CinemaOrdersResponse,
@@ -106,27 +107,30 @@ export class CinemaController extends BaseResolver {
       'seance.date': { $gt: new Date().getTime() }
     });
 
-    const updatedFilmSchedule = filmSchedule.reduce((acc, schedule, index) => {
-      const formattedDate = getDDMMYYFormatDate(index);
+    const updatedFilmSchedule = filmSchedule.reduce(
+      (acc, schedule, index) => {
+        const formattedDate = getDDMMYYFormatDate(index);
 
-      const seances = schedule.map((element) => {
-        const payedTickets = tickets.filter(
-          (ticket) =>
-            ticket.seance.date === formattedDate &&
-            ticket.seance.time === element.time &&
-            ticket.filmId === getScheduleDto.filmId
-        );
+        const seances = schedule.map((element) => {
+          const payedTickets = tickets.filter(
+            (ticket) =>
+              ticket.seance.date === formattedDate &&
+              ticket.seance.time === element.time &&
+              ticket.filmId === getScheduleDto.filmId
+          );
 
-        return {
-          ...element,
-          payedTickets
-        };
-      });
+          return {
+            ...element,
+            payedTickets
+          };
+        });
 
-      acc.push({ date: formattedDate, seances });
+        acc.push({ date: formattedDate, seances });
 
-      return acc;
-    }, [] as ScheduleResponse['schedules']);
+        return acc;
+      },
+      [] as ScheduleResponse['schedules']
+    );
 
     return this.wrapSuccess({ schedules: updatedFilmSchedule });
   }

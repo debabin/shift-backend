@@ -4,7 +4,8 @@ import { Model } from 'mongoose';
 
 import { BaseService } from '@/utils/services';
 
-import { UserDocument, User } from './entities';
+import type { UserDocument } from './entities';
+import { User } from './entities';
 
 @Injectable()
 export class UsersService extends BaseService<UserDocument, User> {

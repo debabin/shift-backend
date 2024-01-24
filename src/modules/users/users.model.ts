@@ -22,3 +22,10 @@ export class SignInResponse extends BaseResponse {
   @ApiProperty({ description: 'Пользовательский токен' })
   token: string;
 }
+
+@ObjectType()
+export class UpdateProfileResponse extends BaseResponse {
+  @Field(() => User)
+  @ApiProperty({ description: 'Пользователь', type: User })
+  user: User;
+}

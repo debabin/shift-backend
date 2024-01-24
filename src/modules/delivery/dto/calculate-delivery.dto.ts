@@ -1,4 +1,4 @@
-import { Field, ArgsType, InputType } from '@nestjs/graphql';
+import { ArgsType, Field, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, ValidateNested } from 'class-validator';
 

@@ -3,8 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseResponse } from '@/utils/services';
 
-import { DeliveryPoint, DeliveryPackageType } from './entities';
 import { DeliveryOption } from './entities/delivery-option.entity';
+import { DeliveryPackageType, DeliveryPoint } from './entities';
 import { DeliveryOrder } from './modules';
 
 @ObjectType()

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import {
-  FilterQuery,
-  Model,
+import type {
   Document,
+  FilterQuery,
   QueryOptions,
-  UpdateWithAggregationPipeline,
-  UpdateQuery
+  UpdateQuery,
+  UpdateWithAggregationPipeline
 } from 'mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class BaseService<Doc extends Document, Entity> {

@@ -1,19 +1,19 @@
 import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { AuthService, BaseResolver } from '@/utils/services';
 
-import { User } from '../users';
+import type { User } from '../users';
 
-import { points, packages } from './constants';
+import { packages, points } from './constants';
 import {
-  DeliveryPointsResponse,
-  DeliveryPackageTypesResponse,
+  DeliveryOrderResponse,
   DeliveryOrdersResponse,
-  DeliveryOrderResponse
+  DeliveryPackageTypesResponse,
+  DeliveryPointsResponse
 } from './delivery.model';
 import { GetDeliveryOrderDto } from './dto';
 import { DeliveryOrderService } from './modules';

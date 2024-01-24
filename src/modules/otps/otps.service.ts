@@ -6,7 +6,8 @@ import { Model } from 'mongoose';
 import { BaseService } from '@/utils/services';
 
 import { OTP_EXPIRED_TIME } from './constants';
-import { OtpDocument, Otp } from './entities';
+import type { OtpDocument } from './entities';
+import { Otp } from './entities';
 
 @Injectable()
 export class OtpsService extends BaseService<OtpDocument, Otp> {

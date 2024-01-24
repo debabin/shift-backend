@@ -1,4 +1,4 @@
-import { Field, ObjectType, InputType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 
 @InputType('CountryInput')

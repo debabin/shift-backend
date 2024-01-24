@@ -1,9 +1,10 @@
 import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Document } from 'mongoose';
+import type { Document } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
-import { DeliveryPoint, DeliveryPerson, Address } from '../../entities';
+import { Address, DeliveryPerson, DeliveryPoint } from '../../entities';
 
 export enum Payer {
   RECEIVER = 'RECEIVER',

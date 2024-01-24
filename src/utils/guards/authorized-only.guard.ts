@@ -1,4 +1,5 @@
-import { CanActivate, UseGuards } from '@nestjs/common';
+import type { CanActivate } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 
 import { ApiAuthGuard } from './api-auth.guard';
 import { GqlAuthGuard } from './gql-auth.guard';

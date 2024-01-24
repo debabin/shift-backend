@@ -3,11 +3,11 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { OtpsService } from '@/modules/otps';
 import { DescribeContext } from '@/utils/decorators';
-import { BaseResolver, AuthService } from '@/utils/services';
+import { AuthService, BaseResolver } from '@/utils/services';
 
-import { SignInDto } from './dto';
+import { SignInDto, UpdateProfileDto } from './dto';
 import { User } from './entities';
-import { SignInResponse } from './users.model';
+import { SignInResponse, UpdateProfileResponse } from './users.model';
 import { UsersService } from './users.service';
 
 @Resolver('💂‍♂️ users mutation')
@@ -27,7 +27,7 @@ export class UsersMutation extends BaseResolver {
     const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
-      await this.usersService.create({ phone: signInDto.phone });
+      throw new BadRequestException(this.wrapFail('Неправильный отп код'));
     }
 
     const otp = await this.otpsService.findOne({ phone: signInDto.phone, code: signInDto.code });
@@ -40,5 +40,27 @@ export class UsersMutation extends BaseResolver {
     const { token } = await this.authService.login(user);
 
     return this.wrapSuccess({ user, token });
+  }
+
+  @Mutation(() => UpdateProfileResponse)
+  async updateProfile(@Args() updateProfileDto: UpdateProfileDto): Promise<UpdateProfileResponse> {
+    const user = await this.usersService.findOne({ phone: updateProfileDto.phone });
+
+    if (!user) {
+      throw new BadRequestException(this.wrapFail('Пользователь не существует'));
+    }
+
+    const updatedUser = await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: updateProfileDto.profile.firstname,
+          lastname: updateProfileDto.profile.lastname,
+          middlename: updateProfileDto.profile.middlename
+        }
+      }
+    );
+
+    return this.wrapSuccess({ user: updatedUser });
   }
 }
