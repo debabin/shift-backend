@@ -204,9 +204,15 @@ export class CinemaController extends BaseResolver {
       phone: createCinemaPaymentDto.person.phone,
       status: CinemaOrderStatus.PAYED
     });
-    // await this.usersService.create(person);
-    await this.usersService.updateOne(
-      { phone: person.phone },
+
+    let user = await this.usersService.findOne({ phone: person.phone });
+
+    if (!user) {
+      user = await this.usersService.create({ phone: person.phone });
+    }
+
+    await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
       {
         $set: {
           firstname: person.firstname,

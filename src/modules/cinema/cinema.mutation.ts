@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
+import { UsersService } from '@/modules/users';
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { BaseResolver, BaseResponse } from '@/utils/services';
@@ -17,7 +18,8 @@ import { CinemaOrderService, CinemaOrderStatus } from './modules';
 export class CinemaMutation extends BaseResolver {
   constructor(
     private readonly cinemaService: CinemaService,
-    private readonly cinemaOrderService: CinemaOrderService
+    private readonly cinemaOrderService: CinemaOrderService,
+    private readonly usersService: UsersService
   ) {
     super();
   }
@@ -53,6 +55,8 @@ export class CinemaMutation extends BaseResolver {
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
   ): Promise<PaymentResponse> {
+    const { person } = createCinemaPaymentDto;
+
     const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
       seance: createCinemaPaymentDto.seance,
@@ -110,6 +114,24 @@ export class CinemaMutation extends BaseResolver {
       phone: createCinemaPaymentDto.person.phone,
       status: CinemaOrderStatus.PAYED
     });
+
+    let user = await this.usersService.findOne({ phone: person.phone });
+
+    if (!user) {
+      user = await this.usersService.create({ phone: person.phone });
+    }
+
+    await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: person.firstname,
+          lastname: person.lastname,
+          middlename: person.middlename
+        }
+      }
+    );
+
     return this.wrapSuccess({ order });
   }
 }

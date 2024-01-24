@@ -1,7 +1,6 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 class UpdateProfileProfileDto {
@@ -28,15 +27,20 @@ class UpdateProfileProfileDto {
   @Field(() => String)
   @ApiProperty({ example: 'email@gmail.com', description: 'Почта' })
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  @Field(() => String)
+  @ApiProperty({ example: 'city', description: 'Город' })
+  city?: string;
 }
 
 @ArgsType()
 export class UpdateProfileDto {
   @IsObject()
   @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => UpdateProfileProfileDto)
   @Field(() => UpdateProfileProfileDto)
+  @ApiProperty({ description: 'Данные пользователя', type: UpdateProfileProfileDto })
   profile: UpdateProfileProfileDto;
 
   @IsString()

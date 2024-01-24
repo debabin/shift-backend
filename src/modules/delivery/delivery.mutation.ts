@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { randomUUID } from 'crypto';
 
+import { UsersService } from '@/modules/users';
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
 import { getDistance } from '@/utils/helpers';
@@ -17,7 +18,10 @@ import { DeliveryOrderService, DeliveryStatus } from './modules';
 @DescribeContext('DeliveryMutation')
 @Resolver()
 export class DeliveryMutation extends BaseResolver {
-  constructor(private readonly deliveryOrderService: DeliveryOrderService) {
+  constructor(
+    private readonly deliveryOrderService: DeliveryOrderService,
+    private readonly usersService: UsersService
+  ) {
     super();
   }
 
@@ -48,11 +52,30 @@ export class DeliveryMutation extends BaseResolver {
   async createDeliveryOrder(
     @Args() createDeliveryOrderDto: CreateDeliveryOrderDto
   ): Promise<DeliverResponse> {
+    const { sender } = createDeliveryOrderDto;
+
     const order = await this.deliveryOrderService.create({
       ...createDeliveryOrderDto,
       status: DeliveryStatus.IN_PROCESSING,
       cancellable: true
     });
+
+    let user = await this.usersService.findOne({ phone: sender.phone });
+
+    if (!user) {
+      user = await this.usersService.create({ phone: sender.phone });
+    }
+
+    await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: sender.firstname,
+          lastname: sender.lastname,
+          middlename: sender.middlename
+        }
+      }
+    );
 
     return this.wrapSuccess({ order });
   }
@@ -89,7 +112,7 @@ export class DeliveryMutation extends BaseResolver {
         id: randomUUID(),
         price: price * 2,
         days: Math.floor(days / 2),
-        name: 'эксперсс доставка',
+        name: 'экспресс доставка',
         type: DeliveryOptionType.EXPRESS
       }
     ];

@@ -485,6 +485,7 @@ type TicketsResponse {
 }
 
 input UpdateProfileProfileDto {
+  city: String!
   email: String!
   firstname: String!
   lastname: String!
