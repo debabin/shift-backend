@@ -419,7 +419,7 @@ type Query {
   getDeliveryPoints: DeliveryPointsResponse!
   getFilm(filmId: String!): FilmResponse!
   getFilmSchedule(filmId: String!): ScheduleResponse!
-  me: SessionResponse!
+  session: SessionResponse!
 }
 
 enum Rating {
@@ -485,6 +485,7 @@ type TicketsResponse {
 }
 
 input UpdateProfileProfileDto {
+  city: String!
   email: String!
   firstname: String!
   lastname: String!

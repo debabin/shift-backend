@@ -8,6 +8,7 @@ import { getDDMMYYFormatDate } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import type { User } from '../users';
+import { UsersService } from '../users';
 
 import {
   CinemaOrdersResponse,
@@ -26,7 +27,8 @@ export class CinemaController extends BaseResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly cinemaService: CinemaService,
-    private readonly cinemaOrderService: CinemaOrderService
+    private readonly cinemaOrderService: CinemaOrderService,
+    private readonly usersService: UsersService
   ) {
     super();
   }
@@ -143,6 +145,8 @@ export class CinemaController extends BaseResolver {
   async createCinemaPayment(
     @Args() createCinemaPaymentDto: CreateCinemaPaymentDto
   ): Promise<PaymentResponse> {
+    const { person } = createCinemaPaymentDto;
+
     const formatedTickets = createCinemaPaymentDto.tickets.map((ticket) => ({
       filmId: createCinemaPaymentDto.filmId,
       seance: createCinemaPaymentDto.seance,
@@ -200,6 +204,23 @@ export class CinemaController extends BaseResolver {
       phone: createCinemaPaymentDto.person.phone,
       status: CinemaOrderStatus.PAYED
     });
+
+    let user = await this.usersService.findOne({ phone: person.phone });
+
+    if (!user) {
+      user = await this.usersService.create({ phone: person.phone });
+    }
+
+    await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: person.firstname,
+          lastname: person.lastname,
+          middlename: person.middlename
+        }
+      }
+    );
 
     return this.wrapSuccess({ order });
   }

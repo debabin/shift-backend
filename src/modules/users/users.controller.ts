@@ -67,18 +67,20 @@ export class UsersController extends BaseResolver {
       throw new BadRequestException(this.wrapFail('Пользователь не существует'));
     }
 
-    const updatedUser = await this.usersService.findOneAndUpdate(
+    await this.usersService.findOneAndUpdate(
       { phone: user.phone },
       {
         $set: {
           firstname: updateProfileDto.profile.firstname,
           lastname: updateProfileDto.profile.lastname,
-          middlename: updateProfileDto.profile.middlename
+          middlename: updateProfileDto.profile.middlename,
+          email: updateProfileDto.profile.email,
+          city: updateProfileDto.profile.city
         }
       }
     );
 
-    return this.wrapSuccess({ user: updatedUser });
+    return this.wrapSuccess();
   }
 
   @ApiAuthorizedOnly()
@@ -93,7 +95,7 @@ export class UsersController extends BaseResolver {
     name: 'authorization'
   })
   @ApiBearerAuth()
-  async me(@Req() request: Request): Promise<SessionResponse> {
+  async session(@Req() request: Request): Promise<SessionResponse> {
     const token = request.headers.authorization.split(' ')[1];
 
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;

@@ -8,6 +8,7 @@ import { getDistance } from '@/utils/helpers';
 import { AuthService, BaseResolver, BaseResponse } from '@/utils/services';
 
 import type { User } from '../users';
+import { UsersService } from '../users';
 
 import { packages, points } from './constants';
 import {
@@ -33,7 +34,8 @@ import { DeliveryOrderService, DeliveryStatus } from './modules';
 export class DeliveryController extends BaseResolver {
   constructor(
     private readonly deliveryOrderService: DeliveryOrderService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService
   ) {
     super();
   }
@@ -116,11 +118,31 @@ export class DeliveryController extends BaseResolver {
   async createOrder(
     @Body() createDeliveryOrderDto: CreateDeliveryOrderDto
   ): Promise<DeliverResponse> {
+    const { sender } = createDeliveryOrderDto;
+    console.log('@@@', createDeliveryOrderDto);
+
     const order = await this.deliveryOrderService.create({
       ...createDeliveryOrderDto,
       status: DeliveryStatus.IN_PROCESSING,
       cancellable: true
     });
+
+    let user = await this.usersService.findOne({ phone: sender.phone });
+
+    if (!user) {
+      user = await this.usersService.create({ phone: sender.phone });
+    }
+
+    await this.usersService.findOneAndUpdate(
+      { phone: user.phone },
+      {
+        $set: {
+          firstname: sender.firstname,
+          lastname: sender.lastname,
+          middlename: sender.middlename
+        }
+      }
+    );
 
     return this.wrapSuccess({ order });
   }
