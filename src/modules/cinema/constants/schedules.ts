@@ -21,6 +21,7 @@ export const schedules = [
       ],
       [
         { time: '16:00', hall: halls.red },
+        { time: '20:20', hall: halls.red },
         { time: '21:00', hall: halls.green },
         { time: '22:45', hall: halls.blue }
       ],
