@@ -75,7 +75,13 @@ export const films: Film[] = [
       kinopoisk: '9.1',
       imdb: '8.6'
     },
-    img: '/static/images/cinema/film_1.webp'
+    img: '/static/images/cinema/film_1.webp',
+    country: {
+      id: 1,
+      code: 'USA',
+      code2: 'US',
+      name: 'США'
+    }
   },
   {
     id: '2',
@@ -140,7 +146,13 @@ export const films: Film[] = [
       kinopoisk: '5.1',
       imdb: '4.9'
     },
-    img: '/static/images/cinema/film_2.webp'
+    img: '/static/images/cinema/film_2.webp',
+    country: {
+      id: 2,
+      code: 'RUS',
+      code2: 'RU',
+      name: 'Россия'
+    }
   },
   {
     id: '3',
@@ -215,7 +227,13 @@ export const films: Film[] = [
       kinopoisk: '7.6',
       imdb: '7.7'
     },
-    img: '/static/images/cinema/film_3.webp'
+    img: '/static/images/cinema/film_3.webp',
+    country: {
+      id: 3,
+      code: 'USA',
+      code2: 'US',
+      name: 'США'
+    }
   },
   {
     id: '4',
@@ -295,7 +313,13 @@ export const films: Film[] = [
       kinopoisk: '6.9',
       imdb: '6.6'
     },
-    img: '/static/images/cinema/film_4.webp'
+    img: '/static/images/cinema/film_4.webp',
+    country: {
+      id: 4,
+      code: 'FRA',
+      code2: 'FR',
+      name: 'Франция'
+    }
   },
   {
     id: '5',
@@ -370,7 +394,13 @@ export const films: Film[] = [
       kinopoisk: '5.8',
       imdb: '5.9'
     },
-    img: '/static/images/cinema/film_5.webp'
+    img: '/static/images/cinema/film_5.webp',
+    country: {
+      id: 5,
+      code: 'USA',
+      code2: 'US',
+      name: 'США'
+    }
   },
   {
     id: '6',
@@ -445,7 +475,13 @@ export const films: Film[] = [
       kinopoisk: '8.1',
       imdb: '8.4'
     },
-    img: '/static/images/cinema/film_6.webp'
+    img: '/static/images/cinema/film_6.webp',
+    country: {
+      id: 6,
+      code: 'KOR',
+      code2: 'KR',
+      name: 'Южная Корея'
+    }
   },
   {
     id: '7',
@@ -500,7 +536,13 @@ export const films: Film[] = [
       kinopoisk: '6.1',
       imdb: '6.0'
     },
-    img: '/static/images/cinema/film_7.webp'
+    img: '/static/images/cinema/film_7.webp',
+    country: {
+      id: 7,
+      code: 'RUS',
+      code2: 'RU',
+      name: 'Россия'
+    }
   },
   {
     id: '8',
@@ -545,7 +587,13 @@ export const films: Film[] = [
       kinopoisk: '5.6',
       imdb: '5.3'
     },
-    img: '/static/images/cinema/film_8.webp'
+    img: '/static/images/cinema/film_8.webp',
+    country: {
+      id: 8,
+      code: 'RUS',
+      code2: 'RU',
+      name: 'Россия'
+    }
   },
   {
     id: '9',
@@ -620,7 +668,13 @@ export const films: Film[] = [
       kinopoisk: '3.9',
       imdb: '2.8'
     },
-    img: '/static/images/cinema/film_9.webp'
+    img: '/static/images/cinema/film_9.webp',
+    country: {
+      id: 9,
+      code: 'NLD',
+      code2: 'NL',
+      name: 'Нидерланды'
+    }
   },
   {
     id: '10',
@@ -695,6 +749,12 @@ export const films: Film[] = [
       kinopoisk: '5.9',
       imdb: '6.0'
     },
-    img: '/static/images/cinema/film_10.webp'
+    img: '/static/images/cinema/film_10.webp',
+    country: {
+      id: 10,
+      code: 'USA',
+      code2: 'US',
+      name: 'США'
+    }
   }
 ];
