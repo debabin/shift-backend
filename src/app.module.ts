@@ -35,6 +35,17 @@ import { AppController } from './app.controller';
       sortSchema: true,
       playground: true,
       introspection: true,
+      formatError: (error) => {
+        console.log('@', error);
+        const graphQLFormattedError = {
+          // @ts-ignore
+          message: error.extensions?.exception?.response?.message || error.message,
+          code: error.extensions?.code || 'SERVER_ERROR',
+          // @ts-ignore
+          name: error.extensions?.exception?.name || error.name
+        };
+        return graphQLFormattedError;
+      },
       context: ({ req, res }) => ({ req, res })
     }),
     ServeStaticModule.forRoot({

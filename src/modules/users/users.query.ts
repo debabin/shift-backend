@@ -1,6 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
 import { Context, Query, Resolver } from '@nestjs/graphql';
 import type { Request } from 'express';
+import { GraphQLError } from 'graphql';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
@@ -32,7 +32,7 @@ export class UsersQuery extends BaseResolver {
     });
 
     if (!user) {
-      throw new BadRequestException(this.wrapFail('Пользователь не найден'));
+      throw new GraphQLError('Пользователь не найден');
     }
 
     return this.wrapSuccess({ user });

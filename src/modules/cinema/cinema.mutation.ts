@@ -1,5 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { GraphQLError } from 'graphql';
 
 import { UsersService } from '@/modules/users';
 import { DescribeContext } from '@/utils/decorators';
@@ -32,11 +33,11 @@ export class CinemaMutation extends BaseResolver {
     const order = await this.cinemaOrderService.findOne({ _id: cancelCinemaOrderDto.orderId });
 
     if (!order) {
-      throw new BadRequestException(this.wrapFail('Заказ не найден'));
+      throw new GraphQLError('Заказ не найден');
     }
 
     if (order.status !== CinemaOrderStatus.PAYED) {
-      throw new BadRequestException(this.wrapFail('Заказ нельзя отменить'));
+      throw new GraphQLError('Заказ нельзя отменить');
     }
 
     const updatedTickets = await this.cinemaService.delete({

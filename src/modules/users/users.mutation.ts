@@ -1,5 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { GraphQLError } from 'graphql';
 
 import { OtpsService } from '@/modules/otps';
 import { DescribeContext } from '@/utils/decorators';
@@ -27,13 +27,13 @@ export class UsersMutation extends BaseResolver {
     const user = await this.usersService.findOne({ phone: signInDto.phone });
 
     if (!user) {
-      throw new BadRequestException(this.wrapFail('Неправильный отп код'));
+      throw new GraphQLError('Неправильный отп код');
     }
 
     const otp = await this.otpsService.findOne({ phone: signInDto.phone, code: signInDto.code });
 
     if (!otp) {
-      throw new BadRequestException(this.wrapFail('Неправильный отп код'));
+      throw new GraphQLError('Неправильный отп код');
     }
 
     await this.otpsService.delete({ _id: otp._id });
@@ -47,7 +47,7 @@ export class UsersMutation extends BaseResolver {
     const user = await this.usersService.findOne({ phone: updateProfileDto.phone });
 
     if (!user) {
-      throw new BadRequestException(this.wrapFail('Пользователь не существует'));
+      throw new GraphQLError('Пользователь не найден');
     }
 
     await this.usersService.findOneAndUpdate(

@@ -1,6 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import type { Request } from 'express';
+import { GraphQLError } from 'graphql';
 
 import { DescribeContext } from '@/utils/decorators';
 import { GqlAuthorizedOnly } from '@/utils/guards';
@@ -81,7 +81,7 @@ export class CinemaQuery extends BaseResolver {
     const decodedJwtAccessToken = (await this.authService.decode(token)) as User;
 
     if (!decodedJwtAccessToken) {
-      throw new BadRequestException(this.wrapFail('Некорректный токен авторизации'));
+      throw new GraphQLError('Некорректный токен авторизации');
     }
 
     const orders = await this.cinemaOrderService.find({ phone: decodedJwtAccessToken.phone });
