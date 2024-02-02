@@ -20,27 +20,27 @@ export class User {
   @ApiProperty({ example: '89990009999', description: 'Номер телефона' })
   phone: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
   @ApiProperty({ example: 'firstname', description: 'Имя', required: false })
   firstname?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
   @ApiProperty({ example: 'middlename', description: 'Отчество', required: false })
   middlename?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
   @ApiProperty({ example: 'lastname', description: 'Фамилия', required: false })
   lastname?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
   @ApiProperty({ example: 'email@gmail.com', description: 'Почта', required: false })
   email?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
   @ApiProperty({ example: 'city', description: 'Город', required: false })
   city?: string;

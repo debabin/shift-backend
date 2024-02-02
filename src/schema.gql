@@ -500,20 +500,20 @@ type UpdateProfileResponse {
 
 type User {
   _id: String!
-  city: String!
-  email: String!
-  firstname: String!
-  lastname: String!
-  middlename: String!
+  city: String
+  email: String
+  firstname: String
+  lastname: String
+  middlename: String
   phone: String!
 }
 
 input UserInput {
   _id: String!
-  city: String!
-  email: String!
-  firstname: String!
-  lastname: String!
-  middlename: String!
+  city: String
+  email: String
+  firstname: String
+  lastname: String
+  middlename: String
   phone: String!
 }
