@@ -26,6 +26,6 @@ export class SignInResponse extends BaseResponse {
 @ObjectType()
 export class UpdateProfileResponse extends BaseResponse {
   @Field(() => User)
-  @ApiProperty({ description: 'Пользователь', type: User })
+  // @ApiProperty({ description: 'Пользователь', type: User })
   user: User;
 }
