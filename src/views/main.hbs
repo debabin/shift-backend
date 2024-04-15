@@ -10,7 +10,9 @@
       border-radius: 6px; background: #fff; text-align: center; } .rest::before { content: "";
       position: absolute; top: -2px; bottom: -2px; left: -2px; right: -2px; background:
       linear-gradient(to bottom, #4776e6, #8e54e9); border-radius: 6px; z-index: -1; }
-      .graphql::before { content: ""; position: absolute; top: -2px; bottom: -2px; left: -2px;
+      .tester::before { content: ""; position: absolute; top: -2px; bottom: -2px; left: -2px; right:
+      -2px; background: linear-gradient(to bottom, #e67947, #e9b554); border-radius: 6px; z-index:
+      -1; } .graphql::before { content: ""; position: absolute; top: -2px; bottom: -2px; left: -2px;
       right: -2px; background: linear-gradient(to bottom, #e647e3, #cb54e9); border-radius: 6px;
       z-index: -1; } .otps::before { content: ""; position: absolute; top: -2px; bottom: -2px; left:
       -2px; right: -2px; background: linear-gradient(to bottom, #4784e6, #54ade9); border-radius:
@@ -32,6 +34,12 @@
         <a href={{graphql}}>
           <div class='card graphql'>
             <p>graphql</p>
+          </div>
+        </a>
+
+        <a href={{tester}}>
+          <div class='card tester'>
+            <p>tester</p>
           </div>
         </a>
 

@@ -15,7 +15,8 @@ export class AppController {
     return {
       graphql: '/graphql',
       rest: '/api',
-      otps: '/otps'
+      otps: '/otps',
+      tester: '/tester'
     };
   }
 
