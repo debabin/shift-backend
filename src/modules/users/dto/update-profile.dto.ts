@@ -7,31 +7,31 @@ class UpdateProfileProfileDto {
   @IsString()
   @IsOptional()
   @Field(() => String)
-  @ApiProperty({ example: 'firstname', description: 'Имя' })
+  @ApiProperty({ example: 'firstname', description: 'Имя', nullable: true })
   firstname?: string;
 
   @IsString()
   @IsOptional()
   @Field(() => String)
-  @ApiProperty({ example: 'middlename', description: 'Отчество' })
+  @ApiProperty({ example: 'middlename', description: 'Отчество', nullable: true })
   middlename?: string;
 
   @IsString()
   @IsOptional()
   @Field(() => String)
-  @ApiProperty({ example: 'lastname', description: 'Фамилия' })
+  @ApiProperty({ example: 'lastname', description: 'Фамилия', nullable: true })
   lastname?: string;
 
   @IsString()
   @IsOptional()
   @Field(() => String)
-  @ApiProperty({ example: 'email@gmail.com', description: 'Почта' })
+  @ApiProperty({ example: 'email@gmail.com', description: 'Почта', nullable: true })
   email?: string;
 
   @IsString()
   @IsOptional()
   @Field(() => String)
-  @ApiProperty({ example: 'city', description: 'Город' })
+  @ApiProperty({ example: 'city', description: 'Город', nullable: true })
   city?: string;
 }
 
